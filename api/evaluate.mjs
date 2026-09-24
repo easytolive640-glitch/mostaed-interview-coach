@@ -26,7 +26,7 @@ const schema = {
 
 function setCors(req, res) {
   const allowedOrigin = process.env.ALLOWED_ORIGIN ||
-    'https://yo1982.github.io';
+    'https://easytolive640-glitch.github.io';
   const origin = req.headers.origin;
   if (origin === allowedOrigin) res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://yo1982.github.io';
+  const allowedOrigin = process.env.ALLOWED_ORIGIN || 'https://easytolive640-glitch.github.io';
   if (req.headers.origin && req.headers.origin !== allowedOrigin) {
     return res.status(403).json({ error: 'Origin not allowed' });
   }
