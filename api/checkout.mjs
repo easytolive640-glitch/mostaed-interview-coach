@@ -3,7 +3,7 @@ import { authenticatedUser, lemonRequest } from '../lib/server/paid-access.mjs';
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   const origin = req.headers.origin;
-  const allowed = new Set(['https://mostaed-interview-coach.vercel.app', 'https://yo1982.github.io']);
+  const allowed = new Set(['https://mostaed-interview-coach.vercel.app', 'https://easytolive640-glitch.github.io']);
   if (allowed.has(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
