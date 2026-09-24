@@ -1,0 +1,26 @@
+name: Monthly job profile question review
+
+on:
+  schedule:
+    - cron: '0 7 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open monthly editorial review issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          month="$(date -u +%Y-%m)"
+          title="Review job profiles and interview questions: $month"
+          if gh issue list --repo "$GH_REPO" --state all --search "in:title $title" --json title --jq '.[].title' | grep -Fxq "$title"; then
+            exit 0
+          fi
+          gh issue create --repo "$GH_REPO" --title "$title" --body "Review HR, customer service and IT/cloud role requirements for $month. Follow docs/JOB_PROFILE_REVIEW.md. Record checked sources and review date; update Arabic and English questions and keywords if requirements changed. Rotation alone does not imply fresh job data."
