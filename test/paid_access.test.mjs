@@ -111,3 +111,93 @@ test('inactive merchant subscription cannot reach OpenAI', async () => {
     }
   }
 });
+
+test('invalid voice and CV inputs are rejected before account or provider calls', async () => {
+  const configuredNames = {
+    PAID_AI_ENABLED: 'true', STORE_LIVE_APPROVED: 'true', LEMON_TEST_MODE: 'false',
+    OPENAI_API_KEY: 'server-only', SUPABASE_URL: 'https://example.supabase.co',
+    SUPABASE_PUBLISHABLE_KEY: 'public', SUPABASE_SERVICE_ROLE_KEY: 'service',
+    LEMON_API_KEY: 'merchant', LEMON_STORE_ID: '1',
+    LEMON_STARTER_VARIANT_ID: '2', LEMON_PRO_VARIANT_ID: '3',
+  };
+  const previous = Object.fromEntries(Object.keys(configuredNames).map(name => [name, process.env[name]]));
+  Object.assign(process.env, configuredNames);
+  const before = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error('Provider should not be called'); };
+  const responses = Array.from({ length: 10 }, (_, index) => ({ questionId: `hr_${index + 1}`, question: 'Tell me about an example', answer: 'I solved a customer issue.' }));
+  try {
+    for (const extra of [
+      { voice: { question: 'Explain your experience', format: 'webm', data: Buffer.from('not-audio-contents').toString('base64') } },
+      { cvText: 'A'.repeat(40) },
+    ]) {
+      const res = response();
+      await evaluate({ method: 'POST', headers: {}, body: { category: 'hr', language: 'english', responses, ...extra } }, res);
+      assert.equal(res.code, 400);
+    }
+  } finally {
+    globalThis.fetch = before;
+    for (const [name, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[name]; else process.env[name] = value;
+    }
+  }
+});
+
+test('active paid evaluation combines text, voice and CV scores without returning private inputs', async () => {
+  const configuredNames = {
+    PAID_AI_ENABLED: 'true', STORE_LIVE_APPROVED: 'true', LEMON_TEST_MODE: 'false',
+    OPENAI_API_KEY: 'server-only', SUPABASE_URL: 'https://example.supabase.co',
+    SUPABASE_PUBLISHABLE_KEY: 'public', SUPABASE_SERVICE_ROLE_KEY: 'service',
+    LEMON_API_KEY: 'merchant', LEMON_STORE_ID: '1',
+    LEMON_STARTER_VARIANT_ID: '2', LEMON_PRO_VARIANT_ID: '3',
+  };
+  const previous = Object.fromEntries(Object.keys(configuredNames).map(name => [name, process.env[name]]));
+  Object.assign(process.env, configuredNames);
+  const before = globalThis.fetch;
+  const urls = [];
+  globalThis.fetch = async (url, options) => {
+    urls.push(String(url));
+    if (String(url).endsWith('/auth/v1/user')) return Response.json({ id: 'dcdb9a59-7c3a-4927-9859-c17b222b5998', email: 'buyer@example.com' });
+    if (String(url).includes('/rpc/paid_subscription_for_user')) return Response.json({ subscription_id: '42', plan: 'starter' });
+    if (String(url).endsWith('/subscriptions/42')) return Response.json({ data: { attributes: {
+      status: 'active', test_mode: false, store_id: 1, variant_id: 2, user_email: 'buyer@example.com',
+    } } });
+    if (String(url).includes('/rpc/reserve_ai_evaluation')) return Response.json({ allowed: true, used: 1, limit: 20 });
+    if (String(url).endsWith('/audio/transcriptions')) {
+      assert.equal(options.body.get('model'), 'gpt-transcribe');
+      return Response.json({ text: 'I resolved the incident using a documented change.' });
+    }
+    if (String(url).endsWith('/responses')) {
+      const request = JSON.parse(options.body);
+      const input = JSON.parse(request.input);
+      assert.match(input.voice.answer, /documented change/);
+      assert.match(input.cvText, /Cloud engineer/);
+      assert.equal(input.voice.data, undefined);
+      return Response.json({ output_text: JSON.stringify({
+        textScore: 80, voiceScore: 90, cvScore: 70,
+        strengths: ['Clear example'], improvements: ['Add results'],
+      }) });
+    }
+    throw new Error(`Unexpected request: ${url}`);
+  };
+  const audio = Buffer.alloc(24); audio.set([0x1a, 0x45, 0xdf, 0xa3]);
+  try {
+    const res = response();
+    await evaluate({ method: 'POST', headers: { authorization: 'Bearer valid.jwt.token' }, body: {
+      category: 'hr', language: 'english',
+      responses: Array.from({ length: 10 }, (_, index) => ({ questionId: `hr_${index + 1}`, question: 'Tell me about an example', answer: 'I solved a customer issue.' })),
+      cvText: 'Cloud engineer experienced in incident response and operations.', cvConsent: true,
+      voice: { question: 'Explain your troubleshooting process', format: 'webm', data: audio.toString('base64') },
+    } }, res);
+    assert.equal(res.code, 200);
+    assert.equal(res.body.score, 81);
+    assert.equal(res.body.voiceScore, 90);
+    assert.equal(res.body.cvScore, 70);
+    assert.equal(JSON.stringify(res.body).includes('Cloud engineer'), false);
+    assert.equal(urls.filter(url => url.includes('openai.com')).length, 2);
+  } finally {
+    globalThis.fetch = before;
+    for (const [name, value] of Object.entries(previous)) {
+      if (value === undefined) delete process.env[name]; else process.env[name] = value;
+    }
+  }
+});

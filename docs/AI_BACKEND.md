@@ -14,14 +14,20 @@ client or GitHub Actions secret.
   are accepted. Checkout email must match the account email.
 - `POST /v1/evaluate`: requires a Supabase bearer token, looks up its subscription,
   confirms it is **active and live** with Lemon Squeezy, then reserves a monthly
-  credit atomically before calling OpenAI. Responses are not stored on the server.
+  credit atomically before calling OpenAI. It accepts 10 Starter or 15 Pro text
+  answers, an optional consented CV text extract, and one optional recorded voice
+  answer (WebM or WAV, maximum 2 MB). Voice is transcribed only on the server for
+  scoring; the transcript is never returned or saved by this application. CV and
+  voice inputs are sent to OpenAI for evaluation and are not stored by this server.
+  The result contains a total score plus separate text, voice, and CV consistency
+  scores. The CV score measures how well the answers reflect the supplied CV,
+  not hiring suitability.
 - `docs/paid_access.sql`: subscription mapping and atomic monthly usage counter.
 
-No checkout or paid AI UI is live yet. The previously developed recorded voice
-question remains in a separate, unmerged branch. The current paid endpoint
-accepts **10 text answers for Starter or 15 for Pro**, validated against the
-subscription. It does not yet process voice. CV selection on the landing page
-is local-only.
+No checkout or paid AI UI is live yet. The current paid endpoint handles the
+evaluation API, but microphone capture, CV text extraction, sign-in, checkout,
+privacy controls, and end-to-end testing still need the paid client flow.
+CV selection on the landing page is local-only and does not send a file anywhere.
 
 ## Setup required before accepting money
 
@@ -50,6 +56,7 @@ is local-only.
    | `LEMON_PRO_VARIANT_ID` | Numeric Pro subscription variant ID |
    | `OPENAI_API_KEY` | **New** secret OpenAI key; never use the exposed one |
    | `OPENAI_MODEL` | Optional text model; default `gpt-5-nano` |
+   | `OPENAI_TRANSCRIPTION_MODEL` | Optional audio transcription model; default `gpt-transcribe` |
    | `LEMON_TEST_MODE` | `true` for test checkouts; test purchases never unlock live AI |
    | `BILLING_ENABLED` | Set `true` only when test checkout flow is ready |
    | `STORE_LIVE_APPROVED` | Set `true` only after merchant approval and live products |
@@ -74,9 +81,32 @@ is local-only.
 
 The current proposal is 20 AI evaluation attempts per UTC calendar month for
 Starter and 100 for Pro. Each Starter evaluation covers 10 text answers and each
-Pro evaluation covers 15; one additional voice answer is planned for both.
+Pro evaluation covers 15; one optional voice answer can be included in both.
 Attempts are reserved before an OpenAI request, even
 if it fails, to bound API spend. The endpoint also rejects test purchases,
 unapproved stores, mismatched customer emails, and missing configuration.
+Audio can require an additional provider request and incur additional cost.
+
+## Evaluation API shape (for the future paid client)
+
+`POST /v1/evaluate` with `Authorization: Bearer <Supabase access token>` and
+`Content-Type: application/json`:
+
+```json
+{
+  "category": "itCloud",
+  "language": "english",
+  "responses": [{ "questionId": "q1", "question": "Describe an incident", "answer": "I diagnosed and resolved..." }],
+  "cvText": "Optional text extracted locally from the user's CV (30-6000 characters)",
+  "cvConsent": true,
+  "voice": { "question": "Explain your approach", "format": "webm", "data": "<base64 recording>" }
+}
+```
+
+Provide exactly 10 or 15 response objects, matching the authenticated plan.
+Omit both `cvText` and `cvConsent` if the user has not consented to CV analysis.
+Omit `voice` if there is no recording. Recordings are limited to 2 MB of actual
+audio data; the application does not display a transcript. Never send the
+server role, merchant, or OpenAI secret to the client.
 OpenAI calls and payment fees are variable; a subscription sale does not imply
 profit. Monitor provider spend and update caps/prices based on actual tests.

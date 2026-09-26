@@ -22,9 +22,9 @@ An Arabic-first interview-practice application for Android and the web.
 
 ## Next milestones
 
-- Connect the included protected OpenAI backend to the live beta.
-- Add a separate recorded voice question to a protected paid AI plan; do not use speech-to-text in free text questions.
-- Add authentication and daily usage limits.
+- Connect the protected OpenAI backend to the paid client after merchant approval and live account configuration. The backend can score an optional recorded answer and a consented CV text extract, but the paid client is not live.
+- Add a separate recorded voice question to the paid client; keep free text questions text-only. Voice transcription occurs privately on the paid server for evaluation and is not shown in the app.
+- Add authentication UI and connect it to the existing server-side monthly usage limits.
 - Add Google Play Billing after beta validation.
 - Expand roles based on beta analytics.
 
