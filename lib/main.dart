@@ -4,6 +4,7 @@ import 'models.dart';
 import 'question_bank.dart';
 import 'services/evaluation_service.dart';
 import 'services/history_service.dart';
+import 'services/practice_tracking.dart';
 
 void main() => runApp(const MostaedApp());
 
@@ -133,6 +134,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
   void initState() {
     super.initState();
     controller.addListener(_refreshAnswerState);
+    PracticeTracking.started();
   }
 
   void _refreshAnswerState() => setState(() {});
@@ -170,6 +172,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
       answers: answers,
     );
     await HistoryService.save(result);
+    PracticeTracking.completed();
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => ResultScreen(result: result)),
