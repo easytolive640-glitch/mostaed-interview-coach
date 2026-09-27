@@ -31,6 +31,10 @@ jobs:
           cache: true
       - name: Generate web project files
         run: flutter create --platforms=web .
+      - name: Configure optional practice tracking
+        env:
+          MOSTAED_GA4_ID: ${{ vars.MOSTAED_GA4_ID }}
+        run: python3 scripts/inject_analytics.py
       - name: Install dependencies
         run: flutter pub get
       - name: Build web beta
