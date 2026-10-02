@@ -72,7 +72,7 @@ function validate(body) {
 
 async function transcribe(voice) {
   const form = new FormData();
-  form.set('model', process.env.OPENAI_TRANSCRIPTION_MODEL || 'gpt-transcribe');
+  form.set('model', process.env.OPENAI_TRANSCRIPTION_MODEL || 'gpt-4o-mini-transcribe');
   form.set('file', new Blob([audioBytes(voice)], {
     type: voice.format === 'wav' ? 'audio/wav' : 'audio/webm',
   }), `answer.${voice.format}`);

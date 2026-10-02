@@ -13,4 +13,4 @@ Register https://mostaed-interview-coach.vercel.app/api/paypal-webhook in the ma
 
 Sandbox requires separate sandbox REST app, plan and webhook; sandbox payments never unlock production AI. After sandbox tests, test the live API key privately, confirm taxes/cancellation terms, and complete a controlled live checkout before opening billing. No live payment or AI test was performed during implementation.
 
-The account portal prepares verified entitlement; connecting that session to the Flutter paid-practice UI remains required for the full customer journey. Free practice remains unchanged. Do not advertise paid plans as active yet.
+The account portal shares the tab session with /paid-practice.html. This paid web screen offers 15 bilingual questions, optional pasted/TXT CV context and one optional WAV/WebM voice answer. Flutter/native session integration and PDF/DOCX parsing remain separate future work. Free practice remains unchanged. Do not advertise paid plans as active yet.
