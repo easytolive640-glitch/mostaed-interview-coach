@@ -1,8 +1,8 @@
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs';
 const $ = id => document.getElementById(id);
-let config, session;
+let config, session, recoveryToken;
 const notice = text => { $('notice').textContent = text; };
-function render() { $('google').hidden = Boolean(session); $('googleNotice').hidden = Boolean(session); $('login').hidden = Boolean(session); $('member').hidden = !session;
+function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
   $('identity').textContent = session?.user?.email || ''; $('subscribe').disabled = !config?.billingEnabled;
 }
 async function api(path, body) {
@@ -59,7 +59,7 @@ async function googleCallback() {
 try {
   const r=await fetch('/api/account-config'); config=await r.json();
   if(!r.ok) throw Error(config.error);
-  const settingsResponse = await fetch(config.url + '/auth/v1/settings', { headers: { apikey: config.key } });
+  const settingsResponse = await fetch(config.url + '/auth/v1/settings', { headers: { apikey: config.key } }).catch(() => ({ok:false}));
   const settings = settingsResponse.ok ? await settingsResponse.json() : {};
   $('google').disabled = settings.external?.google !== true;
   $('googleNotice').textContent = settings.external?.google === true
@@ -67,11 +67,43 @@ try {
     : 'Google sign-in is being configured. Email sign-in is available below.';
   session=JSON.parse(sessionStorage.getItem('mostaed_account')||'null');
   if(session?.expires_at*1000<Date.now()){session=null;sessionStorage.removeItem('mostaed_account');}
+  const fragment = new URLSearchParams(location.hash.slice(1));
+  if (fragment.get('type') === 'recovery') {
+    recoveryToken = fragment.get('access_token');
+    history.replaceState(null, '', '/account.html');
+    if (!recoveryToken) throw Error('Reset link is invalid. Request a new link.');
+    session = null; sessionStorage.removeItem('mostaed_account');
+    render(); notice('Choose a new password below. / اختر كلمة مرور جديدة');
+  }
   const googleSignedIn = await googleCallback();
   render();
-  notice(googleSignedIn ? 'Signed in with Google. Paid AI requires a verified subscription.'
+  if (!recoveryToken) notice(googleSignedIn ? 'Signed in with Google. Paid AI requires a verified subscription.'
     : config.billingEnabled ? 'Sign in before subscribing.' : 'Free practice is available. Paid subscriptions are not open yet.');
 } catch(e) {
   if (!config?.url || !config?.key) $('login').querySelectorAll('button').forEach(b=>b.disabled=true);
   notice(e.message);
 }
+
+$('forgot').onclick = async () => {
+  if (!$('email').reportValidity()) return;
+  $('forgot').disabled = true;
+  try {
+    const r = await fetch(config.url + '/auth/v1/recover?redirect_to=' + encodeURIComponent(location.origin + '/account.html'), {
+      method:'POST', headers:{apikey:config.key,'Content-Type':'application/json'}, body:JSON.stringify({email:$('email').value.trim()})
+    });
+    if (!r.ok) { const d=await r.json(); throw Error(d.msg || d.message || 'Reset email could not be sent. Please try again later.'); }
+    notice('If this email has an account, you will receive a password reset link. Check your inbox and spam folder. / تحقق من بريدك لإعادة تعيين كلمة المرور');
+  } catch(e) { notice(e.message); } finally { $('forgot').disabled=false; }
+};
+$('reset').onsubmit = async e => {
+  e.preventDefault();
+  if ($('newPassword').value !== $('confirmPassword').value) return notice('Passwords do not match. / كلمتا المرور غير متطابقتين');
+  const button=$('reset').querySelector('button'); button.disabled=true;
+  try {
+    if (!recoveryToken) throw Error('Request a new password reset link.');
+    const r=await fetch(config.url + '/auth/v1/user', {method:'PUT',headers:{apikey:config.key,'Content-Type':'application/json',Authorization:'Bearer '+recoveryToken},body:JSON.stringify({password:$('newPassword').value})});
+    const d=await r.json(); if (!r.ok) throw Error(d.msg || d.message || 'Reset link expired or password could not be updated. Request a new link.');
+    await fetch(config.url + '/auth/v1/logout',{method:'POST',headers:{apikey:config.key,Authorization:'Bearer '+recoveryToken}}).catch(()=>{});
+    recoveryToken=null; $('reset').reset(); render(); notice('Password updated. Sign in with your new password. / تم تحديث كلمة المرور');
+  } catch(e) { notice(e.message); } finally { button.disabled=false; }
+};
