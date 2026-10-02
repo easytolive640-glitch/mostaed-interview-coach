@@ -1,4 +1,5 @@
-import { authenticatedUser, configured, lemonRequest, serviceRpc, variantPlan } from '../lib/server/paid-access.mjs';
+import { verifiedSubscription } from '../lib/server/paypal.mjs';
+import { authenticatedUser, configured, serviceRpc } from '../lib/server/paid-access.mjs';
 
 const allowedCategories = new Set(['hr', 'customerService', 'itCloud']);
 const allowedLanguages = new Set(['arabic', 'english']);
@@ -140,12 +141,8 @@ export default async function handler(req, res) {
     if (req.body.responses.length !== (subscription.plan === 'pro' ? 15 : 10)) {
       return res.status(400).json({ error: 'Question count does not match subscription plan' });
     }
-    const current = (await lemonRequest(`subscriptions/${encodeURIComponent(subscription.subscription_id)}`)).data?.attributes;
-    if (!current || current.status !== 'active' || current.test_mode !== false ||
-        String(current.store_id) !== process.env.LEMON_STORE_ID ||
-        variantPlan(current.variant_id) !== subscription.plan ||
-        current.user_email?.toLowerCase() !== user.email?.toLowerCase()) {
-      return res.status(403).json({ error: 'Active subscription required' });
+    if (!await verifiedSubscription(subscription.subscription_id, user.id)) {
+      return res.status(403).json({ error: 'Active paid subscription required' });
     }
     access = await serviceRpc('reserve_ai_evaluation', { p_user_id: user.id });
   } catch {
@@ -210,3 +207,4 @@ export default async function handler(req, res) {
     return res.status(502).json({ error: 'AI evaluation unavailable' });
   }
 }
+

@@ -1,52 +1,23 @@
-import { authenticatedUser, lemonRequest } from '../lib/server/paid-access.mjs';
-
+import { authenticatedUser } from '../lib/server/paid-access.mjs';
+import { paypalConfigured, paypalRequest } from '../lib/server/paypal.mjs';
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  const origin = req.headers.origin;
-  const allowed = new Set(['https://mostaed-interview-coach.vercel.app', 'https://easytolive640-glitch.github.io']);
-  if (allowed.has(origin)) res.setHeader('Access-Control-Allow-Origin', origin);
-  res.setHeader('Vary', 'Origin');
-  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  if (req.method === 'OPTIONS') return res.status(204).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
-  if (origin && !allowed.has(origin)) return res.status(403).json({ error: 'Origin not allowed' });
-  if (process.env.BILLING_ENABLED !== 'true' || !process.env.LEMON_API_KEY ||
-      !process.env.LEMON_STORE_ID || !process.env.SUPABASE_URL ||
-      !process.env.SUPABASE_PUBLISHABLE_KEY ||
-      (process.env.LEMON_TEST_MODE !== 'true' && process.env.STORE_LIVE_APPROVED !== 'true')) {
-    return res.status(503).json({ error: 'Subscriptions are not open yet' });
-  }
-  const variantId = req.body?.plan === 'starter'
-    ? process.env.LEMON_STARTER_VARIANT_ID
-    : req.body?.plan === 'pro' ? process.env.LEMON_PRO_VARIANT_ID : null;
-  if (!variantId || !/^\d+$/.test(variantId)) return res.status(400).json({ error: 'Invalid plan' });
+  const origin = process.env.ALLOWED_ORIGIN || 'https://mostaed-interview-coach.vercel.app';
+  if (req.headers.origin && req.headers.origin !== origin) return res.status(403).json({ error: 'Origin not allowed' });
+  if (process.env.BILLING_ENABLED !== 'true' || !paypalConfigured()) return res.status(503).json({ error: 'Subscriptions are not open yet' });
+  if (req.body?.plan !== 'pro') return res.status(400).json({ error: 'Invalid plan' });
   try {
     const user = await authenticatedUser(req);
-    if (!user?.email) return res.status(401).json({ error: 'Sign in first' });
-    const testMode = process.env.LEMON_TEST_MODE === 'true';
-    const checkout = await lemonRequest('checkouts', {
-      method: 'POST',
-      body: JSON.stringify({ data: {
-        type: 'checkouts',
-        attributes: {
-          test_mode: testMode,
-          checkout_data: { email: user.email, custom: { user_id: user.id } },
-          product_options: { enabled_variants: [Number(variantId)] },
-        },
-        relationships: {
-          store: { data: { type: 'stores', id: process.env.LEMON_STORE_ID } },
-          variant: { data: { type: 'variants', id: variantId } },
-        },
-      } }),
+    if (!user) return res.status(401).json({ error: 'Sign in first' });
+    const result = await paypalRequest('/v1/billing/subscriptions', {
+      method: 'POST', headers: { 'PayPal-Request-Id': `${user.id}-${new Date().toISOString().slice(0,10)}` },
+      body: JSON.stringify({ plan_id: process.env.PAYPAL_PRO_PLAN_ID, custom_id: user.id,
+        application_context: { brand_name: 'Mostaed', user_action: 'SUBSCRIBE_NOW',
+          return_url: `${origin}/account.html?payment=return`, cancel_url: `${origin}/account.html?payment=cancel` } }),
     });
-    const url = checkout.data?.attributes?.url;
-    if (typeof url !== 'string' || new URL(url).protocol !== 'https:') {
-      throw new Error('Merchant checkout URL missing');
-    }
-    return res.status(200).json({ url, testMode });
-  } catch (error) {
-    console.error('Checkout failed', error instanceof Error ? error.message : error);
-    return res.status(503).json({ error: 'Checkout unavailable' });
-  }
+    const url = result.links?.find(l => l.rel === 'approve')?.href;
+    if (!url || !['www.paypal.com','www.sandbox.paypal.com'].includes(new URL(url).hostname) || new URL(url).protocol !== 'https:') throw Error('Approval link unavailable');
+    return res.status(200).json({ url, subscriptionId: result.id, testMode: process.env.PAYPAL_MODE !== 'live' });
+  } catch { return res.status(503).json({ error: 'Checkout unavailable' }); }
 }
