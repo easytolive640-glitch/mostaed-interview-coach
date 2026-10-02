@@ -17,5 +17,5 @@ export function customerSession(data) {
   if (!data?.access_token || !data.user?.id) throw new Error('Sign-in did not return a customer session');
   return { access_token: data.access_token, refresh_token: data.refresh_token,
     expires_at: data.expires_at || Math.floor(Date.now()/1000) + Number(data.expires_in || 3600),
-    user: { id: data.user.id, email: data.user.email } };
+    user: { id: data.user.id, email: data.user.email, full_name: data.user.user_metadata?.full_name || '', username: data.user.user_metadata?.username || '' } };
 }

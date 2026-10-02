@@ -1,26 +1,40 @@
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs';
 const $ = id => document.getElementById(id);
-let config, session, recoveryToken;
+let config, session, recoveryToken, creatingAccount = false;
 const notice = text => { $('notice').textContent = text; };
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
-  $('identity').textContent = session?.user?.email || ''; $('subscribe').disabled = !config?.billingEnabled;
+  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.billingEnabled;
 }
 async function api(path, body) {
   const response = await fetch(path, { method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${session?.access_token || ''}`}, body:JSON.stringify(body) });
   const data = await response.json(); if (!response.ok) throw Error(data.error || 'Request unavailable'); return data;
 }
+function signupMode(enabled) {
+  creatingAccount=enabled; $('signupFields').hidden=!enabled; $('signupFields').disabled=!enabled;
+  $('confirmLabel').hidden=!enabled; $('signupConfirm').disabled=!enabled;
+  $('signup').hidden=enabled; $('backLogin').hidden=!enabled; $('forgot').hidden=enabled;
+  $('authSubmit').textContent=enabled?'Create account / إنشاء حساب':'Sign in / تسجيل الدخول';
+  $('password').autocomplete=enabled?'new-password':'current-password';
+  $('password').value=''; $('signupConfirm').value='';
+  notice(enabled?'Fill in your details to create your Mostaed account. / أدخل بياناتك لإنشاء الحساب':'Sign in with your email and password.');
+}
 async function authenticate(signup) {
+  if(signup && $('password').value!==$('signupConfirm').value) throw Error('Passwords do not match. / كلمتا المرور غير متطابقتين');
+  const body={email:$('email').value.trim(),password:$('password').value};
+  if(signup) body.data={full_name:$('fullName').value.trim(),username:$('username').value.trim(),gender:$('gender').value||null,age:$('age').value?Number($('age').value):null};
+  if(signup && (!body.data.full_name || !/^[A-Za-z0-9_]{3,30}$/.test(body.data.username))) throw Error('Enter your full name and a valid username.');
   const response = await fetch(`${config.url}/auth/v1/${signup ? 'signup' : 'token?grant_type=password'}`, {
     method:'POST', headers:{apikey:config.key,'Content-Type':'application/json'},
-    body:JSON.stringify({email:$('email').value,password:$('password').value}),
+    body:JSON.stringify(body),
   });
   const data = await response.json(); $('password').value = '';
   if (!response.ok) throw Error(data.msg || data.error_description || 'Sign-in failed');
-  if (!data.access_token) return notice('Check your email to confirm your account, then sign in.');
+  if (!data.access_token) { signupMode(false); return notice('Check your email to confirm your account, then sign in. / أكد بريدك الإلكتروني ثم سجل الدخول'); }
   session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); render(); notice('Signed in. Paid AI requires a verified subscription.');
 }
-$('login').onsubmit = async e => {e.preventDefault();try {await authenticate(false);}catch(e){notice(e.message);}};
-$('signup').onclick = async () => {if (!$('login').reportValidity()) return;try{await authenticate(true);}catch(e){notice(e.message);}};
+$('login').onsubmit = async e => {e.preventDefault();try {await authenticate(creatingAccount);}catch(e){notice(e.message);}};
+$('signup').onclick = () => signupMode(true);
+$('backLogin').onclick = () => signupMode(false);
 $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/v1/logout`,{method:'POST',headers:{apikey:config.key,Authorization:`Bearer ${session.access_token}`}}).catch(()=>{});session=null;sessionStorage.removeItem('mostaed_account');render();notice('Signed out.');};
 $('subscribe').onclick = async () => { $('subscribe').disabled=true;try{const d=await api('/api/checkout',{plan:'pro'});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){notice(e.message);$('subscribe').disabled=!config.billingEnabled;}};
 $('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){notice(e.message);}};
