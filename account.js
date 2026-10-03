@@ -23,7 +23,7 @@ async function authenticate(signup) {
   const body={email:$('email').value.trim(),password:$('password').value};
   if(signup) body.data={full_name:$('fullName').value.trim(),username:$('username').value.trim(),gender:$('gender').value||null,age:$('age').value?Number($('age').value):null};
   if(signup && (!body.data.full_name || !/^[A-Za-z0-9_]{3,30}$/.test(body.data.username))) throw Error('Enter your full name and a valid username.');
-  const response = await fetch(signup ? `${config.url}/auth/v1/signup` : '/api/auth', {
+  const response = await fetch(signup ? `${config.url}/auth/v1/signup` : '/api/account-config', {
     method:'POST', headers:{...(signup ? {apikey:config.key} : {}),'Content-Type':'application/json'},
     body:JSON.stringify(body),
     signal: AbortSignal.timeout(15000),
@@ -85,7 +85,7 @@ async function googleCallback() {
 try {
   const r=await fetch('/api/account-config'); config=await r.json();
   if(!r.ok) throw Error(config.error);
-  const settingsResponse = await fetch('/api/auth', { signal: AbortSignal.timeout(15000) }).catch(() => ({ok:false}));
+  const settingsResponse = await fetch('/api/account-config?settings=1', { signal: AbortSignal.timeout(15000) }).catch(() => ({ok:false}));
   const settings = settingsResponse.ok ? await settingsResponse.json() : {};
   $('google').disabled = settings.external?.google !== true;
   $('googleNotice').textContent = settings.external?.google === true

@@ -1,6 +1,6 @@
 import {test, after} from 'node:test';
 import assert from 'node:assert/strict';
-import handler from '../api/auth.mjs';
+import handler from '../lib/server/account-auth.mjs';
 const originalFetch = globalThis.fetch;
 const oldUrl = process.env.SUPABASE_URL, oldKey = process.env.SUPABASE_PUBLISHABLE_KEY;
 process.env.SUPABASE_URL = 'https://example.supabase.co';
