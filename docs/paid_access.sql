@@ -83,3 +83,7 @@ revoke all on function public.reserve_ai_evaluation(uuid) from public, anon, aut
 grant execute on function public.paid_subscription_for_user(uuid) to service_role;
 grant execute on function public.ingest_paid_subscription(text, uuid, text, text, boolean, timestamptz) to service_role;
 grant execute on function public.reserve_ai_evaluation(uuid) to service_role;
+
+-- The expiring server-side test quota uses atomic REST compare-and-set updates.
+-- Browser roles retain no access to this table.
+grant select, insert, update on public.ai_monthly_usage to service_role;
