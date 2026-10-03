@@ -23,16 +23,28 @@ async function authenticate(signup) {
   const body={email:$('email').value.trim(),password:$('password').value};
   if(signup) body.data={full_name:$('fullName').value.trim(),username:$('username').value.trim(),gender:$('gender').value||null,age:$('age').value?Number($('age').value):null};
   if(signup && (!body.data.full_name || !/^[A-Za-z0-9_]{3,30}$/.test(body.data.username))) throw Error('Enter your full name and a valid username.');
-  const response = await fetch(`${config.url}/auth/v1/${signup ? 'signup' : 'token?grant_type=password'}`, {
-    method:'POST', headers:{apikey:config.key,'Content-Type':'application/json'},
+  const response = await fetch(signup ? `${config.url}/auth/v1/signup` : '/api/auth', {
+    method:'POST', headers:{...(signup ? {apikey:config.key} : {}),'Content-Type':'application/json'},
     body:JSON.stringify(body),
+    signal: AbortSignal.timeout(15000),
   });
-  const data = await response.json(); $('password').value = '';
-  if (!response.ok) throw Error(data.msg || data.error_description || 'Sign-in failed');
+  const data = await response.json();
+  if (!response.ok) throw Error(data.msg || data.error_description || data.error || 'Sign-in failed');
   if (!data.access_token) { signupMode(false); return notice('Check your email to confirm your account, then sign in. / أكد بريدك الإلكتروني ثم سجل الدخول'); }
   session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); render(); notice('Signed in. Paid AI requires a verified subscription.');
 }
-$('login').onsubmit = async e => {e.preventDefault();try {await authenticate(creatingAccount);}catch(e){notice(e.message);}};
+$('login').onsubmit = async e => {
+  e.preventDefault();
+  if ($('authSubmit').disabled) return;
+  $('authSubmit').disabled = true;
+  notice('Signing in… / جارٍ تسجيل الدخول');
+  try { await authenticate(creatingAccount); }
+  catch(e) { notice(e.name === 'TimeoutError' || e.name === 'AbortError'
+    ? 'Sign-in timed out. Please try again. / انتهت مهلة تسجيل الدخول، حاول مجدداً'
+    : e instanceof TypeError ? 'Could not connect to the account service. Please try again. / تعذر الاتصال بخدمة الحساب'
+    : e.message); }
+  finally { $('password').value = ''; $('signupConfirm').value = ''; $('authSubmit').disabled = false; }
+};
 $('signup').onclick = () => signupMode(true);
 $('backLogin').onclick = () => signupMode(false);
 $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/v1/logout`,{method:'POST',headers:{apikey:config.key,Authorization:`Bearer ${session.access_token}`}}).catch(()=>{});session=null;sessionStorage.removeItem('mostaed_account');render();notice('Signed out.');};
@@ -73,7 +85,7 @@ async function googleCallback() {
 try {
   const r=await fetch('/api/account-config'); config=await r.json();
   if(!r.ok) throw Error(config.error);
-  const settingsResponse = await fetch(config.url + '/auth/v1/settings', { headers: { apikey: config.key } }).catch(() => ({ok:false}));
+  const settingsResponse = await fetch('/api/auth', { signal: AbortSignal.timeout(15000) }).catch(() => ({ok:false}));
   const settings = settingsResponse.ok ? await settingsResponse.json() : {};
   $('google').disabled = settings.external?.google !== true;
   $('googleNotice').textContent = settings.external?.google === true
