@@ -7,6 +7,10 @@
   },
   "rewrites": [
     {
+      "source": "/api/paypal-sandbox-webhook",
+      "destination": "/api/paypal-webhook?sandbox=1"
+    },
+    {
       "source": "/v1/evaluate",
       "destination": "/api/evaluate"
     }

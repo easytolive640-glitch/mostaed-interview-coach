@@ -1,5 +1,7 @@
 import { paypalConfigured, paypalRequest, syncSubscription } from '../lib/server/paypal.mjs';
+import sandboxWebhook from '../lib/server/paypal-sandbox-webhook.mjs';
 export default async function handler(req, res) {
+  if (req.query?.sandbox === '1') return sandboxWebhook(req,res);
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).end();
   if (!paypalConfigured()) return res.status(503).end();
