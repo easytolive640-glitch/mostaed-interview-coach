@@ -8,7 +8,7 @@ export const topics = [
  {id:'android',en:'Android app',ar:'تطبيق أندرويد',match:/android|download|store|أندرويد|اندرويد|تحميل|متجر/,answer:{en:'Use the web app on your phone today. The Android release is in preparation; there is no confirmed Google Play release date yet.',ar:'يمكنك استخدام نسخة الويب على هاتفك الآن. نسخة أندرويد قيد الإعداد، ولا يوجد موعد مؤكد للنشر على Google Play بعد.'}}
 ];
 export function faqAnswer(message,language='en',topic){
- const found=topic?topics.find(t=>t.id===topic):topics.find(t=>t.match.test(message.toLowerCase()));
+ const found=topic?topics.find(t=>t.id===topic):[...topics.filter(t=>t.id!=='free'),topics[0]].find(t=>t.match.test(message.toLowerCase()));
  return found?.answer[language==='ar'?'ar':'en'] || (language==='ar'?'أستطيع المساعدة في مزايا مستعد والأسعار والتدريب والحساب. اختر سؤالاً شائعاً أعلاه. لا تتوفر إجابة مؤكدة عن هذا السؤال حالياً.':'I can help with Mostaed features, plans, practice and accounts. Try a suggested question above. I do not have a confirmed answer to this question yet.');
 }
 export const productFacts=topics.map(t=>t.id+': '+t.answer.en).join('\n');
