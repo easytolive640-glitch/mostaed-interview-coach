@@ -3,6 +3,8 @@ import { authenticatedUser, configured, serviceRpc, temporaryTestAccess, testAiC
 
 import { categoryRubrics, validCategoryQuestions, evaluationContext, readableFeedback } from '../lib/server/evaluation-context.mjs';
 
+import { saveEvaluation } from '../lib/server/evaluation-history.mjs';
+
 const allowedCategories = new Set(['hr', 'customerService', 'itCloud']);
 const allowedLanguages = new Set(['arabic', 'english']);
 const allowedOrigins = () => new Set([
@@ -224,7 +226,10 @@ export default async function handler(req, res) {
     const evaluation = checkedEvaluation(JSON.parse(extractOutput(response)), Boolean(voiceAnswer), Boolean(req.body.cvText));
     evaluation.strengths = readableFeedback(evaluation.strengths, req.body);
     evaluation.improvements = readableFeedback(evaluation.improvements, req.body);
-    return res.status(200).json({ ...evaluation, category: req.body.category });
+    let historySaved = false;
+    try { await saveEvaluation(user, req.body, evaluation); historySaved = true; }
+    catch { console.error('Evaluation history save unavailable'); }
+    return res.status(200).json({ ...evaluation, category: req.body.category, historySaved });
   } catch (error) {
     console.error('Evaluation failed', error instanceof Error ? error.message : error);
     return res.status(502).json({ error: 'AI evaluation unavailable' });
