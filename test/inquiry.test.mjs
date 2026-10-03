@@ -1,0 +1,15 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import handler from '../api/inquiry.mjs';
+import {faqAnswer,topics} from '../inquiry-knowledge.mjs';
+const req=(body,extra={})=>({method:'POST',headers:{origin:'https://mostaed-interview-coach.vercel.app','x-vercel-forwarded-for':'127.0.0.1'},body,...extra});
+async function call(r){const res={setHeader(){},status(n){this.code=n;return this},json(d){this.data=d;return this}};await handler(r,res);return res;}
+const env={...process.env};
+test.afterEach(()=>{process.env={...env};});
+test('all suggested topics provide bilingual factual answers',()=>{for(const t of topics){assert.equal(faqAnswer('','en',t.id),t.answer.en);assert.equal(faqAnswer('','ar',t.id),t.answer.ar);}assert.match(faqAnswer('voice','en'),/text-only/);});
+test('paid evaluation key alone never enables public provider billing',async()=>{delete process.env.INQUIRY_OPENAI_API_KEY;process.env.INQUIRY_AI_ENABLED='true';process.env.OPENAI_API_KEY='paid-only';const r=await call(req({message:'hello',language:'en',consent:true}));assert.equal(r.data.mode,'faq');});
+test('untrusted origins and oversize inputs are rejected',async()=>{assert.equal((await call(req({message:'hi',language:'en'},{headers:{origin:'https://evil.invalid'}}))).code,403);assert.equal((await call(req({message:'x'.repeat(501),language:'en'}))).code,400);});
+function enable(){Object.assign(process.env,{INQUIRY_AI_ENABLED:'true',INQUIRY_OPENAI_API_KEY:'separate-test-key',SUPABASE_URL:'https://test.invalid',SUPABASE_SERVICE_ROLE_KEY:'service-test'});}
+test('no consent makes no network calls even when AI configured',async()=>{enable();const original=global.fetch;global.fetch=()=>{throw Error('must not call')};try{assert.equal((await call(req({message:'plans',language:'en'}))).data.mode,'faq');}finally{global.fetch=original;}});
+test('durable quota is reserved before AI call; only separate key and bounded nonstored text sent',async()=>{enable();const original=global.fetch,calls=[];global.fetch=async(url,options)=>{calls.push({url,options});return {ok:true,json:async()=>calls.length===1?true:{output:[{content:[{type:'output_text',text:'Mostaed supports Arabic and English.'}]}]}}};try{const r=await call(req({message:'Which languages?',language:'en',consent:true}));assert.equal(r.data.mode,'ai');assert.match(calls[0].url,/reserve_inquiry_message/);assert.match(JSON.parse(calls[0].options.body).p_client_hash,/^[a-f0-9]{64}$/);assert.equal(calls[1].options.headers.Authorization,'Bearer separate-test-key');const body=JSON.parse(calls[1].options.body);assert.equal(body.store,false);assert.equal(body.max_output_tokens,300);assert.equal(body.tools,undefined);}finally{global.fetch=original;}});
+test('exhausted or missing quota fails closed before OpenAI',async()=>{enable();const original=global.fetch;let count=0;global.fetch=async()=>{count++;return {ok:true,json:async()=>false}};try{assert.equal((await call(req({message:'hello',language:'ar',consent:true}))).data.mode,'faq');assert.equal(count,1);}finally{global.fetch=original;}});
