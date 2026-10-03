@@ -1,5 +1,5 @@
 import { verifiedSubscription } from '../lib/server/paypal.mjs';
-import { authenticatedUser, configured, serviceRpc } from '../lib/server/paid-access.mjs';
+import { authenticatedUser, configured, serviceRpc, temporaryTestAccess, testAiConfigured, reserveTestEvaluation } from '../lib/server/paid-access.mjs';
 
 const allowedCategories = new Set(['hr', 'customerService', 'itCloud']);
 const allowedLanguages = new Set(['arabic', 'english']);
@@ -125,7 +125,7 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Origin not allowed' });
   }
   // Fail closed before the provider can be billed. CORS and IP limits are not payment checks.
-  if (!configured()) return res.status(503).json({ error: 'Paid AI is not available' });
+  if (!configured() && !testAiConfigured()) return res.status(503).json({ error: 'Paid AI is not available' });
   if (!validate(req.body)) return res.status(400).json({ error: 'Invalid request' });
   let user;
   try {
@@ -136,6 +136,11 @@ export default async function handler(req, res) {
   if (!user) return res.status(401).json({ error: 'Sign in to use paid AI' });
   let access;
   try {
+    if (temporaryTestAccess(user) && testAiConfigured()) {
+      if (req.body.responses.length !== 15) return res.status(400).json({ error: 'Test access requires 15 questions' });
+      access = await reserveTestEvaluation(user);
+    } else {
+    if (!configured()) return res.status(503).json({ error: 'Paid AI is not available' });
     const subscription = await serviceRpc('paid_subscription_for_user', { p_user_id: user.id });
     if (!subscription?.subscription_id) return res.status(403).json({ error: 'Active subscription required' });
     if (req.body.responses.length !== (subscription.plan === 'pro' ? 15 : 10)) {
@@ -145,10 +150,11 @@ export default async function handler(req, res) {
       return res.status(403).json({ error: 'Active paid subscription required' });
     }
     access = await serviceRpc('reserve_ai_evaluation', { p_user_id: user.id });
+    }
   } catch {
     return res.status(503).json({ error: 'Subscription verification unavailable' });
   }
-  if (!access?.allowed) return res.status(403).json({ error: 'Active subscription or monthly credit required' });
+  if (!access?.allowed) return res.status(403).json({ error: 'Evaluation limit reached or active subscription required' });
 
   const languageInstruction = req.body.language === 'arabic'
     ? 'Write all feedback in clear Modern Standard Arabic.'
