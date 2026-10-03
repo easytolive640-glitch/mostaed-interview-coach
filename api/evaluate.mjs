@@ -33,7 +33,7 @@ const schema = {
 };
 
 function audioBytes(voice) {
-  if (!voice || !['webm', 'wav'].includes(voice.format) ||
+  if (!voice || !['webm', 'wav', 'mp4'].includes(voice.format) ||
       typeof voice.data !== 'string' || voice.data.length > 2_800_000 ||
       !/^[A-Za-z0-9+/]+={0,2}$/.test(voice.data)) return null;
   const bytes = Buffer.from(voice.data, 'base64');
@@ -42,7 +42,9 @@ function audioBytes(voice) {
   const webm = voice.format === 'webm' && bytes.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3]));
   const wav = voice.format === 'wav' && bytes.toString('ascii', 0, 4) === 'RIFF' &&
     bytes.toString('ascii', 8, 12) === 'WAVE';
-  return webm || wav ? bytes : null;
+  const mp4 = voice.format === 'mp4' && bytes.toString('ascii', 4, 8) === 'ftyp' &&
+    bytes.readUInt32BE(0) >= 16 && bytes.readUInt32BE(0) <= bytes.length;
+  return webm || wav || mp4 ? bytes : null;
 }
 
 function setCors(req, res) {
@@ -74,7 +76,7 @@ async function transcribe(voice) {
   const form = new FormData();
   form.set('model', process.env.OPENAI_TRANSCRIPTION_MODEL || 'gpt-4o-mini-transcribe');
   form.set('file', new Blob([audioBytes(voice)], {
-    type: voice.format === 'wav' ? 'audio/wav' : 'audio/webm',
+    type: { wav: 'audio/wav', webm: 'audio/webm', mp4: 'audio/mp4' }[voice.format],
   }), `answer.${voice.format}`);
   const result = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method: 'POST',
