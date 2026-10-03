@@ -151,7 +151,8 @@ export default async function handler(req, res) {
     }
     access = await serviceRpc('reserve_ai_evaluation', { p_user_id: user.id });
     }
-  } catch {
+  } catch (error) {
+    console.error('Access verification failed', error instanceof Error ? error.message : 'Unknown error');
     return res.status(503).json({ error: 'Subscription verification unavailable' });
   }
   if (!access?.allowed) return res.status(403).json({ error: 'Evaluation limit reached or active subscription required' });
