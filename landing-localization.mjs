@@ -1,0 +1,10 @@
+import {languages,translate,preferredLanguage,rememberLanguage} from './locales.mjs';
+import {landingCopy} from './landing-copy.mjs';
+const select=document.getElementById('landingLanguage');
+function apply(){const language=select.value;const index=Object.keys(languages).indexOf(language);document.documentElement.lang=languages[language].code;document.documentElement.dir=language==='arabic'?'rtl':'ltr';rememberLanguage(language);
+  for(const el of document.querySelectorAll('[data-copy]'))el.textContent=landingCopy[el.dataset.copy][index];
+  for(const el of document.querySelectorAll('[data-i18n]'))el.textContent=translate(el.dataset.i18n,language);
+  select.setAttribute('aria-label',translate('language',language));
+  document.title='Mostaed | '+landingCopy.heroTitle[index];
+}
+select.value=preferredLanguage();select.addEventListener('change',apply);apply();

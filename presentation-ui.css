@@ -105,3 +105,5 @@
 .report-plan{padding-inline-start:24px}
 .report-plan li{margin:12px 0;padding:16px 20px}
 @media(max-width:650px){.report-skills{grid-template-columns:1fr}.report-answer,.report-skill{padding:14px}}
+
+.app-locale{display:flex;align-items:center;gap:8px;font-size:13px}.app-locale select{width:auto;min-width:100px;padding:8px 10px}.app-nav{flex-wrap:wrap;gap:12px}

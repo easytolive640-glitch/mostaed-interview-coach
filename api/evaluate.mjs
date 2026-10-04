@@ -1,3 +1,4 @@
+import {languages} from '../locales.mjs';
 import { verifiedSubscription } from '../lib/server/paypal.mjs';
 import { authenticatedUser, configured, serviceRpc, temporaryTestAccess, testAiConfigured, reserveTestEvaluation } from '../lib/server/paid-access.mjs';
 
@@ -8,7 +9,7 @@ import { reportSchema, checkedReport } from '../lib/server/evaluation-report.mjs
 import { saveEvaluation } from '../lib/server/evaluation-history.mjs';
 
 const allowedCategories = new Set(['hr', 'customerService', 'itCloud']);
-const allowedLanguages = new Set(['arabic', 'english']);
+const allowedLanguages = new Set(Object.keys(languages));
 const allowedOrigins = () => new Set([
   'https://mostaed-interview-coach.vercel.app',
   'https://easytolive640-glitch.github.io',
@@ -125,9 +126,7 @@ export default async function handler(req, res) {
   }
   if (!access?.allowed) return res.status(403).json({ error: 'Evaluation limit reached or active subscription required' });
 
-  const languageInstruction = req.body.language === 'arabic'
-    ? 'Write all feedback in clear Modern Standard Arabic.'
-    : 'Write all feedback in clear English.';
+  const languageInstruction = `Write all feedback, suggested answers and practice exercises in ${languages[req.body.language].feedback}.`;
 
   try {
     const voiceAnswer = req.body.voice ? await transcribe(req.body.voice) : null;

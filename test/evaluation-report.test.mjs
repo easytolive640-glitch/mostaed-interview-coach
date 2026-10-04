@@ -40,9 +40,9 @@ class Element {
   set innerHTML(value){throw Error('Unsafe HTML rendering');}
 }
 const allNodes=el=>[el,...el.children.flatMap(allNodes)];
-test('full reports render safely in English and Arabic; legacy history remains readable',()=>{
+test('full reports render safely in all five languages; legacy history remains readable',()=>{
   globalThis.document={createElement:tag=>new Element(tag)};
-  for(const language of ['english','arabic']){
+  for(const language of ['english','arabic','french','spanish','german']){
     const body=makeBody('customerService'),r=fixture(body);r.answers[0].suggestedAnswer='<img src=x onerror=alert(1)>';
     const root=new Element('div');renderEvaluation(root,checkedReport(r,body,false),language,'customerService');
     const nodes=allNodes(root);assert.equal(nodes.filter(n=>n.tag==='details').length,15);

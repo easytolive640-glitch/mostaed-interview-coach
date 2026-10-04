@@ -1,0 +1,35 @@
+const translations={
+'Your coaching report':['Votre rapport de coaching','Tu informe de preparación','Ihr Coachingbericht'],
+'Interview category: ':['Type d’entretien : ','Categoría de entrevista: ','Interviewbereich: '],
+'HR':['Ressources humaines','Recursos humanos','Personalwesen'],'Customer Service':['Service client','Atención al cliente','Kundenservice'],'IT & Cloud':['Informatique et cloud','Informática y nube','IT und Cloud'],
+'What you do well':['Vos points forts','Lo que haces bien','Ihre Stärken'],'Your main opportunities':['Vos principales pistes de progrès','Tus principales oportunidades de mejora','Ihre wichtigsten Verbesserungsmöglichkeiten'],
+'Skills for this interview category':['Compétences pour ce type d’entretien','Habilidades para esta categoría','Fähigkeiten für diesen Interviewbereich'],
+'Question-by-question coaching':['Conseils pour chaque question','Orientación para cada pregunta','Feedback zu jeder Frage'],
+'Open a question to see why it received its score and how to improve it.':['Ouvrez une question pour comprendre sa note et améliorer votre réponse.','Abre una pregunta para entender su puntuación y mejorarla.','Öffnen Sie eine Frage, um die Bewertung und Verbesserungsmöglichkeiten zu sehen.'],
+'Question ':['Question ','Pregunta ','Frage '],
+'Why this score:':['Pourquoi cette note :','Por qué esta puntuación:','Warum diese Bewertung:'],
+'What worked:':['Ce qui a bien fonctionné :','Lo que funcionó:','Was gut funktioniert hat:'],
+'Improve next:':['À améliorer ensuite :','Próxima mejora:','Nächste Verbesserung:'],
+'Suggested answer draft':['Proposition de réponse','Borrador de respuesta sugerida','Vorgeschlagener Antwortentwurf'],
+'Adapt this draft to your own experience. Replace brackets with true details and verify every fact.':['Adaptez ce texte à votre expérience. Remplacez les crochets par des détails réels et vérifiez chaque fait.','Adapta este borrador a tu experiencia. Sustituye los corchetes por detalles reales y verifica cada dato.','Passen Sie den Entwurf an Ihre Erfahrung an. Ersetzen Sie Klammern durch wahre Angaben und prüfen Sie alle Fakten.'],
+'Practice follow-up:':['Question de suivi :','Pregunta de seguimiento:','Übungsnachfrage:'],
+'Voice answer coaching':['Conseils sur la réponse audio','Orientación para la respuesta de audio','Feedback zur Audioantwort'],
+'No voice answer was submitted.':['Aucune réponse audio fournie.','No se envió una respuesta de audio.','Keine Audioantwort eingereicht.'],
+'This assesses answer content, not accent or vocal delivery.':['Le contenu est évalué, pas l’accent ni la manière de parler.','Se evalúa el contenido, no el acento ni la expresión vocal.','Bewertet wird der Inhalt, nicht Akzent oder Sprechweise.'],
+'CV consistency coaching':['Cohérence avec le CV','Coherencia con el CV','Übereinstimmung mit dem Lebenslauf'],
+'No CV context was submitted.':['Aucun contexte de CV fourni.','No se proporcionó contexto del CV.','Kein Lebenslaufkontext eingereicht.'],
+'This compares interview evidence with the supplied CV; it is not a hiring decision.':['Comparaison des réponses avec le CV fourni ; ce n’est pas une décision de recrutement.','Compara las respuestas con el CV; no es una decisión de contratación.','Vergleicht Antworten mit dem Lebenslauf; dies ist keine Einstellungsentscheidung.'],
+'Strength:':['Point fort :','Fortaleza:','Stärke:'],'Next improvement:':['Prochaine amélioration :','Próxima mejora:','Nächste Verbesserung:'],'Exercise:':['Exercice :','Ejercicio:','Übung:'],
+'Your next practice plan':['Votre prochain plan d’entraînement','Tu próximo plan de práctica','Ihr nächster Übungsplan'],'Action:':['Action :','Acción:','Maßnahme:'],'Success looks like:':['Critères de réussite :','Criterios de éxito:','Erfolgskriterien:'],
+'Revise the lowest-scoring answers, rehearse the follow-ups, then repeat the practice to compare progress in your history.':['Améliorez les réponses les moins bien notées, répétez les questions de suivi, puis recommencez pour comparer vos progrès dans l’historique.','Mejora las respuestas con menor puntuación, ensaya las preguntas de seguimiento y repite para comparar tu progreso en el historial.','Überarbeiten Sie schwache Antworten, üben Sie Nachfragen und wiederholen Sie das Interview, um Fortschritte im Verlauf zu vergleichen.'],
+'Communication':['Communication','Comunicación','Kommunikation'],'Motivation':['Motivation','Motivación','Motivation'],'Teamwork':['Travail en équipe','Trabajo en equipo','Teamarbeit'],'Self-awareness':['Connaissance de soi','Autoconocimiento','Selbstreflexion'],'Empathy':['Empathie','Empatía','Einfühlungsvermögen'],'Problem resolution':['Résolution de problèmes','Resolución de problemas','Problemlösung'],'Ownership':['Responsabilisation','Responsabilidad','Verantwortungsübernahme'],'Technical accuracy':['Exactitude technique','Precisión técnica','Technische Genauigkeit'],'Troubleshooting':['Diagnostic des pannes','Diagnóstico de problemas','Fehlerdiagnose'],'Security':['Sécurité','Seguridad','Sicherheit'],'Reliability':['Fiabilité','Fiabilidad','Zuverlässigkeit'],
+'Score analysis':['Analyse des notes','Análisis de puntuaciones','Bewertungsanalyse'],'Overall':['Note globale','Puntuación total','Gesamtbewertung'],'Text answers':['Réponses écrites','Respuestas escritas','Schriftliche Antworten'],'Voice answer':['Réponse audio','Respuesta de audio','Audioantwort'],'CV consistency':['Cohérence du CV','Coherencia del CV','Lebenslaufkonsistenz'],'Not evaluated':['Non évalué','No evaluado','Nicht bewertet'],
+'Scores are out of 100. Overall is weighted, rather than a simple average. “Not evaluated” means that input was absent.':['Notes sur 100. Le total est pondéré, pas une simple moyenne. « Non évalué » indique un élément non fourni.','Puntuaciones sobre 100. El total es ponderado, no una media simple. « No evaluado » significa que no se proporcionó ese elemento.','Bewertungen von 100. Der Gesamtwert ist gewichtet. „Nicht bewertet“ bedeutet, dass diese Eingabe fehlte.'],
+'Interview score analysis':['Analyse des notes d’entretien','Análisis de puntuaciones de entrevista','Analyse der Interviewbewertung'],
+'Text is the average of individual answer scores. Overall weights: text {text}%, voice {voice}%, CV {cv}%. Skill scores below are separate diagnostics.':['La note écrite est la moyenne des réponses. Pondération : écrit {text} %, audio {voice} %, CV {cv} %. Les compétences sont des indicateurs distincts.','La nota escrita es la media de las respuestas. Pesos: texto {text} %, audio {voice} %, CV {cv} %. Las habilidades son indicadores independientes.','Textbewertung: Durchschnitt der Antworten. Gewichte: Text {text} %, Audio {voice} %, Lebenslauf {cv} %. Fähigkeiten sind separate Diagnosewerte.'],
+};
+export function reportText(english,arabic,language='english',values={}){
+  const i=['french','spanish','german'].indexOf(language);
+  let text=language==='arabic'?arabic:(i>=0?translations[english]?.[i]:english)||english;
+  for(const [key,value] of Object.entries(values))text=text.replaceAll('{'+key+'}',String(value));return text;
+}

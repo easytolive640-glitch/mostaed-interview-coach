@@ -1,3 +1,4 @@
+import {reportText} from './report-translations.mjs';
 import {appendScoreChart} from './score-chart.mjs';
 const labels={
   communication:['Communication','التواصل'],motivation:['Motivation','الدافع المهني'],teamwork:['Teamwork','العمل الجماعي'],selfAwareness:['Self-awareness','الوعي بالذات'],
@@ -7,16 +8,16 @@ const labels={
 function node(tag,text,className){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(className)el.className=className;return el;}
 function paragraph(container,label,text){if(!text)return;const p=node('p');p.append(node('strong',label+' '),node('span',text));container.append(p);}
 export function renderEvaluation(container,evaluation,language='english',category) {
-  const ar=language==='arabic';const t=(en,arabic)=>ar?arabic:en;
+  const ar=language==='arabic';const t=(en,arabic)=>reportText(en,arabic,language);
   const section=node('section',undefined,'evaluation-report');section.dir=ar?'rtl':'ltr';
   section.append(node('h2',t('Your coaching report','تقريرك التدريبي')+' · '+evaluation.score+'/100'));
   const categories={hr:['HR','الموارد البشرية'],customerService:['Customer Service','خدمة العملاء'],itCloud:['IT & Cloud','تقنية المعلومات والسحابة']};
-  const cat=categories[category];if(cat)section.append(node('p',t('Interview category: ','نوع المقابلة: ')+cat[ar?1:0]));
+  const cat=categories[category];if(cat)section.append(node('p',t('Interview category: ','نوع المقابلة: ')+t(cat[0],cat[1])));
   if(evaluation.summary)section.append(node('p',evaluation.summary,'report-summary'));
   appendScoreChart(section,evaluation,language);
-  if(evaluation.scoringWeights){const w=evaluation.scoringWeights;section.append(node('small',t(
-    `Text is the average of individual answer scores. Overall weights: text ${w.text}%, voice ${w.voice}%, CV ${w.cv}%. Skill scores below are separate diagnostics.`,
-    `درجة الكتابة هي متوسط درجات الإجابات. أوزان الإجمالي: الكتابة ${w.text}٪، الصوت ${w.voice}٪، السيرة ${w.cv}٪. درجات المهارات أدناه مؤشرات تشخيصية مستقلة.`)));
+  if(evaluation.scoringWeights){const w=evaluation.scoringWeights;section.append(node('small',reportText(
+    'Text is the average of individual answer scores. Overall weights: text {text}%, voice {voice}%, CV {cv}%. Skill scores below are separate diagnostics.',
+    'درجة الكتابة هي متوسط درجات الإجابات. أوزان الإجمالي: الكتابة {text}٪، الصوت {voice}٪، السيرة {cv}٪. درجات المهارات مؤشرات مستقلة.',language,w)));
   }
   for(const [heading,items] of [[t('What you do well','نقاط قوتك'),evaluation.strengths],[t('Your main opportunities','فرص التحسين الرئيسية'),evaluation.improvements]]){
     if(!items?.length)continue;section.append(node('h3',heading));const ul=node('ul');for(const item of items)ul.append(node('li',item));section.append(ul);
@@ -24,7 +25,7 @@ export function renderEvaluation(container,evaluation,language='english',categor
   if(evaluation.competencies?.length){
     section.append(node('h3',t('Skills for this interview category','مهارات نوع المقابلة')));
     const grid=node('div',undefined,'report-skills');
-    for(const c of evaluation.competencies){const card=node('section',undefined,'report-skill');const label=labels[c.key]?.[ar?1:0]||c.key;
+    for(const c of evaluation.competencies){const card=node('section',undefined,'report-skill');const label=labels[c.key]?t(...labels[c.key]):c.key;
       card.append(node('h4',label+' · '+c.score+'/100'));const meter=node('meter');meter.min=0;meter.max=100;meter.value=c.score;meter.setAttribute('aria-label',label);card.append(meter,node('p',c.explanation));grid.append(card);
     }section.append(grid);
   }

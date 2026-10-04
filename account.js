@@ -1,7 +1,11 @@
+import {localizeMessage} from './localized-messages.mjs';
+import {initLocalization,currentLanguage,applyLocale} from './app-localization.mjs';
+import {translate} from './locales.mjs';
+initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs';
 const $ = id => document.getElementById(id);
 let config, session, recoveryToken, creatingAccount = false;
-const notice = text => { $('notice').textContent = text; };
+const notice = text => { $('notice').textContent = localizeMessage(text,currentLanguage()); };
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
   $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.billingEnabled;
 }
@@ -13,7 +17,7 @@ function signupMode(enabled) {
   creatingAccount=enabled; $('signupFields').hidden=!enabled; $('signupFields').disabled=!enabled;
   $('confirmLabel').hidden=!enabled; $('signupConfirm').disabled=!enabled;
   $('signup').hidden=enabled; $('backLogin').hidden=!enabled; $('forgot').hidden=enabled;
-  $('authSubmit').textContent=enabled?'Create account / إنشاء حساب':'Sign in / تسجيل الدخول';
+  $('authSubmit').dataset.i18n=enabled?'signup':'signIn';applyLocale();
   $('password').autocomplete=enabled?'new-password':'current-password';
   $('password').value=''; $('signupConfirm').value='';
   notice(enabled?'Fill in your details to create your Mostaed account. / أدخل بياناتك لإنشاء الحساب':'Sign in with your email and password.');
@@ -88,9 +92,8 @@ try {
   const settingsResponse = await fetch('/api/account-config?settings=1', { signal: AbortSignal.timeout(15000) }).catch(() => ({ok:false}));
   const settings = settingsResponse.ok ? await settingsResponse.json() : {};
   $('google').disabled = settings.external?.google !== true;
-  $('googleNotice').textContent = settings.external?.google === true
-    ? 'Use your Google account or sign in with email below.'
-    : 'Google sign-in is being configured. Email sign-in is available below.';
+  $('googleNotice').dataset.i18n = settings.external?.google === true ? 'googleHelp' : 'googleUnavailable';
+  applyLocale();
   session=JSON.parse(sessionStorage.getItem('mostaed_account')||'null');
   if(session?.expires_at*1000<Date.now()){session=null;sessionStorage.removeItem('mostaed_account');}
   const fragment = new URLSearchParams(location.hash.slice(1));

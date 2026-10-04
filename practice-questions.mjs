@@ -1,3 +1,4 @@
+import {questionTranslations} from './question-translations.mjs';
 export const questionBank = {
   "hr": [
     {
@@ -306,6 +307,12 @@ export const questionBank = {
     }
   ]
 };
+for (const [language,categories] of Object.entries(questionTranslations)) {
+  for (const [category,translations] of Object.entries(categories)) {
+    if(translations.length !== questionBank[category].length) throw Error('Incomplete question translation');
+    questionBank[category].forEach((question,index)=>question[language]=translations[index]);
+  }
+}
 export function paidQuestions(category, date = new Date()) {
   const all = questionBank[category];
   if (!all) throw new Error("Invalid category");
@@ -313,3 +320,4 @@ export function paidQuestions(category, date = new Date()) {
   const offset = ((date.getUTCFullYear()*12 + date.getUTCMonth()+1)*5)%pool.length;
   return [...all.slice(0,5), ...Array.from({length:10},(_,i)=>pool[(offset+i)%pool.length])];
 }
+

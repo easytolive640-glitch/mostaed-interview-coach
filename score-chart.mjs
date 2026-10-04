@@ -1,16 +1,18 @@
+import {reportText} from './report-translations.mjs';
 export function appendScoreChart(container, evaluation, language = 'english') {
   const arabic = language === 'arabic';
+  const t=(en,ar)=>reportText(en,ar,language);
   const section = document.createElement('section');
-  section.setAttribute('aria-label', arabic ? 'تحليل درجات المقابلة' : 'Interview score analysis');
+  section.setAttribute('aria-label', t('Interview score analysis','تحليل درجات المقابلة'));
   section.style.cssText = 'margin:24px 0;padding:20px;border:1px solid #ded5ef;border-radius:16px;background:#faf7ff';
   const heading = document.createElement('h3');
-  heading.textContent = arabic ? 'تحليل الدرجات' : 'Score analysis';
+  heading.textContent = t('Score analysis','تحليل الدرجات');
   section.append(heading);
   const rows = [
-    [arabic ? 'الإجمالي' : 'Overall', evaluation.score, '#6235b5'],
-    [arabic ? 'الإجابات المكتوبة' : 'Text answers', evaluation.textScore, '#246bb8'],
-    [arabic ? 'الإجابة الصوتية' : 'Voice answer', evaluation.voiceScore, '#087e72'],
-    [arabic ? 'اتساق السيرة الذاتية' : 'CV consistency', evaluation.cvScore, '#a44c12'],
+    [t('Overall','الإجمالي'), evaluation.score, '#6235b5'],
+    [t('Text answers','الإجابات المكتوبة'), evaluation.textScore, '#246bb8'],
+    [t('Voice answer','الإجابة الصوتية'), evaluation.voiceScore, '#087e72'],
+    [t('CV consistency','اتساق السيرة الذاتية'), evaluation.cvScore, '#a44c12'],
   ];
   for (const [label, score, color] of rows) {
     const row = document.createElement('div');
@@ -21,7 +23,7 @@ export function appendScoreChart(container, evaluation, language = 'english') {
     name.textContent = label;
     const value = document.createElement('strong');
     const available = Number.isInteger(score) && score >= 0 && score <= 100;
-    value.textContent = available ? score + '/100' : (arabic ? 'لم يُقيّم' : 'Not evaluated');
+    value.textContent = available ? score + '/100' : (t('Not evaluated','لم يُقيّم'));
     caption.append(name, value);
     row.append(caption);
     if (available) {
@@ -42,9 +44,7 @@ export function appendScoreChart(container, evaluation, language = 'english') {
     section.append(row);
   }
   const note = document.createElement('small');
-  note.textContent = arabic
-    ? 'الدرجات من 100. الدرجة الإجمالية موزونة وليست متوسطاً بسيطاً. «لم يُقيّم» يعني عدم توفر هذا المدخل.'
-    : 'Scores are out of 100. Overall is weighted, rather than a simple average. “Not evaluated” means that input was absent.';
+  note.textContent = t('Scores are out of 100. Overall is weighted, rather than a simple average. “Not evaluated” means that input was absent.','الدرجات من 100. الإجمالي موزون. «لم يُقيّم» يعني أن المدخل غير متوفر.');
   section.append(note);
   container.append(section);
 }

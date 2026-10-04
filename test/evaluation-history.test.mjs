@@ -22,3 +22,7 @@ test('database failures are surfaced as save failures',async()=>{
  globalThis.fetch=async()=>new Response('{}',{status:404});
  await assert.rejects(()=>saveEvaluation({id:'verified-owner'},{category:'hr',language:'english'},{score:70}));
 });
+test('new report languages persist without breaking a legacy English/Arabic database constraint',async()=>{
+ globalThis.fetch=async(url,options)=>{const record=JSON.parse(options.body);assert.equal(record.language,'english');assert.equal(record.evaluation.reportLanguage,'french');assert.equal(record.user_id,'verified-owner');return new Response(null,{status:201});};
+ await saveEvaluation({id:'verified-owner'},{category:'hr',language:'french'},{score:70});
+});
