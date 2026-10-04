@@ -1,4 +1,4 @@
-import {appendScoreChart} from './score-chart.mjs';
+import {renderEvaluation} from './evaluation-report.mjs';
 const notice=document.getElementById('notice'), list=document.getElementById('history'), refresh=document.getElementById('refresh');
 async function loadHistory(){
   refresh.disabled=true;
@@ -14,11 +14,7 @@ async function loadHistory(){
       const summary=document.createElement('summary');
       const label={hr:'HR / الموارد البشرية',customerService:'Customer Service / خدمة العملاء',itCloud:'IT & Cloud / تقنية المعلومات والسحابة'}[item.category]||item.category;
       summary.textContent=new Date(item.created_at).toLocaleString()+' · '+label+' · '+item.evaluation.score+'/100';
-      card.append(summary);appendScoreChart(card,item.evaluation,item.language);
-      for(const [label,items] of [['Strengths / نقاط القوة',item.evaluation.strengths],['Improve / التحسينات',item.evaluation.improvements]]){
-        const heading=document.createElement('h3');heading.textContent=label;
-        const ul=document.createElement('ul');for(const text of items||[]){const li=document.createElement('li');li.textContent=text;ul.append(li);}card.append(heading,ul);
-      }
+      card.append(summary);renderEvaluation(card,item.evaluation,item.language,item.category);
       list.append(card);
     }
     notice.textContent=data.items.length?'Saved evaluations for your account / تقييمات حسابك المحفوظة':'No saved evaluations yet / لا توجد تقييمات محفوظة بعد';

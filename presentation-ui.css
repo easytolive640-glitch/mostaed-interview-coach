@@ -89,3 +89,19 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 
 .app-page [hidden]{display:none!important}
+
+/* Detailed coaching report */
+.evaluation-report{line-height:1.7;overflow-wrap:anywhere}
+.evaluation-report h3{margin-top:32px}
+.evaluation-report h4{margin:12px 0 8px}
+.report-summary{font-size:1.08rem;color:var(--ui-ink)}
+.report-skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.report-skill,.report-answer,.report-plan li{border:1px solid var(--ui-line);border-radius:16px;padding:18px;background:#fcfaff}
+.report-skill meter{width:100%;height:18px;accent-color:var(--ui-brand)}
+.report-answer{margin:14px 0}
+.report-answer summary{font-weight:700;color:var(--ui-brand);cursor:pointer;padding:6px 0}
+.report-answer[open] summary{border-bottom:1px solid var(--ui-line);margin-bottom:16px}
+.report-draft{background:var(--ui-soft);border-radius:12px;padding:16px;white-space:pre-wrap}
+.report-plan{padding-inline-start:24px}
+.report-plan li{margin:12px 0;padding:16px 20px}
+@media(max-width:650px){.report-skills{grid-template-columns:1fr}.report-answer,.report-skill{padding:14px}}

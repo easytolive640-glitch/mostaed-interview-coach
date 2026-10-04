@@ -3,6 +3,8 @@ import { authenticatedUser, configured, serviceRpc, temporaryTestAccess, testAiC
 
 import { categoryRubrics, validCategoryQuestions, evaluationContext, readableFeedback } from '../lib/server/evaluation-context.mjs';
 
+import { reportSchema, checkedReport } from '../lib/server/evaluation-report.mjs';
+
 import { saveEvaluation } from '../lib/server/evaluation-history.mjs';
 
 const allowedCategories = new Set(['hr', 'customerService', 'itCloud']);
@@ -12,29 +14,6 @@ const allowedOrigins = () => new Set([
   'https://easytolive640-glitch.github.io',
   ...(process.env.ALLOWED_ORIGIN ? [process.env.ALLOWED_ORIGIN] : []),
 ]);
-
-const schema = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    textScore: { type: 'integer', minimum: 0, maximum: 100 },
-    voiceScore: { type: ['integer', 'null'], minimum: 0, maximum: 100 },
-    cvScore: { type: ['integer', 'null'], minimum: 0, maximum: 100 },
-    strengths: {
-      type: 'array',
-      minItems: 1,
-      maxItems: 3,
-      items: { type: 'string', maxLength: 300 },
-    },
-    improvements: {
-      type: 'array',
-      minItems: 1,
-      maxItems: 3,
-      items: { type: 'string', maxLength: 300 },
-    },
-  },
-  required: ['textScore', 'voiceScore', 'cvScore', 'strengths', 'improvements'],
-};
 
 function audioBytes(voice) {
   if (!voice || !['webm', 'wav', 'mp4'].includes(voice.format) ||
@@ -92,23 +71,6 @@ async function transcribe(voice) {
   if (typeof transcript !== 'string' || transcript.trim().length < 2 ||
       transcript.length > 3000) throw new Error('No usable voice answer');
   return transcript.trim();
-}
-
-function checkedEvaluation(value, hasVoice, hasCv) {
-  if (!value || !Number.isInteger(value.textScore) || value.textScore < 0 || value.textScore > 100 ||
-      ![value.voiceScore, value.cvScore].every(v => v === null ||
-        (Number.isInteger(v) && v >= 0 && v <= 100)) ||
-      (hasVoice && value.voiceScore === null) || (hasCv && value.cvScore === null) ||
-      !Array.isArray(value.strengths) || !Array.isArray(value.improvements) ||
-      ![value.strengths, value.improvements].every(items => items.length >= 1 && items.length <= 3 &&
-        items.every(item => typeof item === 'string' && item.length <= 300))) {
-    throw new Error('Invalid evaluation output');
-  }
-  const textWeight = hasVoice ? (hasCv ? 0.7 : 0.8) : (hasCv ? 0.9 : 1);
-  const score = Math.round(value.textScore * textWeight +
-    (hasVoice ? value.voiceScore * 0.2 : 0) + (hasCv ? value.cvScore * 0.1 : 0));
-  return { score, textScore: value.textScore, voiceScore: hasVoice ? value.voiceScore : null,
-    cvScore: hasCv ? value.cvScore : null, strengths: value.strengths, improvements: value.improvements };
 }
 
 function extractOutput(response) {
@@ -189,24 +151,23 @@ export default async function handler(req, res) {
           'If a voice answer is provided, score its content separately; do not score accent, identity, gender, or background noise.',
           'If a CV is provided, score consistency between the answers and CV evidence, not the candidate’s eligibility for employment.',
           'Return null for voiceScore or cvScore when that input is absent. Do not include a transcript or CV personal details in feedback.',
-          'Keep each feedback item concise and actionable.',
+          'Return one answers entry for every supplied questionNumber, in order. For each answer explain its score using relevance, correctness and clarity, identify one specific strength and the highest-impact improvement, offer a better answer based ONLY on the supplied evidence, and ask one realistic follow-up question. Use bracketed placeholders for missing true details; never invent achievements, numbers or technical experience.',
+          'Score each answer from 0 to 100: 0-39 misses the question or has major errors; 40-59 partially relevant with important gaps; 60-79 relevant and mostly correct but missing useful detail; 80-100 specific, clear and accurate for the question. Apply these anchors consistently; the server averages these scores for textScore.',
+          'Provide four category-specific competencies using each allowed key once. Explain the evidence and limits behind each competency score, referencing visible question numbers. These scores are diagnostic and do not contribute separately to the overall score.',
+          'Write a balanced summary and exactly three practicePlan priorities numbered 1, 2, 3, ordered by impact. Each must include an action, a concrete practice exercise and observable success criteria tailored to this interview.',
+          'For provided voice content and CV, give assessment, strength, improvement and exercise. Voice feedback must be about transcribed answer content only, not vocal delivery, confidence, fluency, pronunciation or accent. CV feedback must distinguish contradiction from details simply absent from the CV; missing evidence is not dishonesty. Return null feedback for absent inputs.',
+          'Do not repeat contact information or other sensitive personal details in suggested answers or feedback. Suggested answers are coaching drafts that require the user to verify every fact. Do not predict hiring success or make employment suitability decisions.',
+          'Keep each field focused and within its length limit.',
           languageInstruction,
         ].join(' '),
         input: JSON.stringify(context),
-        max_output_tokens: 3000,
+        max_output_tokens: 12000,
         text: {
           format: {
             type: 'json_schema',
             name: 'interview_evaluation',
             strict: true,
-            schema: {
-              ...schema,
-              properties: {
-                ...schema.properties,
-                voiceScore: voiceAnswer ? { type: 'integer', minimum: 0, maximum: 100 } : { type: 'null' },
-                cvScore: req.body.cvText ? { type: 'integer', minimum: 0, maximum: 100 } : { type: 'null' },
-              },
-            },
+            schema: reportSchema(req.body, Boolean(voiceAnswer)),
           },
         },
       }),
@@ -223,7 +184,7 @@ export default async function handler(req, res) {
         response.incomplete_details?.reason || 'unknown');
       throw new Error('The AI response did not complete');
     }
-    const evaluation = checkedEvaluation(JSON.parse(extractOutput(response)), Boolean(voiceAnswer), Boolean(req.body.cvText));
+    const evaluation = checkedReport(JSON.parse(extractOutput(response)), req.body, Boolean(voiceAnswer));
     evaluation.strengths = readableFeedback(evaluation.strengths, req.body);
     evaluation.improvements = readableFeedback(evaluation.improvements, req.body);
     let historySaved = false;
