@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mostaed-interview-coach.vercel.app/sitemap.xml
