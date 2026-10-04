@@ -10,3 +10,314 @@ howTitle:['A clear path from practice to progress.','طريق واضح من ال
 pricingTitle:['Start simply. Add personal coaching when you need it.','ابدأ ببساطة. أضف التدريب الشخصي عند الحاجة.',"Commencez simplement. Ajoutez du coaching personnalisé selon vos besoins.",'Empieza de forma sencilla. Añade orientación personalizada cuando la necesites.','Einfach starten. Persönliches Coaching nach Bedarf ergänzen.'],free:['Free','مجاني','Gratuit','Gratis','Kostenlos'],freeBody:['Five text questions per session in five languages. Basic on-device feedback.','خمسة أسئلة كتابية لكل جلسة بخمس لغات وملاحظات أساسية على جهازك.',"Cinq questions écrites par séance en cinq langues. Retours simples sur votre appareil.",'Cinco preguntas escritas por sesión en cinco idiomas. Comentarios básicos en tu dispositivo.','Fünf schriftliche Fragen pro Sitzung in fünf Sprachen. Einfaches Feedback auf Ihrem Gerät.'],proBody:['15 text questions, up to 100 evaluations per month, and optional CV text plus one voice answer.','15 سؤالاً كتابياً، حتى 100 تقييم شهرياً، ونص سيرة وإجابة صوتية اختيارية.',"15 questions écrites, jusqu’à 100 évaluations par mois, texte de CV et une réponse audio facultatifs.",'15 preguntas escritas, hasta 100 evaluaciones al mes, texto del CV y una respuesta de audio opcionales.','15 schriftliche Fragen, bis zu 100 Auswertungen im Monat sowie optional Lebenslauftext und eine Audioantwort.'],month:['/ month','/ شهرياً','/ mois','/ mes','/ Monat'],proBenefit:['Detailed reports · five languages · saved history','تقارير مفصلة · خمس لغات · سجل محفوظ',"Rapports détaillés · cinq langues · historique enregistré",'Informes detallados · cinco idiomas · historial guardado','Detaillierte Berichte · fünf Sprachen · gespeicherter Verlauf'],paymentNote:['Monthly subscription until cancelled. Paid AI access requires verified payment. Each submitted evaluation consumes an attempt, including provider failures after reservation.','اشتراك شهري حتى الإلغاء. يتطلب التدريب الذكي التحقق من الدفع. يستهلك كل تقييم محاولة، بما فيها فشل المزود بعد الحجز.',"Abonnement mensuel jusqu’à résiliation. Paiement vérifié requis. Chaque évaluation utilise une tentative, y compris les échecs après réservation.",'Suscripción mensual hasta cancelar. Requiere pago verificado. Cada evaluación consume un intento, incluso si el proveedor falla después de reservarlo.','Monatliches Abo bis zur Kündigung. Verifizierte Zahlung erforderlich. Jede Auswertung verbraucht einen Versuch, auch bei Anbieterfehlern nach Reservierung.'],
 centersTitle:['Bring interview practice into your career-readiness program.','أضف تدريب المقابلات إلى برنامج التأهيل المهني.',"Intégrez les entretiens à votre programme de préparation professionnelle.",'Integra la práctica de entrevistas en tu programa de preparación laboral.','Integrieren Sie Interviewübungen in Ihr Karriereprogramm.'],centersBody:['Use Mostaed as a guided practice tool for students and job seekers. Demonstrate a question, review the coaching report, and discuss the next improvement together.','استخدم مستعد للتدريب الموجّه للطلاب والباحثين عن عمل. اعرض سؤالاً وراجع التقرير وناقش التحسين التالي معاً.',"Utilisez Mostaed pour accompagner étudiants et candidats. Présentez une question, examinez le rapport et discutez des prochaines améliorations.",'Usa Mostaed para orientar a estudiantes y candidatos. Presenta una pregunta, revisa el informe y analiza juntos la próxima mejora.','Nutzen Sie Mostaed für Studierende und Bewerber. Zeigen Sie eine Frage, besprechen Sie den Bericht und die nächste Verbesserung.'],demo:['Explore the practice flow','استكشف مسار التدريب',"Découvrir le parcours",'Explorar el flujo de práctica','Übungsablauf ansehen'],privacy:['CV text is sent for evaluation only with consent. Original CV text and recordings are not stored in report history. AI feedback is coaching guidance, not a hiring decision.','يُرسل نص السيرة للتقييم بموافقتك فقط. لا يُخزن النص الأصلي أو التسجيلات في سجل التقارير. الملاحظات تدريبية وليست قرار توظيف.',"Le texte du CV est envoyé avec votre consentement. Texte brut et audio ne sont pas conservés dans l’historique. Les conseils IA ne sont pas une décision de recrutement.",'El CV se envía con tu consentimiento. El texto original y las grabaciones no se guardan en el historial. La orientación de IA no es una decisión de contratación.','Lebenslauftext wird nur mit Zustimmung gesendet. Originaltext und Aufnahmen werden nicht im Verlauf gespeichert. KI-Feedback ist keine Einstellungsentscheidung.'],android:['Android release in preparation. Practice on the web today.','نسخة أندرويد قيد الإعداد. تدرّب على الويب الآن.',"Version Android en préparation. Entraînez-vous sur le web dès maintenant.",'La versión Android está en preparación. Practica en la web hoy.','Android-Version in Vorbereitung. Üben Sie schon jetzt im Web.'],
 };
+
+Object.assign(landingCopy, {
+  "oldHero": [
+    "Practice smarter.",
+    "تدرّب بذكاء.",
+    "Entraînez-vous mieux.",
+    "Practica con inteligencia.",
+    "Üben Sie gezielter."
+  ],
+  "oldHeroAccent": [
+    "Interview stronger.",
+    "وتألق في المقابلة.",
+    "Réussissez votre entretien.",
+    "Destaca en tu entrevista.",
+    "Überzeugen Sie im Gespräch."
+  ],
+  "oldBadge": [
+    "Five languages · Free practice + AI coaching",
+    "خمس لغات · تدريب مجاني وتدريب ذكي",
+    "Cinq langues · Entraînement gratuit et coaching IA",
+    "Cinco idiomas · Práctica gratuita y orientación de IA",
+    "Fünf Sprachen · Kostenlose Übung und KI-Coaching"
+  ],
+  "voiceTitle": [
+    "Bring your voice into the interview.",
+    "اجعل صوتك جزءاً من المقابلة.",
+    "Faites entendre votre voix.",
+    "Haz que tu voz forme parte de la entrevista.",
+    "Bringen Sie Ihre Stimme ins Gespräch."
+  ],
+  "voiceBody": [
+    "Record or upload one answer alongside your 15 written answers. AI Pro gives feedback on what you said and how clearly your answer addresses the question.",
+    "سجّل أو ارفع إجابة صوتية مع إجاباتك الكتابية الـ15. تقدم AI Pro ملاحظات حول محتوى إجابتك ومدى وضوح استجابتها للسؤال.",
+    "Enregistrez ou importez une réponse avec vos 15 réponses écrites. AI Pro analyse son contenu et sa pertinence par rapport à la question.",
+    "Graba o sube una respuesta junto con tus 15 respuestas escritas. AI Pro evalúa el contenido y la claridad con la que respondes a la pregunta.",
+    "Nehmen Sie eine Antwort auf oder laden Sie sie zu Ihren 15 schriftlichen Antworten hoch. AI Pro gibt Feedback zum Inhalt und zum Bezug auf die Frage."
+  ],
+  "voiceNote": [
+    "One optional recording · up to 60 seconds · feedback on content",
+    "تسجيل اختياري واحد · حتى 60 ثانية · ملاحظات على المحتوى",
+    "Un enregistrement facultatif · 60 secondes maximum · retours sur le contenu",
+    "Una grabación opcional · hasta 60 segundos · comentarios sobre el contenido",
+    "Eine optionale Aufnahme · bis zu 60 Sekunden · Feedback zum Inhalt"
+  ],
+  "cvTitle": [
+    "Bring your CV into the conversation.",
+    "اجعل سيرتك الذاتية جزءاً من التدريب.",
+    "Intégrez votre CV à la conversation.",
+    "Integra tu CV en la conversación.",
+    "Beziehen Sie Ihren Lebenslauf ein."
+  ],
+  "cvBody": [
+    "Add relevant experience and skills as text or a .txt file. AI Pro compares your answers with that context and shows where your examples support your experience—or need clarification.",
+    "أضف الخبرات والمهارات كنص أو ملف ‎.txt. تقارن AI Pro إجاباتك بهذا السياق وتوضح أين تدعم أمثلتك خبراتك وأين تحتاج إلى توضيح.",
+    "Ajoutez votre expérience et vos compétences sous forme de texte ou de fichier .txt. AI Pro compare vos réponses à ce contexte et relève les points cohérents ou à clarifier.",
+    "Añade experiencia y habilidades como texto o archivo .txt. AI Pro compara tus respuestas con ese contexto y señala coincidencias o aspectos que necesitan aclaración.",
+    "Fügen Sie Erfahrung und Fähigkeiten als Text oder .txt-Datei hinzu. AI Pro vergleicht Ihre Antworten mit diesem Kontext und zeigt Übereinstimmungen und Klärungsbedarf."
+  ],
+  "cvAction": [
+    "Add CV context in AI practice",
+    "أضف سياق السيرة في التدريب الذكي",
+    "Ajouter mon CV dans le coaching IA",
+    "Añadir CV en la práctica de IA",
+    "Lebenslauf im KI-Training ergänzen"
+  ],
+  "cvLabel": [
+    "Experience · Skills · Achievements",
+    "الخبرات · المهارات · الإنجازات",
+    "Expérience · Compétences · Réalisations",
+    "Experiencia · Habilidades · Logros",
+    "Erfahrung · Fähigkeiten · Erfolge"
+  ],
+  "cvFormat": [
+    "Paste text or upload .txt in your practice session",
+    "الصق النص أو ارفع ملف ‎.txt في جلسة التدريب",
+    "Collez du texte ou importez un fichier .txt pendant la séance",
+    "Pega texto o sube un archivo .txt en tu sesión",
+    "Text einfügen oder eine .txt-Datei in der Sitzung hochladen"
+  ],
+  "cvNav": [
+    "CV & voice",
+    "السيرة والصوت",
+    "CV et voix",
+    "CV y voz",
+    "Lebenslauf & Stimme"
+  ],
+  "fiveLanguages": [
+    "English · Arabic · French · Spanish · German",
+    "الإنجليزية · العربية · الفرنسية · الإسبانية · الألمانية",
+    "Anglais · Arabe · Français · Espagnol · Allemand",
+    "Inglés · Árabe · Francés · Español · Alemán",
+    "Englisch · Arabisch · Französisch · Spanisch · Deutsch"
+  ],
+  "freeFive": [
+    "5 written questions per session",
+    "5 أسئلة كتابية لكل جلسة",
+    "5 questions écrites par séance",
+    "5 preguntas escritas por sesión",
+    "5 schriftliche Fragen pro Sitzung"
+  ],
+  "freeScore": [
+    "Basic on-device feedback",
+    "ملاحظات أساسية على جهازك",
+    "Retours simples sur votre appareil",
+    "Comentarios básicos en tu dispositivo",
+    "Einfaches Feedback auf Ihrem Gerät"
+  ],
+  "freeHistory": [
+    "History saved on this device",
+    "سجل محفوظ على هذا الجهاز",
+    "Historique enregistré sur cet appareil",
+    "Historial guardado en este dispositivo",
+    "Verlauf auf diesem Gerät gespeichert"
+  ],
+  "noCard": [
+    "No account or card required",
+    "دون حساب أو بطاقة دفع",
+    "Sans compte ni carte bancaire",
+    "Sin cuenta ni tarjeta",
+    "Ohne Konto oder Zahlungskarte"
+  ],
+  "starterTag": [
+    "SMART START",
+    "بداية ذكية",
+    "BIEN DÉMARRER",
+    "EMPIEZA BIEN",
+    "SMARTER EINSTIEG"
+  ],
+  "proTag": [
+    "INTENSIVE PREP",
+    "تحضير مكثف",
+    "PRÉPARATION INTENSIVE",
+    "PREPARACIÓN INTENSIVA",
+    "INTENSIVE VORBEREITUNG"
+  ],
+  "freeTag": [
+    "ESSENTIAL PRACTICE",
+    "التدريب الأساسي",
+    "ENTRAÎNEMENT ESSENTIEL",
+    "PRÁCTICA ESENCIAL",
+    "GRUNDLAGEN ÜBEN"
+  ],
+  "starterDesc": [
+    "A lighter AI plan, planned for regular practice.",
+    "باقة ذكية أخف مخطط لها للتدريب المنتظم.",
+    "Une formule IA plus légère, prévue pour un entraînement régulier.",
+    "Un plan de IA más ligero, previsto para practicar con regularidad.",
+    "Ein kleinerer KI-Tarif für regelmäßiges Üben ist geplant."
+  ],
+  "starterLimit": [
+    "Planned: 20 evaluations per month",
+    "مخطط: 20 تقييماً شهرياً",
+    "Prévu : 20 évaluations par mois",
+    "Previsto: 20 evaluaciones al mes",
+    "Geplant: 20 Auswertungen pro Monat"
+  ],
+  "starterQuestions": [
+    "Planned: 10 written questions per session",
+    "مخطط: 10 أسئلة كتابية لكل جلسة",
+    "Prévu : 10 questions écrites par séance",
+    "Previsto: 10 preguntas escritas por sesión",
+    "Geplant: 10 schriftliche Fragen pro Sitzung"
+  ],
+  "starterNote": [
+    "Proposed price · not open for purchase yet",
+    "سعر مقترح · غير متاح للشراء بعد",
+    "Prix indicatif · achat pas encore disponible",
+    "Precio propuesto · aún no disponible para comprar",
+    "Vorgesehener Preis · noch nicht buchbar"
+  ],
+  "comingSoon": [
+    "Coming soon",
+    "قريباً",
+    "Bientôt disponible",
+    "Próximamente",
+    "Demnächst"
+  ],
+  "proLimit": [
+    "Up to 100 AI evaluations per month",
+    "حتى 100 تقييم ذكي شهرياً",
+    "Jusqu’à 100 évaluations IA par mois",
+    "Hasta 100 evaluaciones de IA al mes",
+    "Bis zu 100 KI-Auswertungen pro Monat"
+  ],
+  "proQuestions": [
+    "15 written questions per session",
+    "15 سؤالاً كتابياً لكل جلسة",
+    "15 questions écrites par séance",
+    "15 preguntas escritas por sesión",
+    "15 schriftliche Fragen pro Sitzung"
+  ],
+  "proVoice": [
+    "One optional voice answer",
+    "إجابة صوتية اختيارية واحدة",
+    "Une réponse audio facultative",
+    "Una respuesta de voz opcional",
+    "Eine optionale Sprachantwort"
+  ],
+  "proCV": [
+    "Optional CV consistency feedback",
+    "ملاحظات اختيارية على اتساق السيرة",
+    "Retours facultatifs sur la cohérence du CV",
+    "Comentarios opcionales sobre coherencia con el CV",
+    "Optionales Feedback zur Übereinstimmung mit dem Lebenslauf"
+  ],
+  "proReport": [
+    "Detailed feedback and skill charts",
+    "ملاحظات مفصلة ورسوم المهارات",
+    "Retours détaillés et graphiques des compétences",
+    "Comentarios detallados y gráficos de habilidades",
+    "Detailliertes Feedback und Kompetenzdiagramme"
+  ],
+  "proHistory": [
+    "Reports saved to your account",
+    "تقارير محفوظة في حسابك",
+    "Rapports enregistrés dans votre compte",
+    "Informes guardados en tu cuenta",
+    "Berichte in Ihrem Konto gespeichert"
+  ],
+  "proMonthly": [
+    "Role-specific questions rotate monthly",
+    "أسئلة حسب المجال تتغير شهرياً",
+    "Questions par métier renouvelées chaque mois",
+    "Preguntas por puesto que rotan cada mes",
+    "Monatlich wechselnde Fragen passend zum Beruf"
+  ],
+  "planIntro": [
+    "Choose free practice, explore the upcoming Starter plan, or prepare with AI Pro.",
+    "اختر التدريب المجاني أو استكشف باقة Starter القادمة أو استعد مع AI Pro.",
+    "Choisissez l’entraînement gratuit, découvrez la future formule Starter ou préparez-vous avec AI Pro.",
+    "Elige la práctica gratuita, conoce el próximo plan Starter o prepárate con AI Pro.",
+    "Wählen Sie kostenlose Übungen, entdecken Sie den geplanten Starter-Tarif oder bereiten Sie sich mit AI Pro vor."
+  ],
+  "checkAccess": [
+    "View subscription & access",
+    "عرض الاشتراك والوصول",
+    "Voir l’abonnement et l’accès",
+    "Ver suscripción y acceso",
+    "Abo und Zugang ansehen"
+  ],
+  "tour": [
+    "App tour",
+    "جولة التطبيق",
+    "Visite de l’application",
+    "Recorrido de la app",
+    "App-Rundgang"
+  ],
+  "tourTitle": [
+    "See how practice becomes progress.",
+    "شاهد كيف يتحول التدريب إلى تطور.",
+    "Découvrez comment progresser en vous entraînant.",
+    "Descubre cómo la práctica se convierte en progreso.",
+    "So wird Übung zu Fortschritt."
+  ],
+  "sampleShort": [
+    "Illustrative report",
+    "تقرير توضيحي",
+    "Rapport illustratif",
+    "Informe ilustrativo",
+    "Beispielbericht"
+  ],
+  "scoreOut": [
+    "out of 100",
+    "من 100",
+    "sur 100",
+    "de 100",
+    "von 100"
+  ],
+  "strongStructure": [
+    "Clear structure",
+    "بنية واضحة",
+    "Structure claire",
+    "Estructura clara",
+    "Klare Struktur"
+  ],
+  "improveImpact": [
+    "Make the outcome clear",
+    "وضّح النتيجة",
+    "Précisez le résultat",
+    "Aclara el resultado",
+    "Ergebnis verdeutlichen"
+  ],
+  "nextPractice": [
+    "Your next practice",
+    "تدريبك التالي",
+    "Votre prochain entraînement",
+    "Tu próxima práctica",
+    "Ihre nächste Übung"
+  ],
+  "voiceTour": [
+    "Voice tour",
+    "شرح صوتي",
+    "Présentation audio",
+    "Guía de voz",
+    "Audio-Rundgang"
+  ],
+  "audioNote": [
+    "Press play to hear the tour in your selected language. Voice availability depends on your browser.",
+    "اضغط التشغيل لسماع الشرح بلغتك المختارة. يعتمد توفر الصوت على متصفحك.",
+    "Écoutez la présentation dans la langue choisie. Les voix disponibles dépendent de votre navigateur.",
+    "Pulsa reproducir para escuchar la guía en tu idioma. Las voces dependen de tu navegador.",
+    "Starten Sie den Rundgang in Ihrer Sprache. Verfügbare Stimmen hängen vom Browser ab."
+  ],
+  "audioUnavailable": [
+    "Audio is unavailable in this browser. Follow the three steps shown here.",
+    "الصوت غير متاح في هذا المتصفح. اتبع الخطوات الثلاث المعروضة.",
+    "L’audio est indisponible dans ce navigateur. Suivez les trois étapes affichées.",
+    "El audio no está disponible en este navegador. Sigue los tres pasos mostrados.",
+    "Audio ist in diesem Browser nicht verfügbar. Folgen Sie den drei angezeigten Schritten."
+  ]
+});
