@@ -1,0 +1,91 @@
+/* Mostaed presentation theme, shared by the account and coaching screens. */
+:root{--ui-bg:#f8f7fc;--ui-ink:#29213d;--ui-muted:#6e6980;--ui-brand:#663bba;--ui-line:#e8e2f0;--ui-soft:#ebe0fa;--ui-radius:20px}
+.app-page{background:var(--ui-bg);color:var(--ui-ink);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+.app-page *{box-sizing:border-box}
+.app-page main{width:min(1040px,calc(100% - 40px));max-width:1040px;margin:0 auto;padding:32px 0 64px}
+.app-nav{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:44px;padding-bottom:22px;border-bottom:1px solid var(--ui-line)}
+.app-nav .app-brand{color:var(--ui-brand);font-size:22px;font-weight:800;text-decoration:none}
+.app-links{display:flex;gap:24px;flex-wrap:wrap;font-size:14px}
+.app-page a{color:var(--ui-brand);text-underline-offset:4px}
+.app-links a{text-decoration:none;color:var(--ui-muted)}
+.app-links a[aria-current=page]{color:var(--ui-brand);font-weight:700}
+.app-page h1{font-size:clamp(32px,4vw,44px);line-height:1.15;letter-spacing:-.035em;margin:12px 0 16px}
+.app-page h2{font-size:26px;line-height:1.3;letter-spacing:-.025em}
+.app-page h3{font-size:19px}
+.ui-eyebrow{color:var(--ui-brand);font-size:12px;font-weight:800;letter-spacing:.1em;margin-bottom:12px}
+.ui-lead{color:var(--ui-muted);font-size:18px;max-width:720px;margin:0 0 28px}
+.app-page .card,.app-page #member>section,.checkout-page main>section{background:white;border:1px solid var(--ui-line);border-radius:var(--ui-radius);padding:28px;margin:22px 0;box-shadow:0 4px 20px #29213d04}
+.app-page label{font-size:15px;font-weight:600;line-height:1.6}
+.app-page input:not([type=checkbox]):not([type=radio]),.app-page select,.app-page textarea{font:inherit;color:var(--ui-ink);padding:13px 15px;border:1px solid #d1c8df;border-radius:12px;background:#fff;max-width:100%}
+.app-page textarea{width:100%;min-height:140px;resize:vertical;line-height:1.7}
+.app-page select{margin-inline-start:12px;min-width:170px}
+.app-page input[type=file]{display:block;width:100%;margin-top:12px;background:#faf9fd}
+.app-page input::file-selector-button{border:0;border-radius:8px;background:var(--ui-soft);color:var(--ui-brand);padding:8px 12px;margin-inline-end:12px;font:600 14px system-ui;cursor:pointer}
+.app-page input[type=checkbox]{accent-color:var(--ui-brand);width:18px;height:18px;vertical-align:middle;margin-inline-end:8px}
+.app-page button,.app-page .ui-button{background:var(--ui-brand);color:white;border:1px solid transparent;border-radius:12px;padding:13px 20px;font:600 15px/1.4 Inter,system-ui;cursor:pointer;min-height:46px;transition:background .15s,box-shadow .15s}
+.app-page button:hover:not(:disabled){background:#542ea0;box-shadow:0 5px 16px #663bba20}
+.app-page button:disabled{opacity:.48;cursor:not-allowed}
+.app-page :is(a,button,input,select,textarea,summary):focus-visible{outline:3px solid #9b76de;outline-offset:4px}
+.app-page small{font-size:13px;color:var(--ui-muted);line-height:1.7}
+.app-page #notice,.app-page .status{padding:18px 22px;border:1px solid #e1d5f5;background:var(--ui-soft);color:#4d3578;border-radius:16px;line-height:1.65;margin:24px 0;white-space:pre-wrap}
+.practice-steps{display:flex;gap:28px;flex-wrap:wrap;background:var(--ui-soft);border-radius:16px;padding:20px 24px;color:var(--ui-muted);margin:28px 0}
+.practice-steps a{text-decoration:none;font-size:14px}
+.practice-steps a:first-child{font-weight:700}
+.practice-progress{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:18px 0;color:var(--ui-muted);font-size:13px}
+.practice-progress progress{width:180px;height:7px;accent-color:var(--ui-brand);border:0;border-radius:8px}
+.question-counter{font-size:12px;letter-spacing:.08em;color:var(--ui-brand);font-weight:800;margin:0 0 10px}
+.practice-page #questions .card>label{font-size:22px;line-height:1.5;font-weight:700;margin:0 0 14px}
+.question-hint{font-size:13px;color:var(--ui-muted);margin:0 0 14px}
+.practice-page #result{border-top:4px solid var(--ui-brand);padding:32px}
+.practice-page #result>h2{font-size:32px;color:var(--ui-brand)}
+.practice-page #result li{padding:6px 0}
+.practice-page #submit{width:100%;margin:12px 0}
+.practice-page #stop,.practice-page #clearVoice,.app-page #forgot,.app-page #signup,.app-page #backLogin,.app-page #logout{background:white;color:var(--ui-brand);border-color:#d9cdec}
+.account-page main{max-width:560px;background:transparent;box-shadow:none;border-radius:0}
+.account-page .app-nav{gap:14px}.account-page .app-links{gap:16px}
+.account-page #login,.account-page #reset{background:white;border:1px solid var(--ui-line);border-radius:20px;padding:28px}
+.account-page #login label:first-child{margin-top:0}
+.account-page #authSubmit,.account-page #google{width:100%;margin-inline:0}
+.account-page #google{background:white;color:var(--ui-ink);border-color:#d9d2e4}
+.account-page #member{background:white;border:1px solid var(--ui-line);border-radius:20px;padding:26px}
+.account-page #member>h2{color:var(--ui-brand)}
+.history-page summary{font-weight:700;color:var(--ui-brand)}
+.history-page #history:empty{min-height:80px}
+.checkout-page .banner{border-radius:16px;font-size:14px}
+.landing-page{background:radial-gradient(ellipse at 82% 2%,#3a246955,transparent 42%),#100d24!important}
+.landing-page .glow{display:none}.landing-page .wrap{width:min(1160px,calc(100% - 48px))}
+.landing-page nav{height:90px;border-bottom:1px solid #ffffff12}
+.landing-page .hero{min-height:650px;gap:80px;padding:64px 0 80px}
+.landing-page h1{font-size:clamp(44px,5.7vw,72px);letter-spacing:-.05em;line-height:1.08}
+.landing-page .grad{background:linear-gradient(90deg,#c2a8ff,#a9eadd);background-clip:text;-webkit-background-clip:text;animation:none}
+.landing-page .lead{font-size:18px;line-height:1.8;color:#c5bfd6}
+.landing-page .primary{background:#bba0ff;color:#25133f;box-shadow:none}
+.landing-page .secondary,.landing-page .lang{background:#ffffff08;border-color:#ffffff24}
+.landing-page .badge{background:#bba0ff10;border-color:#bba0ff38;color:#d8c7ff}
+.landing-page .dot{background:#bba0ff;box-shadow:none}
+.landing-page .orbit{animation:none;border-color:#c2a8ff19;box-shadow:none}
+.landing-page .phone{transform:rotate(0deg);border-color:#bba0ff44;background:#1a1532;box-shadow:0 30px 70px #0005}
+.landing-page .screen{background:linear-gradient(180deg,#292047,#17132d)}
+.landing-page #features,.landing-page #pricing{background:transparent}
+.landing-page section{padding:72px 0}
+.landing-page .eyebrow{color:#c2a8ff}
+.landing-page .card{background:#ffffff05;border-color:#ffffff14;box-shadow:none;border-radius:20px}
+.landing-page .card:after{display:none}
+.landing-page .step{background:#ffffff05;border-color:#ffffff16}
+.landing-page .step:before{background:#bba0ff22;color:#d8c7ff}
+.landing-page .price-card{background:#ffffff05;border-color:#ffffff19;border-radius:20px}
+.landing-page .price-card.pro{background:#bba0ff0e;border-color:#bba0ff70;box-shadow:none;transform:none}
+.landing-page .popular{background:#bba0ff;color:#25133f}
+.landing-page .price-card.starter{background:#ffffff05;border-color:#ffffff19}
+.landing-page .download{background:linear-gradient(120deg,#35244f,#252344);box-shadow:none;border-color:#bba0ff30}
+.landing-page .download .primary{background:#bba0ff}
+.landing-page .monthly-section{background:#18132b!important;border-color:#ffffff12!important}
+.landing-page .monthly-panel{box-shadow:none!important;background:#ffffff03!important}
+.landing-page .monthly-badge{background:#bba0ff!important}
+.landing-page .cv-panel{background:#ffffff05!important;border-color:#ffffff19!important}
+.landing-page .motion-video{background:linear-gradient(145deg,#2c2048,#1a1532);box-shadow:none;border-color:#bba0ff30}
+.landing-page .motion-card{background:#ffffff0a;backdrop-filter:none}
+@media(max-width:650px){.app-page main{width:calc(100% - 32px);padding-top:22px}.app-nav{align-items:flex-start;gap:12px;margin-bottom:28px}.app-links{gap:12px;font-size:12px}.app-nav .app-brand{font-size:18px}.app-page .card,.app-page #member{padding:20px}.app-page select{display:block;width:100%;margin:8px 0}.practice-steps{gap:14px;padding:16px}.practice-progress{gap:12px}.practice-progress progress{width:100px}.practice-page #questions .card>label{font-size:19px}.account-page #login{padding:20px}.landing-page .hero{gap:32px;min-height:auto}.landing-page .wrap{width:calc(100% - 32px)}.landing-page nav{height:76px}.landing-page section{padding:50px 0}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+.app-page [hidden]{display:none!important}
