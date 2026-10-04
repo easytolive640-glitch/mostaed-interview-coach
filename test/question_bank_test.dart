@@ -16,8 +16,10 @@ void main() {
           free.map((question) => question.id));
       expect(pro.map((question) => question.id).toSet().length, 15);
       for (final question in pro) {
-        expect(question.text(AppLanguage.arabic).trim(), isNotEmpty);
-        expect(question.text(AppLanguage.english).trim(), isNotEmpty);
+        for (final language in AppLanguage.values) {
+          expect(question.text(language).trim(), isNotEmpty);
+          if (language != AppLanguage.english) expect(question.text(language), isNot(question.english));
+        }
       }
     }
   });

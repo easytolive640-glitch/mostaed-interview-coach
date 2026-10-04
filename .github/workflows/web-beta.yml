@@ -37,6 +37,8 @@ jobs:
         run: python3 scripts/inject_analytics.py
       - name: Install dependencies
         run: flutter pub get
+      - name: Test free practice
+        run: flutter test
       - name: Build web beta
         run: flutter build web --release --base-href /mostaed-interview-coach/
       - name: Configure Pages

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'free_localizations.dart';
+import 'question_translations.dart';
 
-enum AppLanguage { arabic, english }
+enum AppLanguage { arabic, english, french, spanish, german }
+extension AppLanguageUi on AppLanguage {
+  String get nativeName => switch (this) {
+    AppLanguage.arabic => 'العربية', AppLanguage.english => 'English',
+    AppLanguage.french => 'Français', AppLanguage.spanish => 'Español', AppLanguage.german => 'Deutsch',
+  };
+}
 enum InterviewCategory { hr, customerService, itCloud }
 
 extension InterviewCategoryUi on InterviewCategory {
-  String label(AppLanguage language) => switch ((this, language)) {
-        (InterviewCategory.hr, AppLanguage.arabic) => 'الموارد البشرية',
-        (InterviewCategory.hr, AppLanguage.english) => 'Human resources',
-        (InterviewCategory.customerService, AppLanguage.arabic) => 'خدمة العملاء',
-        (InterviewCategory.customerService, AppLanguage.english) => 'Customer service',
-        (InterviewCategory.itCloud, AppLanguage.arabic) => 'الدعم الفني والسحابة',
-        (InterviewCategory.itCloud, AppLanguage.english) => 'IT support and cloud',
-      };
+  String label(AppLanguage language) => FreeLocalizations.text(name, language.name);
 
   IconData get icon => switch (this) {
         InterviewCategory.hr => Icons.people_alt_outlined,
@@ -26,7 +27,9 @@ class InterviewQuestion {
   final String arabic;
   final String english;
   final List<String> keywords;
-  String text(AppLanguage language) => language == AppLanguage.arabic ? arabic : english;
+  String text(AppLanguage language) => language == AppLanguage.arabic ? arabic :
+      language == AppLanguage.english ? english : translatedQuestions[language.name]![id]!;
+  List<String> keywordsFor(AppLanguage language) => translatedKeywords[language.name]?[id] ?? keywords;
 }
 
 class InterviewResult {

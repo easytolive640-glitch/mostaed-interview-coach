@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'free_localizations.dart';
 
 import 'models.dart';
 import 'question_bank.dart';
@@ -35,6 +37,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AppLanguage language = AppLanguage.arabic;
   bool get isArabic => language == AppLanguage.arabic;
+  bool selectedManually = false;
+  String tr(String key, [Map<String, Object> values = const {}]) => FreeLocalizations.text(key, language.name, values);
+  @override
+  void initState() { super.initState(); restoreLanguage(); }
+  Future<void> restoreLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    final requested = Uri.base.queryParameters['lang'] ?? prefs.getString('mostaed_language');
+    final match = AppLanguage.values.where((item) => item.name == requested);
+    if (mounted && !selectedManually && match.isNotEmpty) setState(() => language = match.first);
+  }
+  Future<void> selectLanguage(AppLanguage value) async {
+    selectedManually = true;
+    setState(() => language = value);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mostaed_language', value.name);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text(isArabic ? 'مستعد' : 'Mostaed'),
           actions: [
             IconButton(
-              tooltip: isArabic ? 'السجل' : 'History',
+              tooltip: tr('history'),
               icon: const Icon(Icons.history),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
@@ -58,35 +76,29 @@ class _HomeScreenState extends State<HomeScreen> {
         body: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            SegmentedButton<AppLanguage>(
-              segments: const [
-                ButtonSegment(value: AppLanguage.arabic, label: Text('العربية')),
-                ButtonSegment(value: AppLanguage.english, label: Text('English')),
+            Wrap(
+              spacing: 8, runSpacing: 8,
+              children: [for (final item in AppLanguage.values)
+                ChoiceChip(label: Text(item.nativeName), selected: language == item,
+                  onSelected: (_) => selectLanguage(item)),
               ],
-              selected: {language},
-              onSelectionChanged: (selection) =>
-                  setState(() => language = selection.first),
             ),
             const SizedBox(height: 24),
             Text(
-              isArabic
-                  ? 'تدرّب. تحسّن. احصل على الوظيفة.'
-                  : 'Practice. Improve. Get the job.',
+              tr('headline'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
             const SizedBox(height: 8),
-            Text(isArabic
-                ? 'اختر نوع المقابلة وابدأ تدريباً عملياً.'
-                : 'Choose a role and start a practical interview.'),
+            Text(tr('lead')),
             const SizedBox(height: 24),
             for (final category in InterviewCategory.values)
               Card(
                 child: ListTile(
                   leading: Icon(category.icon),
                   title: Text(category.label(language)),
-                  subtitle: Text(isArabic ? '5 أسئلة تدريبية' : '5 practice questions'),
+                  subtitle: Text(tr('five')),
                   trailing: Icon(isArabic
                       ? Icons.arrow_back_ios_new
                       : Icons.arrow_forward_ios),
@@ -127,6 +139,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
   bool submitting = false;
 
   bool get isArabic => widget.language == AppLanguage.arabic;
+  String tr(String key, [Map<String, Object> values = const {}]) => FreeLocalizations.text(key, widget.language.name, values);
   List<InterviewQuestion> get interviewQuestions =>
       QuestionBank.forCategory(widget.category);
 
@@ -151,9 +164,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
     if (controller.text.trim().length < 10) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(isArabic
-              ? 'اكتب إجابة أوضح قبل المتابعة.'
-              : 'Write a clearer answer before continuing.'),
+          content: Text(tr('clearer')),
         ),
       );
       return;
@@ -200,7 +211,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
               child: Chip(
                 avatar: const Icon(Icons.auto_awesome,
                     size: 17, color: Color(0xFFFFD45C)),
-                label: Text(isArabic ? 'وضع التدريب' : 'Practice mode'),
+                label: Text(tr('mode')),
                 backgroundColor: const Color(0xFF2A175B),
                 labelStyle: const TextStyle(color: Colors.white),
                 side: const BorderSide(color: Color(0xFF7148B7)),
@@ -263,9 +274,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          isArabic
-                              ? 'السؤال ${index + 1} من ${interviewQuestions.length}'
-                              : 'Question ${index + 1} of ${interviewQuestions.length}',
+                          tr('question', {'number': index + 1, 'total': interviewQuestions.length}),
                           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                         ),
                       ),
@@ -298,9 +307,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                       const SizedBox(width: 11),
                       Expanded(
                         child: Text(
-                          isArabic
-                              ? 'نصيحة: نظّم إجابتك إلى موقف، مهمة، إجراء، ونتيجة قابلة للقياس.'
-                              : 'Tip: structure your answer with a situation, task, action, and measurable result.',
+                          tr('tip'),
                           style: const TextStyle(color: Color(0xFFD8D4ED), height: 1.45),
                         ),
                       ),
@@ -319,9 +326,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                     filled: true,
                     fillColor: const Color(0xFF121039),
                     hintStyle: const TextStyle(color: Color(0xFF8F8AAE)),
-                    hintText: isArabic
-                        ? 'اكتب إجابتك مع مثال عملي ونتيجة واضحة…'
-                        : 'Write your answer with a practical example and clear result…',
+                    hintText: tr('hint'),
                     contentPadding: const EdgeInsets.all(20),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(22),
@@ -340,9 +345,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    isArabic
-                        ? '$answerLength حرفاً · يفضّل 100 حرف على الأقل'
-                        : '$answerLength characters · aim for at least 100',
+                    tr('characters', {'count': answerLength}),
                     style: TextStyle(
                       color: answerLength >= 100
                           ? const Color(0xFF56F2C3)
@@ -371,10 +374,10 @@ class _InterviewScreenState extends State<InterviewScreen> {
                             ? Icons.insights_rounded
                             : (isArabic ? Icons.arrow_back_rounded : Icons.arrow_forward_rounded)),
                     label: Text(submitting
-                        ? (isArabic ? 'جارٍ التقييم…' : 'Evaluating…')
+                        ? (tr('evaluating'))
                         : index == interviewQuestions.length - 1
-                            ? (isArabic ? 'عرض التقييم' : 'View evaluation')
-                            : (isArabic ? 'السؤال التالي' : 'Next question')),
+                            ? (tr('view'))
+                            : (tr('next'))),
                   ),
                 ),
               ],
@@ -393,10 +396,11 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isArabic = result.language == AppLanguage.arabic;
+    String tr(String key) => FreeLocalizations.text(key, result.language.name);
     return Directionality(
       textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        appBar: AppBar(title: Text(isArabic ? 'نتيجة التدريب' : 'Interview result')),
+        appBar: AppBar(title: Text(tr('result'))),
         body: ListView(
           padding: const EdgeInsets.all(24),
           children: [
@@ -408,22 +412,23 @@ class ResultScreen extends StatelessWidget {
             Chip(
               avatar: Icon(result.usedRemoteAi ? Icons.auto_awesome : Icons.offline_bolt),
               label: Text(result.usedRemoteAi
-                  ? (isArabic ? 'تقييم ذكي آمن' : 'Secure AI evaluation')
-                  : (isArabic ? 'تقييم محلي' : 'On-device evaluation')),
+                  ? (tr('ai'))
+                  : (tr('local'))),
             ),
             const SizedBox(height: 16),
+            if (!result.usedRemoteAi) Text(tr('disclaimer')),
             _FeedbackCard(
-              title: isArabic ? 'نقاط القوة' : 'Strengths',
+              title: tr('strengths'),
               items: result.strengths,
             ),
             _FeedbackCard(
-              title: isArabic ? 'خطوات التحسين' : 'Improvements',
+              title: tr('improvements'),
               items: result.improvements,
             ),
             const SizedBox(height: 12),
             FilledButton(
               onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
-              child: Text(isArabic ? 'تدريب جديد' : 'New practice'),
+              child: Text(tr('new')),
             ),
           ],
         ),
@@ -479,10 +484,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final isArabic = widget.language == AppLanguage.arabic;
+    String tr(String key) => FreeLocalizations.text(key, widget.language.name);
     return Directionality(
       textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
-        appBar: AppBar(title: Text(isArabic ? 'سجل المقابلات' : 'Interview history')),
+        appBar: AppBar(title: Text(tr('historyTitle'))),
         body: FutureBuilder<List<InterviewResult>>(
           future: history,
           builder: (context, snapshot) {
@@ -492,9 +498,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             final results = snapshot.data!;
             if (results.isEmpty) {
               return Center(
-                child: Text(isArabic
-                    ? 'أكمل أول مقابلة لتظهر هنا.'
-                    : 'Complete your first interview to see it here.'),
+                child: Text(tr('empty')),
               );
             }
             return ListView.builder(

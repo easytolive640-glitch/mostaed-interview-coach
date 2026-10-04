@@ -5,6 +5,7 @@ function apply(){const language=select.value;const index=Object.keys(languages).
   for(const el of document.querySelectorAll('[data-copy]'))el.textContent=landingCopy[el.dataset.copy][index];
   for(const el of document.querySelectorAll('[data-i18n]'))el.textContent=translate(el.dataset.i18n,language);
   select.setAttribute('aria-label',translate('language',language));
+  for(const link of document.querySelectorAll('a[data-copy="startFree"]')){const url=new URL(link.href);url.searchParams.set('lang',language);link.href=url.href;}
   document.title='Mostaed | '+landingCopy.heroTitle[index];
 }
 select.value=preferredLanguage();select.addEventListener('change',apply);apply();
