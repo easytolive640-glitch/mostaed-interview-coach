@@ -1,2 +1,4 @@
 .blog-grid{display:grid;gap:22px;margin-top:32px}.blog-card,.blog-next{padding:26px;border:1px solid var(--line);border-radius:20px;background:#ffffff08}.blog-card h2{font-size:25px}.blog-card p{font-size:17px}.blog-next{margin-top:32px}.blog-related{display:grid;gap:16px}.career-blogs .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.career-blogs .card{padding:24px;border:1px solid var(--line);border-radius:20px;background:#ffffff08}.career-blogs .card h3{font-size:23px;line-height:1.4}.career-blogs .card p{line-height:1.75}.career-blogs .blog-actions{margin-top:26px}@media(max-width:760px){.career-blogs .grid{grid-template-columns:1fr}}
 .nav a.blog-link{display:inline-flex}
+
+.blog-credit{font-weight:700;color:var(--mint,#69e4c2)}.original-title{font-size:14px!important;opacity:.85}.blog-source-note{font-size:15px;line-height:1.6;margin-bottom:24px}

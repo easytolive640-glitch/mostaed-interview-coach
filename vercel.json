@@ -77,5 +77,22 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/blogs/cv-achievements.html",
+      "destination": "https://www.themuse.com/advice/professional-accomplishments-achievements-on-resume-examples",
+      "permanent": true
+    },
+    {
+      "source": "/blogs/prepare-for-your-interview.html",
+      "destination": "https://www.themuse.com/advice/second-interview-questions-answers-examples",
+      "permanent": true
+    },
+    {
+      "source": "/blogs/30-day-career-plan.html",
+      "destination": "https://www.themuse.com/advice/8-steps-to-an-utterly-successful-career-change",
+      "permanent": true
+    }
   ]
 }
