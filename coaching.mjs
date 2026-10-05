@@ -20,13 +20,14 @@ noApplications:['No applications awaiting review.','لا توجد طلبات ب�
 cvError:['Choose a PDF CV of up to 1 MB.','اختر سيرة ذاتية PDF حتى 1 ميجابايت.']
 });
 copy.consent=['I agree that my name, bio, specialities, languages, price and LinkedIn link may appear publicly after approval. My CV is used privately by Mostaed for application review.','أوافق على نشر اسمي ونبذتي وتخصصاتي ولغاتي وسعري ورابط لينكدإن بعد الموافقة. تستخدم مستعد سيرتي بشكل خاص لمراجعة الطلب.'];
+Object.assign(copy,{credentialsSaved:['LinkedIn and CV saved successfully. Your application is pending review.','تم حفظ لينكدإن والسيرة الذاتية بنجاح. طلبك بانتظار المراجعة.'],credentialsSaving:['Uploading CV and saving LinkedIn…','جارٍ رفع السيرة الذاتية وحفظ لينكدإن…'],credentialsRequired:['Enter your LinkedIn profile URL and choose a PDF CV before saving.','أدخل رابط ملف لينكدإن واختر ملف سيرة ذاتية PDF قبل الحفظ.'],savedCV:['Saved CV: ','السيرة المحفوظة: '],noSavedCV:['No CV saved yet.','لم يتم حفظ سيرة ذاتية بعد.']});
 const t=k=>copy[k]?.[lang==='ar'?1:0]||k;
 const say=msg=>$('notice').textContent=msg;
 const applicationSay=msg=>{$('applicationNotice').textContent=msg;};
 const applicationAuth=()=>{$('applicationAuth').hidden=Boolean(session());};
 const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;};
 const session=()=>{try{const s=JSON.parse(sessionStorage.getItem('mostaed_account')||'null');return s?.expires_at*1000>Date.now()?s:null;}catch{return null;}};
-async function api(body,mine=false){const s=session();const r=await fetch('/api/coaching'+(mine?'?mine=1':''),{method:body?'POST':'GET',headers:{...(s?{Authorization:'Bearer '+s.access_token}:{}),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{})});const d=await r.json();if(!r.ok)throw Error(d.error||t('unavailable'));return d;}
+async function api(body,mine=false){const s=session();const r=await fetch('/api/coaching'+(mine?'?mine=1':''),{method:body?'POST':'GET',headers:{...(s?{Authorization:'Bearer '+s.access_token}:{}),...(body?{'Content-Type':'application/json'}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(45000)});let d;try{d=await r.json();}catch{throw Error(r.status===413?t('cvError'):t('unavailable'));}if(!r.ok)throw Error(d.error||t('unavailable'));return d;}
 function apply(){document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';$('language').value=lang;document.querySelectorAll('[data-t]').forEach(el=>el.textContent=t(el.dataset.t));applicationAuth();renderCoaches();if(selected)renderSlots();if(personal)renderMine();}
 $('language').onchange=()=>{lang=$('language').value;localStorage.setItem('mostaed_coaching_language',lang);apply();};
 const money=c=>new Intl.NumberFormat(lang,{style:'currency',currency:'USD'}).format(c/100);
@@ -36,7 +37,7 @@ function localDate(d){const x=new Date(d);return [x.getFullYear(),String(x.getMo
 function renderSlots(){$('calendarTitle').textContent=selected.name+' · '+money(selected.price_cents);$('timezone').textContent=Intl.DateTimeFormat().resolvedOptions().timeZone;$('slots').replaceChildren();const rows=data.slots.filter(s=>s.coach_id===selected.id&&localDate(s.starts_at)===$('date').value);if(!rows.length)$('slots').append(node('p',t('noSlots')));for(const s of rows){const b=node('button',new Date(s.starts_at).toLocaleTimeString(lang,{hour:'2-digit',minute:'2-digit'})+' · '+t('pay'),'btn primary');b.disabled=!data.bookingEnabled;b.onclick=async()=>{if(!session())return say(t('signin'));b.disabled=true;say(t('busy'));try{const r=await api({action:'checkout',slot_id:s.id});location.assign(r.url);}catch(e){say(e.message);b.disabled=false;}};$('slots').append(b);}if(!data.bookingEnabled)$('slots').append(node('p',t('closed')));}
 $('date').onchange=renderSlots;
 function bookingCard(b){const c=node('article',null,'card');c.append(node('h3',b.coach_name||'Mostaed'),node('p',b.starts_at?dateLabel(b.starts_at):b.id),node('p',money(b.price_cents)),node('p',b.status.replaceAll('_',' ')));if(b.test_mode)c.append(node('p',t('sandbox')));if(b.status==='pending_payment'){const verify=node('button',lang==='ar'?'التحقق من الدفع':'Verify payment','btn secondary');verify.onclick=()=>confirm(b.id);c.append(verify);}if(b.status==='confirmed'&&b.zoom_join_url){const a=node('a',t('join'),'btn primary');a.href=b.zoom_join_url;a.target='_blank';a.rel='noopener noreferrer';c.append(a);const ics=node('button',t('ics'),'btn secondary');ics.onclick=()=>downloadCalendar(b);c.append(ics);}return c;}
-function renderMine(){$('adminReview').hidden=!personal.isAdmin;$('bookings').replaceChildren(...personal.bookings.map(bookingCard));if(!personal.bookings.length)$('bookings').append(node('p',t('none')));$('dashboard').hidden=!personal.coach;$('application').hidden=Boolean(personal.coach);if(personal.coach){$('credentialUpdate').hidden=personal.coach.status==='approved';$('myCV').hidden=!personal.coach.cv_name;$('profileStatus').textContent=personal.coach.name+' · '+personal.coach.status;$('availability').hidden=personal.coach.status!=='approved';$('coachSlots').replaceChildren(...personal.slots.map(s=>node('p',dateLabel(s.starts_at))));$('coachBookings').replaceChildren(...personal.coachBookings.map(bookingCard));}}
+function renderMine(){$('adminReview').hidden=!personal.isAdmin;$('bookings').replaceChildren(...personal.bookings.map(bookingCard));if(!personal.bookings.length)$('bookings').append(node('p',t('none')));$('dashboard').hidden=!personal.coach;$('application').hidden=Boolean(personal.coach);if(personal.coach){$('currentCredentials').textContent=personal.coach.cv_name?t('savedCV')+personal.coach.cv_name:t('noSavedCV');const linkedinInput=$('credentialUpdate').elements.linkedin_url;if(!linkedinInput.value)linkedinInput.value=personal.coach.linkedin_url||'';$('credentialUpdate').hidden=personal.coach.status==='approved';$('myCV').hidden=!personal.coach.cv_name;$('profileStatus').textContent=personal.coach.name+' · '+personal.coach.status;$('availability').hidden=personal.coach.status!=='approved';$('coachSlots').replaceChildren(...personal.slots.map(s=>node('p',dateLabel(s.starts_at))));$('coachBookings').replaceChildren(...personal.coachBookings.map(bookingCard));}}
 async function mine(){if(!session())return say(t('signin'));try{personal=await api(null,true);renderMine();if(personal.isAdmin)await loadReviews();}catch(e){say(e.message);}}
 $('refresh').onclick=mine;
 $('application').onsubmit=async e=>{
@@ -65,9 +66,16 @@ async function viewCV(id){
 }
 $('myCV').onclick=()=>viewCV(personal.coach.id).catch(e=>say(e.message));
 $('credentialUpdate').onsubmit=async e=>{
- e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;$('credentialNotice').textContent=t('busy');
- try{const r=await api({action:'credentials',...await credentialsPayload(e.target)});$('credentialNotice').textContent=r.message;e.target.reset();await mine();}
- catch(err){$('credentialNotice').textContent=err.message;}finally{b.disabled=false;}
+ e.preventDefault();const form=e.target,b=form.querySelector('button'),notice=$('credentialNotice');
+ const show=message=>{notice.textContent=message;notice.scrollIntoView({behavior:'smooth',block:'center'});};
+ if(!form.checkValidity()){show(t('credentialsRequired'));form.reportValidity();return;}
+ if(!session()){show(t('signin'));return;}
+ b.disabled=true;b.textContent=t('credentialsSaving');form.setAttribute('aria-busy','true');show(t('credentialsSaving'));
+ try{
+  await api({action:'credentials',...await credentialsPayload(form)});
+  form.reset();await mine();show(t('credentialsSaved'));
+ }catch(err){show(err.name==='TimeoutError'?t('unavailable'):err.message);notice.focus();}
+ finally{b.disabled=false;b.textContent=t('saveCredentials');form.setAttribute('aria-busy','false');}
 };
 async function loadReviews(){
  const r=await fetch('/api/coaching?review=1',{headers:{Authorization:'Bearer '+session()?.access_token}}),d=await r.json();
