@@ -1,0 +1,17 @@
+name: Notify IndexNow
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['index.html', 'guides/**', 'sitemap.xml']
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Allow production deployment to finish
+        run: sleep 90
+      - run: node scripts/submit-indexnow.mjs
