@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler,{validateProfile,validPayment,bookingReady,zoomMeeting} from '../lib/server/coaching.mjs';
+import handler,{validateProfile,validPayment,bookingReady,zoomMeeting,coachingMode,coachingPaymentRequest} from '../lib/server/coaching.mjs';
 const profile={name:'Sample coach',bio:'Fictional career coaching background',specialty:'Interviews',languages:'English',price:'12.50'};
 test('profile validates and converts server-side price',()=>{assert.equal(validateProfile(profile).price_cents,1250);for(const price of ['-1','NaN','1001',''])assert.throws(()=>validateProfile({...profile,price}));assert.throws(()=>validateProfile({...profile,bio:'x'.repeat(1501)}));});
 const booking={id:'booking-1',order_id:'order-1',price_cents:799};
@@ -11,3 +11,16 @@ const response=()=>({headers:{},setHeader(k,v){this.headers[k]=v;},status(n){thi
 test('unauthenticated private bookings are rejected',async()=>{const res=response();await handler({method:'GET',headers:{},query:{mine:'1'}},res);assert.equal(res.code,401);assert.equal(res.headers['Cache-Control'],'no-store');});
 test('unsupported method rejected without modifying records',async()=>{const res=response();await handler({method:'DELETE',headers:{},query:{}},res);assert.equal(res.code,405);});
 test('Zoom sends scheduled meeting with privacy settings and returns only participant URL',async()=>{const old=global.fetch;const requests=[];process.env.ZOOM_ACCOUNT_ID='test';global.fetch=async(url,opt)=>{requests.push({url,opt});return {ok:true,json:async()=>requests.length===1?{access_token:'dummy'}:{id:123,join_url:'https://zoom.us/j/123?pwd=test',start_url:'secret-host-url'}};};try{const meeting=await zoomMeeting({zoom_host_id:'host@example.com'},{starts_at:'2026-11-01T10:00:00Z',duration_minutes:30});assert.equal(meeting.start_url,undefined);const body=JSON.parse(requests[1].opt.body);assert.equal(body.settings.waiting_room,true);assert.equal(body.settings.auto_recording,'none');assert.equal(body.timezone,'UTC');}finally{global.fetch=old;}});
+
+test('coaching sandbox routes Orders independently of live subscription settings',async()=>{
+ const saved={...process.env};const old=global.fetch;const urls=[];
+ Object.assign(process.env,{PAYPAL_MODE:'live',COACHING_PAYPAL_MODE:'sandbox',PAYPAL_CLIENT_ID:'live-id',PAYPAL_CLIENT_SECRET:'live-secret',PAYPAL_SANDBOX_CLIENT_ID:'sandbox-id',PAYPAL_SANDBOX_CLIENT_SECRET:'sandbox-secret'});
+ global.fetch=async(url,opt)=>{urls.push({url,opt});return {ok:true,status:200,json:async()=>urls.length===1?{access_token:'dummy'}:{id:'order-test'}};};
+ try{
+  assert.equal(coachingMode(),'sandbox');await coachingPaymentRequest('/v2/checkout/orders',{method:'POST',body:'{}'});
+  assert.ok(urls.every(r=>r.url.startsWith('https://api-m.sandbox.paypal.com/')));
+  assert.equal(urls[0].opt.headers.Authorization,'Basic '+Buffer.from('sandbox-id:sandbox-secret').toString('base64'));
+  assert.equal(process.env.PAYPAL_MODE,'live');
+  process.env.COACHING_PAYPAL_MODE='invalid';assert.equal(bookingReady(),false);await assert.rejects(()=>coachingPaymentRequest('/v2/checkout/orders'));
+ }finally{global.fetch=old;for(const k of Object.keys(process.env))if(!(k in saved))delete process.env[k];Object.assign(process.env,saved);}
+});
