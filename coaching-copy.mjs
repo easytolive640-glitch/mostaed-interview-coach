@@ -1,3 +1,4 @@
+import {blogCopy} from './blog-copy.mjs';
 export const coachingCopy={
   "badge": [
     "A PERSON TO HELP YOU MOVE FORWARD",
@@ -707,3 +708,5 @@ export const coachingCopy={
     "Prüfen Sie LinkedIn und Lebenslauf, bestätigen Sie die Prüfung und weisen Sie eine gültige verwaltete Zoom-Host-E-Mail oder ID zu."
   ]
 };
+
+coachingCopy.careerBlogs=blogCopy.careerBlogs;

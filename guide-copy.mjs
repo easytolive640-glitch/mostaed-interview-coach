@@ -1,3 +1,4 @@
+import {blogCopy} from './blog-copy.mjs';
 export const guideCopy={
   "guides": [
     "Interview preparation guides",
@@ -546,3 +547,5 @@ export const guideCopy={
     "Antworten Sie etwa eine Minute lang: Problem, eigene Handlung und korrektes Ergebnis ohne Fachjargon. Wählen Sie Kundenservice kostenlos; kostenpflichtige KI kann optional Lebenslauf und eine Audioantwort einbeziehen. Feedback garantiert keine Anstellung."
   ]
 };
+
+Object.assign(guideCopy,blogCopy);
