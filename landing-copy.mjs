@@ -416,3 +416,10 @@ Object.assign(landingCopy,{
     "Interviewleitfaden ansehen →"
   ]
 });
+
+Object.assign(landingCopy, {
+coachingNav:['1:1 coaching','تدريب فردي','Coaching individuel','Orientación individual','Einzelcoaching'],
+coachingTitle:['A personal conversation for your next career step.','حوار شخصي لخطوتك المهنية القادمة.','Un échange personnel pour votre prochaine étape professionnelle.','Una conversación personal para tu próximo paso profesional.','Ein persönliches Gespräch für Ihren nächsten Karriereschritt.'],
+coachingBody:['Explore career coaching and coach registration. Paid calendar bookings and private Zoom sessions are in preparation.','استكشف التدريب المهني وتسجيل المدربين. الحجز المدفوع بالتقويم وجلسات زووم الخاصة قيد الإعداد.','Découvrez le coaching professionnel et les candidatures de coachs. Les réservations payantes et séances Zoom privées sont en préparation.','Explora la orientación profesional y el registro de coaches. Las reservas de pago y sesiones privadas de Zoom están en preparación.','Entdecken Sie Karriereberatung und die Anmeldung als Coach. Bezahlte Buchungen und private Zoom-Sitzungen sind in Vorbereitung.'],
+coachingAction:['Explore career coaching','استكشف التدريب المهني','Découvrir le coaching','Explorar orientación profesional','Karrierecoaching entdecken']
+});

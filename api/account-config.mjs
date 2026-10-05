@@ -1,7 +1,9 @@
+import coachingHandler from '../lib/server/coaching.mjs';
 import { testAiConfigured } from '../lib/server/paid-access.mjs';
 import accountAuth from '../lib/server/account-auth.mjs';
 import historyHandler from '../lib/server/evaluation-history.mjs';
 export default async function handler(req, res) {
+  if (req.query?.coaching === '1') return coachingHandler(req,res);
   if (req.method === 'GET' && req.query?.history === '1') return historyHandler(req,res);
   if (req.method === 'POST' || (req.method === 'GET' && req.query?.settings === '1')) return accountAuth(req, res);
   res.setHeader('Cache-Control', 'no-store');

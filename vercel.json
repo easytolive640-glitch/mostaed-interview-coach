@@ -3,9 +3,16 @@
   "functions": {
     "api/evaluate.mjs": {
       "maxDuration": 60
+    },
+    "api/account-config.mjs": {
+      "maxDuration": 60
     }
   },
   "rewrites": [
+    {
+      "source": "/api/coaching",
+      "destination": "/api/account-config?coaching=1"
+    },
     {
       "source": "/api/paypal-sandbox-webhook",
       "destination": "/api/paypal-webhook?sandbox=1"
