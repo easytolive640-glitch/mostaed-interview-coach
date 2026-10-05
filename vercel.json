@@ -10,6 +10,10 @@
   },
   "rewrites": [
     {
+      "source": "/api/admin",
+      "destination": "/api/account-config?admin=1"
+    },
+    {
       "source": "/api/coaching",
       "destination": "/api/account-config?coaching=1"
     },
@@ -74,6 +78,19 @@
         {
           "key": "X-Robots-Tag",
           "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/admin.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
         }
       ]
     }

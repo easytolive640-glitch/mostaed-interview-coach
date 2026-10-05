@@ -710,3 +710,6 @@ export const coachingCopy={
 };
 
 coachingCopy.careerBlogs=blogCopy.careerBlogs;
+
+coachingCopy.applicationStatus=["My coach application", "طلب تسجيل المدرب", "Ma candidature de coach", "Mi solicitud de coach", "Meine Coach-Bewerbung"];
+coachingCopy.adminDashboard=["Admin dashboard", "لوحة الإدارة", "Tableau administrateur", "Panel de administración", "Admin-Dashboard"];

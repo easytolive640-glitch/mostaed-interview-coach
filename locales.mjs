@@ -41,3 +41,5 @@ export function rememberLanguage(language){
   const url=new URL(location.href);if(url.searchParams.has('lang')){url.searchParams.set('lang',value);history.replaceState(null,'',url.href);}
  }
 }
+
+ui.adminDashboard=["Admin dashboard", "لوحة الإدارة", "Tableau administrateur", "Panel de administración", "Admin-Dashboard"];
