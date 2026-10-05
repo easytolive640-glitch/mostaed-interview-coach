@@ -81,3 +81,5 @@ nav{height:auto;min-height:88px;gap:24px}.nav{flex-wrap:wrap;justify-content:fle
 @media(max-width:900px){.role-grid{grid-template-columns:1fr}.landing-page .hero{gap:38px;padding-top:45px}.landing-page .phone{transform:none}.role-card{padding:25px}}
 @media(max-width:480px){.landing-page .wrap{width:calc(100% - 32px)}.landing-page .hero h1{font-size:40px}.landing-page .hero{min-height:0}.landing-page .badge{font-size:9px}.landing-page .price-card{padding:25px}.landing-page .lead{font-size:17px}}
 @media(prefers-reduced-motion:reduce){.role-card,.landing-page .btn{transition:none}}
+
+.coach-photo,.coach-avatar{width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:16px}.coach-avatar{display:grid;place-items:center;background:linear-gradient(135deg,#5839a8,#247b79);color:#fff;font-size:2rem}.coach-brief{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}

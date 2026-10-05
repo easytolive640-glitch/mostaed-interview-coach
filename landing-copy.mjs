@@ -490,3 +490,5 @@ Object.assign(landingCopy,{
     "Geplant: Ein privater Zoom-Link nach bestätigter Zahlung. Sitzungen werden separat von AI Pro bezahlt."
   ]
 });
+
+Object.assign(landingCopy,{"approvedCoaches":["Approved career coaches","المدربون المهنيون المعتمدون","Coachs professionnels approuvés","Coaches profesionales aprobados","Freigegebene Karrierecoaches"],"coachSubmitted":["Application saved. Mostaed will review your profile before publication.","تم حفظ الطلب. ستراجع مستعد ملفك قبل نشره.","Candidature enregistrée. Mostaed examinera votre profil avant publication.","Solicitud guardada. Mostaed revisará tu perfil antes de publicarlo.","Bewerbung gespeichert. Mostaed prüft Ihr Profil vor der Veröffentlichung."]});
