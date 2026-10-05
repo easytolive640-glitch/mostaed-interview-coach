@@ -1,3 +1,4 @@
+import {pageCopy} from './page-copy.mjs';
 export const languages={english:{code:'en',name:'English',feedback:'English'},arabic:{code:'ar',name:'العربية',feedback:'clear Modern Standard Arabic'},french:{code:'fr',name:'Français',feedback:'French'},spanish:{code:'es',name:'Español',feedback:'Spanish'},german:{code:'de',name:'Deutsch',feedback:'German'}};
 const order=Object.keys(languages);
 export function validLanguage(value){return Object.hasOwn(languages,value);}
@@ -20,6 +21,22 @@ noGender:['Prefer not to say','أفضل عدم الإجابة','Je préfère ne 
 testCheckout:['Test card checkout & PayPal sandbox','تجربة دفع البطاقات وPayPal',"Tester les cartes et le sandbox PayPal",'Probar tarjetas y sandbox de PayPal','Kartenzahlung und PayPal-Sandbox testen'],
 paymentMethods:['PayPal · Eligible debit or credit cards through PayPal','PayPal · البطاقات المؤهلة عبر PayPal',"PayPal · Cartes de débit ou crédit éligibles via PayPal",'PayPal · Tarjetas de débito o crédito admitidas por PayPal','PayPal · Berechtigte Debit- oder Kreditkarten über PayPal'],paymentHelp:['PayPal determines available payment methods. A PayPal account may be required. Mostaed does not collect your card number or security code.','يحدد PayPal طرق الدفع المتاحة وقد يلزم حساب PayPal. لا يجمع مستعد رقم البطاقة أو رمز الأمان.',"PayPal détermine les moyens disponibles. Un compte peut être nécessaire. Mostaed ne collecte pas votre numéro de carte ni le code de sécurité.",'PayPal determina los métodos disponibles. Puede requerir una cuenta. Mostaed no recoge tu número de tarjeta ni código de seguridad.','PayPal bestimmt die verfügbaren Zahlungsarten. Ein Konto kann nötig sein. Mostaed erfasst weder Kartennummer noch Sicherheitscode.'],
 });
+Object.assign(ui,pageCopy,{
+proPlanTitle:['AI Pro — USD 7.99/month','AI Pro — 7.99 دولار شهرياً','AI Pro — 7,99 USD/mois','AI Pro — 7,99 USD/mes','AI Pro — 7,99 USD/Monat'],
+usernameRules:['3–30 letters, numbers or underscores','3–30 حرفاً أو رقماً أو شرطة سفلية','3 à 30 lettres, chiffres ou traits de soulignement','3–30 letras, números o guiones bajos','3–30 Buchstaben, Zahlen oder Unterstriche'],
+thirtyMinutes:['30 min','30 دقيقة','30 min','30 min','30 Min.'],
+mainNavigation:['Main navigation','التنقل الرئيسي','Navigation principale','Navegación principal','Hauptnavigation'],
+completedAnswers:['Completed answers','الإجابات المكتملة','Réponses terminées','Respuestas completadas','Abgeschlossene Antworten'],
+});
 export function translate(key,language='english',values={}){let text=ui[key]?.[order.indexOf(normalizeLanguage(language))]||key;for(const [name,value] of Object.entries(values))text=text.replaceAll('{'+name+'}',String(value));return text;}
-export function preferredLanguage(){try{return normalizeLanguage(localStorage.getItem('mostaed-language')||localStorage.getItem('mostaed-lang'));}catch{return 'english';}}
-export function rememberLanguage(language){try{localStorage.setItem('mostaed-language',normalizeLanguage(language));}catch{}}
+export function preferredLanguage(){
+ const query=typeof location!=='undefined'?new URLSearchParams(location.search).get('lang'):null;
+ if(query&&(validLanguage(query)||order.some(key=>languages[key].code===query)))return normalizeLanguage(query);
+ try{return normalizeLanguage(localStorage.getItem('mostaed-language')||localStorage.getItem('mostaed-lang')||localStorage.getItem('mostaed_coaching_language'));}catch{return 'english';}
+}
+export function rememberLanguage(language){
+ const value=normalizeLanguage(language);try{localStorage.setItem('mostaed-language',value);}catch{}
+ if(typeof location!=='undefined'&&typeof history!=='undefined'){
+  const url=new URL(location.href);if(url.searchParams.has('lang')){url.searchParams.set('lang',value);history.replaceState(null,'',url.href);}
+ }
+}

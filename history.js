@@ -1,10 +1,11 @@
+import {localizeMessage} from './localized-messages.mjs';
 import {initLocalization,currentLanguage} from './app-localization.mjs';
 import {translate,languages} from './locales.mjs';
 initLocalization();
 import {renderEvaluation} from './evaluation-report.mjs';
 const notice=document.getElementById('notice'), list=document.getElementById('history'), refresh=document.getElementById('refresh');
 async function loadHistory(){
-  refresh.disabled=true;
+  refresh.disabled=true;notice.removeAttribute('data-i18n');
   try{
     const session=JSON.parse(sessionStorage.getItem('mostaed_account')||'null');
     if(!session || session.expires_at*1000<Date.now()) throw Error(translate('signInAgain',currentLanguage()));
@@ -17,11 +18,11 @@ async function loadHistory(){
       const summary=document.createElement('summary');
       const label=translate(item.category,currentLanguage());
       summary.textContent=new Date(item.created_at).toLocaleString(languages[currentLanguage()].code)+' · '+label+' · '+item.evaluation.score+'/100';
-      card.append(summary);renderEvaluation(card,item.evaluation,item.evaluation.reportLanguage||item.language,item.category);
+      card.append(summary);renderEvaluation(card,item.evaluation,currentLanguage(),item.category);
       list.append(card);
     }
     notice.textContent=translate(data.items.length?'historyLoaded':'emptyHistory',currentLanguage());
-  }catch(error){list.replaceChildren();notice.textContent=error.message;}
+  }catch(error){list.replaceChildren();notice.textContent=localizeMessage(error.message,currentLanguage());}
   finally{refresh.disabled=false;}
 }
 refresh.addEventListener('click',loadHistory);loadHistory();

@@ -1,3 +1,4 @@
+import {translate} from './locales.mjs';
 
 const root=document.getElementById('approvedCoaches'),select=document.getElementById('landingLanguage');
 const languages={english:'en',arabic:'ar',french:'fr',spanish:'es',german:'de'};
@@ -13,8 +14,8 @@ function render(){
   else card.append(node('div',c.name.trim().slice(0,1),'coach-avatar'));
   card.append(node('h3',c.name),node('p',c.specialty),node('p',c.bio.slice(0,240),'coach-brief'),node('p',c.languages));
   const price=new Intl.NumberFormat(languages[select.value]||'en',{style:'currency',currency:'USD'}).format(c.price_cents/100);
-  card.append(node('p',price+' / 30 min'));
-  const link=node('a',words.view[i],'btn secondary');link.href='/coaching.html?coach='+encodeURIComponent(c.id)+'#calendar';card.append(link);root.append(card);
+  card.append(node('p',price+' / '+translate('thirtyMinutes',select.value)));
+  const link=node('a',words.view[i],'btn secondary');link.href='/coaching.html?coach='+encodeURIComponent(c.id)+'&lang='+select.value+'#calendar';card.append(link);root.append(card);
  }
 }
 if(sessionStorage.getItem('mostaed_coach_submission')){document.getElementById('coachSubmissionNotice').hidden=false;sessionStorage.removeItem('mostaed_coach_submission');}

@@ -5,7 +5,9 @@ initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs';
 const $ = id => document.getElementById(id);
 let config, session, recoveryToken, creatingAccount = false;
-const notice = text => { $('notice').textContent = localizeMessage(text,currentLanguage()); };
+let noticeSource='';
+const notice = text => { noticeSource=text; $('notice').removeAttribute('data-i18n');$('notice').textContent = localizeMessage(text,currentLanguage()); };
+document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSource)notice(noticeSource);});
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
   $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.billingEnabled;
 }

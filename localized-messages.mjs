@@ -1,3 +1,6 @@
+import {extraMessages} from './extra-messages.mjs';
+import {coachingCopy} from './coaching-copy.mjs';
+import {ui,normalizeLanguage} from './locales.mjs';
 const messages={
 'Signed in. Paid AI requires a verified subscription.':['تم تسجيل الدخول. يتطلب التدريب الذكي اشتراكاً مؤكداً.',"Connexion réussie. Un abonnement vérifié est requis pour l’IA.",'Sesión iniciada. La IA requiere una suscripción verificada.','Angemeldet. KI-Coaching erfordert ein verifiziertes Abo.'],
 'Signed out.':['تم تسجيل الخروج.','Déconnexion effectuée.','Sesión cerrada.','Abgemeldet.'],
@@ -30,4 +33,44 @@ const messages={
 'Signed in with Google. Paid AI requires a verified subscription.':['تم الدخول باستخدام Google. يلزم اشتراك مؤكد للتدريب الذكي.',"Connexion Google réussie. Un abonnement vérifié est requis pour l’IA.",'Acceso con Google completado. La IA requiere una suscripción verificada.','Mit Google angemeldet. KI-Coaching erfordert ein verifiziertes Abo.'],
 'Sign in with your email and password.':['سجل الدخول بالبريد وكلمة المرور.',"Connectez-vous avec votre e-mail et votre mot de passe.",'Inicia sesión con tu correo y contraseña.','Melden Sie sich mit E-Mail und Passwort an.'],
 };
-export function localizeMessage(message,language){const key=String(message).split(' / ')[0];const i=['arabic','french','spanish','german'].indexOf(language);return i>=0&&messages[key]?messages[key][i]:message;}
+Object.assign(messages,extraMessages);
+export {messages};
+const coachingAliases={
+'Sign in to your Mostaed account first.':'signin',
+"Availability added.":"availabilityAdded",
+"Test alert sent to the configured admin email.":"alertSent",
+"Payment received. Meeting setup is in progress or needs support review. Check My sessions.":"meetingPreparing",
+"Payment verified. Meeting setup needs support review; you will not be charged again.":"meetingSupport",
+"Payment has not been verified. No meeting has been confirmed.":"paymentUnverified",
+"Choose a time between two hours and 90 days from now.":"chooseSlotTime",
+"This time overlaps an existing slot.":"overlap",
+"Mostaed administrator access required.":"adminRequired",
+"Your coach profile must be approved first.":"approvedFirst",
+"Only pending or paused applications can update credentials.":"onlyPending",
+"CV access denied.":"privateDenied",
+"This booking is already paid. View it in My sessions.":"alreadyPaid",
+"This booking was cancelled. Contact Mostaed if you have already paid.":"bookingCancelled",
+"This session time has passed. Contact Mostaed before making a payment.":"sessionPassed",
+"Booking not found in this payment environment.":"bookingNotFound",
+"Review LinkedIn and CV, confirm your review, and assign a valid managed Zoom host email or ID.":"reviewRequired",
+'Coach approved and published.':'approved',
+'Application paused; not publicly listed.':'paused',
+'Your coach application is already saved.':'applicationSuccess',
+'Consent is required before submitting your coach application.':'applicationInvalid',
+'Application received. Mostaed will review your profile before it appears publicly.':'applicationSuccess',
+'Credentials saved for review.':'credentialsSaved',
+'No profile photo uploaded yet.':'photoError',
+'No CV uploaded yet.':'noSavedCV',
+'Paid session bookings are not open yet.':'closed',
+'Session confirmed. Your private Zoom link is in My sessions.':'confirmed',
+'Sandbox payment verified; this is a test booking.':'sandbox',
+'Career coaching is temporarily unavailable. Please try again or contact Mostaed.':'unavailable',
+};
+export function localizeMessage(message,language){
+ const text=String(message),key=text.split(' / ')[0],target=normalizeLanguage(language),i=['english','arabic','french','spanish','german'].indexOf(target);
+ if(i>0&&coachingAliases[key])return coachingCopy[coachingAliases[key]][i];
+ const matched=Object.entries(messages).find(([en,row])=>en===key||row.includes(key));
+ if(matched)return i===0?matched[0]:matched[1][i-1];
+ const uiRow=Object.values({...ui,...coachingCopy}).find(row=>row.includes(key));if(uiRow)return uiRow[i];
+ return i===0?text:messages['Request unavailable'][i-1];
+}

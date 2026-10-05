@@ -1,8 +1,10 @@
+import {syncLanguageLinks} from './language-navigation.mjs';
+import {applyGuideCards} from './guide-localization.mjs';
 import {languages,translate,preferredLanguage,rememberLanguage} from './locales.mjs';
 import {landingCopy} from './landing-copy.mjs';
 const select=document.getElementById('landingLanguage');
-function apply(){const language=select.value;const index=Object.keys(languages).indexOf(language);document.documentElement.lang=languages[language].code;document.documentElement.dir=language==='arabic'?'rtl':'ltr';rememberLanguage(language);
-  for(const el of document.querySelectorAll('[data-copy]'))el.textContent=landingCopy[el.dataset.copy][index];
+function apply(){const language=select.value;const index=Object.keys(languages).indexOf(language);document.documentElement.lang=languages[language].code;document.documentElement.dir=language==='arabic'?'rtl':'ltr';rememberLanguage(language);syncLanguageLinks(language);applyGuideCards(language);
+  for(const el of document.querySelectorAll('[data-copy]'))el.textContent=landingCopy[el.dataset.copy]?.[index]||el.textContent;
   for(const el of document.querySelectorAll('[data-i18n]'))el.textContent=translate(el.dataset.i18n,language);
   select.setAttribute('aria-label',translate('language',language));
   for(const link of document.querySelectorAll('a[data-copy="startFree"]')){const url=new URL(link.href);url.searchParams.set('lang',language);link.href=url.href;}

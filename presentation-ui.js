@@ -26,6 +26,7 @@ if (form) {
     });
   }
   questions.addEventListener('input', update);
+  document.getElementById('language').addEventListener('change',update);
   new MutationObserver(update).observe(questions,{childList:true});
   update();
 }
