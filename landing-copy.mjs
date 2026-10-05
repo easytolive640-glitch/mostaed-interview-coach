@@ -321,3 +321,98 @@ Object.assign(landingCopy, {
     "Audio ist in diesem Browser nicht verfügbar. Folgen Sie den drei angezeigten Schritten."
   ]
 });
+
+// Focused landing copy across all supported languages.
+Object.assign(landingCopy,{
+  "oldHero": [
+    "Turn your experience into",
+    "حوّل خبرتك إلى",
+    "Transformez votre expérience en",
+    "Convierte tu experiencia en",
+    "Verwandeln Sie Ihre Erfahrung in"
+  ],
+  "oldHeroAccent": [
+    "interview-ready answers.",
+    "إجابات جاهزة للمقابلة.",
+    "réponses prêtes pour l’entretien.",
+    "respuestas para tu entrevista.",
+    "überzeugende Interviewantworten."
+  ],
+  "oldBadge": [
+    "ROLE-SPECIFIC INTERVIEW PRACTICE",
+    "تدريب مقابلات يناسب مجالك",
+    "ENTRAÎNEMENT ADAPTÉ À VOTRE MÉTIER",
+    "PRÁCTICA ADAPTADA A TU PUESTO",
+    "INTERVIEWTRAINING FÜR IHREN BERUF"
+  ],
+  "heroLead": [
+    "Prepare for HR, customer service and IT & cloud interviews. Practise in your language, then build clearer answers with feedback you can act on.",
+    "استعد لمقابلات الموارد البشرية وخدمة العملاء وتقنية المعلومات والسحابة. تدرّب بلغتك وطوّر إجاباتك بملاحظات واضحة قابلة للتطبيق.",
+    "Préparez vos entretiens RH, service client et informatique/cloud. Entraînez-vous dans votre langue avec des conseils concrets pour améliorer vos réponses.",
+    "Prepárate para entrevistas de RR. HH., atención al cliente e informática/cloud. Practica en tu idioma y mejora tus respuestas con consejos concretos.",
+    "Bereiten Sie sich auf HR-, Kundenservice- und IT-/Cloud-Interviews vor. Üben Sie in Ihrer Sprache und verbessern Sie Ihre Antworten mit konkretem Feedback."
+  ],
+  "roleTitle": [
+    "Prepare for the role you want.",
+    "استعد للوظيفة التي تريدها.",
+    "Préparez le poste que vous visez.",
+    "Prepárate para el puesto que quieres.",
+    "Bereiten Sie sich auf Ihre Wunschrolle vor."
+  ],
+  "roleLead": [
+    "Real situations. Relevant questions. A clearer way to tell your story.",
+    "مواقف واقعية وأسئلة مرتبطة بمجالك وطريقة أوضح لعرض خبرتك.",
+    "Des situations réalistes, des questions pertinentes, une expérience mieux expliquée.",
+    "Situaciones reales, preguntas relevantes y una forma más clara de contar tu experiencia.",
+    "Reale Situationen, relevante Fragen und klarere Beispiele aus Ihrer Erfahrung."
+  ],
+  "roleHR": [
+    "HR interviews",
+    "مقابلات الموارد البشرية",
+    "Entretiens RH",
+    "Entrevistas de RR. HH.",
+    "HR-Interviews"
+  ],
+  "roleCS": [
+    "Customer service",
+    "خدمة العملاء",
+    "Service client",
+    "Atención al cliente",
+    "Kundenservice"
+  ],
+  "roleIT": [
+    "IT & cloud",
+    "تقنية المعلومات والسحابة",
+    "Informatique & cloud",
+    "Informática y cloud",
+    "IT & Cloud"
+  ],
+  "roleHRBody": [
+    "Motivation, teamwork and specific examples from your experience.",
+    "الدوافع والعمل الجماعي وأمثلة محددة من خبرتك.",
+    "Motivation, travail d’équipe et exemples précis de votre expérience.",
+    "Motivación, trabajo en equipo y ejemplos concretos de tu experiencia.",
+    "Motivation, Teamarbeit und konkrete Beispiele aus Ihrer Erfahrung."
+  ],
+  "roleCSBody": [
+    "Complaints, escalation and prioritisation under pressure.",
+    "الشكاوى والتصعيد وترتيب الأولويات تحت الضغط.",
+    "Réclamations, escalade et priorités sous pression.",
+    "Reclamaciones, escalación y prioridades bajo presión.",
+    "Beschwerden, Eskalation und Prioritäten unter Druck."
+  ],
+  "roleITBody": [
+    "Troubleshooting, incident communication and recovery.",
+    "حل المشكلات والتواصل أثناء الحوادث واستعادة الخدمة.",
+    "Diagnostic, communication en incident et reprise.",
+    "Diagnóstico, comunicación de incidentes y recuperación.",
+    "Fehlersuche, Incident-Kommunikation und Wiederherstellung."
+  ],
+  "roleAction": [
+    "Explore interview guide →",
+    "استكشف دليل المقابلة ←",
+    "Explorer le guide →",
+    "Explorar la guía →",
+    "Interviewleitfaden ansehen →"
+  ]
+});

@@ -47,3 +47,37 @@ body{background:radial-gradient(circle at 12% 8%,#4a1973 0,transparent 27%),radi
 nav{height:auto;min-height:88px;gap:24px}.nav{flex-wrap:wrap;justify-content:flex-end;gap:18px}.lang{max-width:150px;font:inherit}.lang option{background:#17104a;color:white}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.hero{padding-top:55px}.hero h1 span{display:block}.phone .sample-label{text-align:center;font-size:10px;color:#c6c3df;margin:9px 0}.price-list span{display:block}.price-card .price-note{margin-bottom:8px}.cv-picker{background:#080c2966;padding:24px;border-radius:20px}.cv-document{display:grid;gap:13px;padding:23px;background:#ffffff0c;border:1px solid #ffffff26;border-radius:16px;margin-bottom:18px}.cv-document i{height:8px;border-radius:5px;background:#ffffff25}.cv-document i:nth-child(3){width:65%}.cv-document b{color:var(--mint)}.cv-copy .actions{margin-top:24px}.language-line{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.language-line span{padding:5px 11px;border:1px solid #ffffff24;background:#ffffff09;border-radius:999px;font-size:12px}.footer-links{display:flex;gap:18px}.legal-note{max-width:900px}.motion-video{min-height:390px}.motion-stage{inset:53px 0 0}.price-card .soon-button{opacity:.8}.cv-privacy{margin-top:16px}.head p{max-width:760px}.screen .feedback p{overflow-wrap:anywhere}
 @media(max-width:900px){nav{flex-wrap:wrap;padding-block:20px}.nav{display:flex;gap:12px}.nav a{display:none}.nav a.account-link{display:inline-flex}.hero{gap:35px}.phone-area{min-width:0}.brand-copy small{letter-spacing:.03em}}
 @media(max-width:480px){nav{gap:14px}.nav{width:100%;justify-content:space-between}.hero h1{font-size:46px}.voice-spotlight{padding:24px}.phone{max-width:100%}.price-card{padding:25px}.foot{gap:20px;flex-wrap:wrap}}
+
+/* Focused landing refinement */
+.landing-page{background:#100d25}
+.landing-page .wrap{width:min(1200px,calc(100% - 48px))}
+.landing-page nav{padding-block:22px;border-bottom:1px solid #ffffff12}
+.landing-page .hero{gap:64px;padding:76px 0 80px;min-height:680px}
+.landing-page .hero h1{font-size:clamp(42px,4.7vw,66px);line-height:1.09;letter-spacing:-.045em;max-width:690px}
+.landing-page .hero h1 .grad{margin-top:8px;background:linear-gradient(100deg,#ffd45c,#ff8b91 68%,#cf9bff);background-clip:text}
+.landing-page .lead{font-size:18px;line-height:1.75;color:#c7c2db;max-width:590px}
+.landing-page .badge{letter-spacing:.08em;font-size:11px;padding:8px 12px}
+.landing-page .btn{border-radius:12px;padding:15px 22px}
+.landing-page .primary{background:#56f2c3;color:#17104a;box-shadow:0 8px 25px #56f2c31a}
+.landing-page .phone{transform:rotate(2deg);border-radius:32px;box-shadow:0 35px 90px #0006}
+.landing-page .orbit{opacity:.55}
+.landing-page section{scroll-margin-top:24px}
+.landing-page .head h2{font-size:clamp(28px,3.2vw,42px);letter-spacing:-.035em;line-height:1.2;max-width:850px}
+.landing-page .head p{color:#c7c2db}
+.role-section{padding:32px 0 76px!important;border-block:1px solid #ffffff0b;background:#ffffff02}
+.role-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.role-card{padding:30px;border:1px solid #ffffff18;border-radius:22px;background:#211b40;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+.role-card:hover{transform:translateY(-4px);border-color:#56f2c36b}
+.role-number{font-size:12px;color:#ffaa83;letter-spacing:.14em;font-weight:700}
+.role-card h3{font-size:24px;margin:20px 0 10px;letter-spacing:-.02em}
+.role-card p{color:#c7c2db;margin:0 0 26px;flex:1}
+.role-action{font-size:14px;color:#56f2c3;font-weight:700}
+.landing-page .card,.landing-page .price-card{border-radius:22px}
+.landing-page .price-card.pro{transform:none;border-color:#b799ff80;box-shadow:0 20px 60px #0002}
+.landing-page .price-card{padding:32px}
+.landing-page .price{letter-spacing:-.04em}
+.landing-page .voice-spotlight,.landing-page .cv-panel{border-radius:24px}
+.landing-page a:focus-visible,.landing-page button:focus-visible,.landing-page select:focus-visible{outline:3px solid #56f2c3;outline-offset:5px}
+@media(max-width:900px){.role-grid{grid-template-columns:1fr}.landing-page .hero{gap:38px;padding-top:45px}.landing-page .phone{transform:none}.role-card{padding:25px}}
+@media(max-width:480px){.landing-page .wrap{width:calc(100% - 32px)}.landing-page .hero h1{font-size:40px}.landing-page .hero{min-height:0}.landing-page .badge{font-size:9px}.landing-page .price-card{padding:25px}.landing-page .lead{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.role-card,.landing-page .btn{transition:none}}
