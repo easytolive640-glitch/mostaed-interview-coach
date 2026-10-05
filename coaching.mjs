@@ -94,9 +94,9 @@ $('credentialUpdate').onsubmit=async e=>{
 async function loadReviews(){
  const r=await fetch('/api/coaching?review=1',{headers:{Authorization:'Bearer '+session()?.access_token}}),d=await r.json();
  if(!r.ok){$('reviewNotice').textContent=d.error;return;}
- const root=$('applications');root.replaceChildren();if(!d.applications.length)root.append(node('p',t('noApplications')));
+ const root=$('applications');root.replaceChildren();const test=node('button',lang==='ar'?'اختبار بريد الإدارة':'Send admin test email','btn secondary');test.type='button';test.onclick=async()=>{test.disabled=true;try{const r=await api({action:'alert_test'});$('reviewNotice').textContent=r.message;}catch(e){$('reviewNotice').textContent=e.message;}finally{test.disabled=false;}};root.append(test);if(!d.applications.length)root.append(node('p',t('noApplications')));
  for(const c of d.applications){
-  const card=node('article',null,'card');card.append(node('h3',c.name),node('p',c.specialty),node('p',c.bio),node('p',c.languages),node('p',money(c.price_cents)),node('p',c.status));
+  const card=node('article',null,'card');card.id='application-'+c.id;card.append(node('h3',c.name),node('p',c.specialty),node('p',c.bio),node('p',c.languages),node('p',money(c.price_cents)),node('p',c.status));
   if(c.linkedin_url){const a=node('a','LinkedIn','btn secondary');a.href=c.linkedin_url;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}
   const cv=node('button',t('viewCV'),'btn secondary');cv.type='button';cv.disabled=!c.cv_name;cv.onclick=()=>viewCV(c.id).catch(e=>$('reviewNotice').textContent=e.message);card.append(cv);if(c.has_photo){const photo=node('button',lang==='ar'?'عرض الصورة':'View photo','btn secondary');photo.type='button';photo.onclick=()=>viewCV(c.id,true).catch(e=>$('reviewNotice').textContent=e.message);card.append(photo);}
   const form=node('form',null,'coaching-form'),hostLabel=node('label',t('zoomHost')),host=node('input');host.name='zoom_host_id';host.required=true;hostLabel.append(host);form.append(hostLabel);
@@ -105,6 +105,7 @@ async function loadReviews(){
   form.onsubmit=async e=>{e.preventDefault();approve.disabled=true;try{const r=await api({action:'review',coach_id:c.id,status:'approved',zoom_host_id:host.value.trim(),review_confirmed:att.checked});$('reviewNotice').textContent=r.message;await loadReviews();await load();}catch(err){$('reviewNotice').textContent=err.message;}finally{approve.disabled=false;}};
   const pause=node('button',t('pause'),'btn secondary');pause.type='button';pause.onclick=async()=>{pause.disabled=true;try{const r=await api({action:'review',coach_id:c.id,status:'paused'});$('reviewNotice').textContent=r.message;await loadReviews();}catch(e){$('reviewNotice').textContent=e.message;}finally{pause.disabled=false;}};form.append(pause);card.append(form);root.append(card);
  }
+ const requested=new URLSearchParams(location.search).get('review');if(requested&&/^[0-9a-f-]{36}$/i.test(requested)){const target=document.getElementById('application-'+requested);if(target){target.style.outline='3px solid #7c3aed';target.scrollIntoView({block:'center'});}}
 }
 $('reviewRefresh').onclick=loadReviews;
 
