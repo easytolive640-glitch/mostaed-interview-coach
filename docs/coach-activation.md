@@ -1,0 +1,3 @@
+Coach activation
+
+Review and approve the CV, LinkedIn and coaching/payout terms first. Approval clears the host assignment and does not publish the coach. Add a separate user in the managed Zoom account, have the coach accept the invitation, and assign the required hosting licence. In /admin.html, enter that coach’s Zoom email or user ID, attest setup completion, and activate bookings. Activation is a manual administrator confirmation, not automatic Zoom licence verification. Only approved coaches with a host assignment are listed and can add availability. Existing approved coaches with host assignments remain active. No database migration required.

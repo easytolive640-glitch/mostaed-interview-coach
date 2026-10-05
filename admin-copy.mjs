@@ -1,4 +1,5 @@
 export const adminCopy={
+"awaitingZoom":["Approved — awaiting Zoom setup", "تم الاعتماد — بانتظار إعداد زووم", "Approuvé — configuration Zoom en attente", "Aprobado — pendiente de configurar Zoom", "Genehmigt — Zoom-Einrichtung ausstehend"],"bookingActive":["Active for bookings", "متاح للحجز", "Actif pour les réservations", "Activo para reservas", "Für Buchungen aktiv"],"activate":["Activate bookings", "تفعيل الحجز", "Activer les réservations", "Activar reservas", "Buchungen aktivieren"],"zoomReady":["The coach accepted the Zoom invitation and has the required hosting licence.", "قبل المدرب دعوة زووم ولديه ترخيص الاستضافة المطلوب.", "Le coach a accepté l’invitation Zoom et dispose de la licence nécessaire.", "El coach aceptó la invitación de Zoom y tiene la licencia necesaria.", "Der Coach hat die Zoom-Einladung angenommen und besitzt die erforderliche Lizenz."],
   "title": [
     "Mostaed admin dashboard",
     "لوحة إدارة مستعد",
