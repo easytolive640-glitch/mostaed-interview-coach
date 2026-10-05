@@ -423,3 +423,70 @@ coachingTitle:['A personal conversation for your next career step.','حوار ش
 coachingBody:['Explore career coaching and coach registration. Paid calendar bookings and private Zoom sessions are in preparation.','استكشف التدريب المهني وتسجيل المدربين. الحجز المدفوع بالتقويم وجلسات زووم الخاصة قيد الإعداد.','Découvrez le coaching professionnel et les candidatures de coachs. Les réservations payantes et séances Zoom privées sont en préparation.','Explora la orientación profesional y el registro de coaches. Las reservas de pago y sesiones privadas de Zoom están en preparación.','Entdecken Sie Karriereberatung und die Anmeldung als Coach. Bezahlte Buchungen und private Zoom-Sitzungen sind in Vorbereitung.'],
 coachingAction:['Explore career coaching','استكشف التدريب المهني','Découvrir le coaching','Explorar orientación profesional','Karrierecoaching entdecken']
 });
+
+// Career coaching launch status and registration, in all landing languages.
+Object.assign(landingCopy,{
+  "coachingBody": [
+    "Coach registration is open. Prepare for a focused 30-minute conversation about interviews, CVs and your next career step. Paid calendar bookings and private Zoom sessions are in preparation.",
+    "تسجيل المدربين متاح الآن. استعد لحوار فردي مدته 30 دقيقة حول المقابلات والسيرة الذاتية وخطوتك المهنية القادمة. الحجز المدفوع وجلسات زووم الخاصة قيد الإعداد.",
+    "Les candidatures de coachs sont ouvertes. Préparez un échange individuel de 30 minutes sur vos entretiens, votre CV et votre prochaine étape. Les réservations payantes et séances Zoom sont en préparation.",
+    "El registro de coaches está abierto. Prepárate para una conversación de 30 minutos sobre entrevistas, CV y tu próximo paso profesional. Las reservas de pago y sesiones de Zoom están en preparación.",
+    "Die Anmeldung als Coach ist geöffnet. Bereiten Sie ein 30-minütiges Gespräch über Interviews, Lebenslauf und Ihren nächsten Karriereschritt vor. Bezahlte Buchungen und Zoom-Sitzungen sind in Vorbereitung."
+  ],
+  "coachingApply": [
+    "Apply as a career coach",
+    "سجّل كمدرب مهني",
+    "Devenir coach professionnel",
+    "Registrarse como coach",
+    "Als Karrierecoach bewerben"
+  ],
+  "coachingStatus": [
+    "Coach applications open · Paid bookings coming soon",
+    "تسجيل المدربين متاح · الحجز المدفوع قريباً",
+    "Candidatures ouvertes · Réservations payantes à venir",
+    "Registro abierto · Reservas de pago próximamente",
+    "Coach-Bewerbungen geöffnet · Bezahlte Buchungen folgen"
+  ],
+  "coachingFocusTitle": [
+    "Support for your next step",
+    "دعم لخطوتك القادمة",
+    "Un soutien pour votre prochaine étape",
+    "Apoyo para tu próximo paso",
+    "Unterstützung für Ihren nächsten Schritt"
+  ],
+  "coachingFocusBody": [
+    "Discuss interview preparation, CV examples and career direction with a coach.",
+    "ناقش التحضير للمقابلات وأمثلة السيرة الذاتية ومسارك المهني مع مدرب.",
+    "Discutez de préparation aux entretiens, de votre CV et de votre orientation avec un coach.",
+    "Habla de preparación para entrevistas, ejemplos de CV y orientación profesional con un coach.",
+    "Besprechen Sie Interviewvorbereitung, Lebenslaufbeispiele und berufliche Orientierung mit einem Coach."
+  ],
+  "coachingCalendarTitle": [
+    "A time that fits your schedule",
+    "موعد يناسب جدولك",
+    "Un créneau adapté à votre emploi du temps",
+    "Un horario que encaje contigo",
+    "Ein Termin, der zu Ihnen passt"
+  ],
+  "coachingCalendarBody": [
+    "Planned: choose a coach and an available 30-minute slot, displayed in your local time.",
+    "قريباً: اختر مدرباً وموعداً متاحاً مدته 30 دقيقة بتوقيتك المحلي.",
+    "À venir : choisissez un coach et un créneau de 30 minutes affiché dans votre fuseau horaire.",
+    "Próximamente: elige un coach y una sesión de 30 minutos mostrada en tu hora local.",
+    "Geplant: Wählen Sie einen Coach und einen 30-minütigen Termin in Ihrer lokalen Zeit."
+  ],
+  "coachingZoomTitle": [
+    "Meet privately on Zoom",
+    "جلسة خاصة عبر زووم",
+    "Une séance privée sur Zoom",
+    "Una sesión privada por Zoom",
+    "Privates Gespräch über Zoom"
+  ],
+  "coachingZoomBody": [
+    "Planned: a private Zoom link after verified payment. Sessions are paid separately from AI Pro.",
+    "قريباً: رابط زووم خاص بعد تأكيد الدفع. تُدفع الجلسات بشكل منفصل عن AI Pro.",
+    "À venir : un lien Zoom privé après paiement vérifié. Les séances sont facturées séparément d’AI Pro.",
+    "Próximamente: enlace privado de Zoom tras verificar el pago. Las sesiones se pagan aparte de AI Pro.",
+    "Geplant: Ein privater Zoom-Link nach bestätigter Zahlung. Sitzungen werden separat von AI Pro bezahlt."
+  ]
+});
