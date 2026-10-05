@@ -66,7 +66,7 @@ async function viewCV(id,photo=false){
 $('myCV').onclick=()=>viewCV(personal.coach.id).catch(e=>say(e.message));
 $('credentialUpdate').onsubmit=async e=>{
  e.preventDefault();const form=e.target,b=form.querySelector('button'),notice=$('credentialNotice');
- const show=message=>{notice.textContent=localMessage(message);notice.scrollIntoView({behavior:'smooth',block:'center'});};
+ const show=message=>{showMessage('credentialNotice',message);notice.scrollIntoView({behavior:'smooth',block:'center'});};
  if(!form.checkValidity()){show(t('credentialsRequired'));form.reportValidity();return;}
  if(!session()){show(t('signin'));return;}
  b.disabled=true;b.textContent=t('credentialsSaving');form.setAttribute('aria-busy','true');show(t('credentialsSaving'));
@@ -78,17 +78,17 @@ $('credentialUpdate').onsubmit=async e=>{
 };
 async function loadReviews(){
  const r=await fetch('/api/coaching?review=1',{headers:{Authorization:'Bearer '+session()?.access_token}}),d=await r.json();
- if(!r.ok){$('reviewNotice').textContent=localMessage(d.error);return;}
- const root=$('applications');root.replaceChildren();const test=node('button',t('testEmail'),'btn secondary');test.type='button';test.onclick=async()=>{test.disabled=true;try{const r=await api({action:'alert_test'});$('reviewNotice').textContent=localMessage(r.message);}catch(e){$('reviewNotice').textContent=localMessage(e.message);}finally{test.disabled=false;}};root.append(test);if(!d.applications.length)root.append(node('p',t('noApplications')));
+ if(!r.ok){showMessage('reviewNotice',d.error);return;}
+ const root=$('applications');root.replaceChildren();const test=node('button',t('testEmail'),'btn secondary');test.type='button';test.onclick=async()=>{test.disabled=true;try{const r=await api({action:'alert_test'});showMessage('reviewNotice',r.message);}catch(e){showMessage('reviewNotice',e.message);}finally{test.disabled=false;}};root.append(test);if(!d.applications.length)root.append(node('p',t('noApplications')));
  for(const c of d.applications){
   const card=node('article',null,'card');card.id='application-'+c.id;card.append(node('h3',c.name),node('p',c.specialty),node('p',c.bio),node('p',c.languages),node('p',money(c.price_cents)),node('p',t(c.status)));
   if(c.linkedin_url){const a=node('a','LinkedIn','btn secondary');a.href=c.linkedin_url;a.target='_blank';a.rel='noopener noreferrer';card.append(a);}
-  const cv=node('button',t('viewCV'),'btn secondary');cv.type='button';cv.disabled=!c.cv_name;cv.onclick=()=>viewCV(c.id).catch(e=>$('reviewNotice').textContent=localMessage(e.message));card.append(cv);if(c.has_photo){const photo=node('button',t('viewPhoto'),'btn secondary');photo.type='button';photo.onclick=()=>viewCV(c.id,true).catch(e=>$('reviewNotice').textContent=localMessage(e.message));card.append(photo);}
+  const cv=node('button',t('viewCV'),'btn secondary');cv.type='button';cv.disabled=!c.cv_name;cv.onclick=()=>viewCV(c.id).catch(e=>showMessage('reviewNotice',e.message));card.append(cv);if(c.has_photo){const photo=node('button',t('viewPhoto'),'btn secondary');photo.type='button';photo.onclick=()=>viewCV(c.id,true).catch(e=>showMessage('reviewNotice',e.message));card.append(photo);}
   const form=node('form',null,'coaching-form'),hostLabel=node('label',t('zoomHost')),host=node('input');host.name='zoom_host_id';host.required=true;hostLabel.append(host);form.append(hostLabel);
   const attLabel=node('label',null,'full checkbox'),att=node('input');att.type='checkbox';att.required=true;attLabel.append(att,node('span',t('reviewAttest')));form.append(attLabel);
   const approve=node('button',t('approve'),'btn primary');approve.type='submit';form.append(approve);
-  form.onsubmit=async e=>{e.preventDefault();approve.disabled=true;try{const r=await api({action:'review',coach_id:c.id,status:'approved',zoom_host_id:host.value.trim(),review_confirmed:att.checked});$('reviewNotice').textContent=localMessage(r.message);await loadReviews();await load();}catch(err){$('reviewNotice').textContent=localMessage(err.message);}finally{approve.disabled=false;}};
-  const pause=node('button',t('pause'),'btn secondary');pause.type='button';pause.onclick=async()=>{pause.disabled=true;try{const r=await api({action:'review',coach_id:c.id,status:'paused'});$('reviewNotice').textContent=localMessage(r.message);await loadReviews();}catch(e){$('reviewNotice').textContent=localMessage(e.message);}finally{pause.disabled=false;}};form.append(pause);card.append(form);root.append(card);
+  form.onsubmit=async e=>{e.preventDefault();approve.disabled=true;try{const r=await api({action:'review',coach_id:c.id,status:'approved',zoom_host_id:host.value.trim(),review_confirmed:att.checked});showMessage('reviewNotice',r.message);await loadReviews();await load();}catch(err){showMessage('reviewNotice',err.message);}finally{approve.disabled=false;}};
+  const pause=node('button',t('pause'),'btn secondary');pause.type='button';pause.onclick=async()=>{pause.disabled=true;try{const r=await api({action:'review',coach_id:c.id,status:'paused'});showMessage('reviewNotice',r.message);await loadReviews();}catch(e){showMessage('reviewNotice',e.message);}finally{pause.disabled=false;}};form.append(pause);card.append(form);root.append(card);
  }
  const requested=new URLSearchParams(location.search).get('review');if(requested&&/^[0-9a-f-]{36}$/i.test(requested)){const target=document.getElementById('application-'+requested);if(target){target.style.outline='3px solid #7c3aed';target.scrollIntoView({block:'center'});}}
 }
