@@ -23,7 +23,13 @@ if measurement_id:
   function gtag() {{ dataLayer.push(arguments); }}
   gtag('js', new Date());
   gtag('set', 'linker', {{domains: ['mostaed-interview-coach.vercel.app', 'easytolive640-glitch.github.io']}});
-  gtag('config', '{measurement_id}', {{page_location: location.origin + location.pathname, allow_google_signals: false, allow_ad_personalization_signals: false}});
+  const config = {{page_location: location.origin + location.pathname, page_referrer: document.referrer ? new URL(document.referrer).origin : '', allow_google_signals: false, allow_ad_personalization_signals: false}};
+  const campaign = new URL(location.href).searchParams;
+  for (const [key, param] of [['campaign_source','utm_source'],['campaign_medium','utm_medium'],['campaign_name','utm_campaign'],['campaign_content','utm_content']]) {{
+    const value = campaign.get(param);
+    if (value && /^[a-zA-Z0-9_-]{{1,80}}$/.test(value)) config[key] = value;
+  }}
+  gtag('config', '{measurement_id}', config);
   window.mostaedTrack = function (eventName) {{ gtag('event', eventName); }};
 </script>"""
 else:
