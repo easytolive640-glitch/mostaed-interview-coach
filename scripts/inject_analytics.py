@@ -22,7 +22,8 @@ if measurement_id:
   window.dataLayer = window.dataLayer || [];
   function gtag() {{ dataLayer.push(arguments); }}
   gtag('js', new Date());
-  gtag('config', '{measurement_id}');
+  gtag('set', 'linker', {{domains: ['mostaed-interview-coach.vercel.app', 'easytolive640-glitch.github.io']}});
+  gtag('config', '{measurement_id}', {{page_location: location.origin + location.pathname, allow_google_signals: false, allow_ad_personalization_signals: false}});
   window.mostaedTrack = function (eventName) {{ gtag('event', eventName); }};
 </script>"""
 else:

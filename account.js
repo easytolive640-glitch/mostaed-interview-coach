@@ -1,3 +1,4 @@
+import {track} from './funnel-analytics.mjs';
 import {localizeMessage} from './localized-messages.mjs';
 import {initLocalization,currentLanguage,applyLocale} from './app-localization.mjs';
 import {translate} from './locales.mjs';
@@ -36,8 +37,9 @@ async function authenticate(signup) {
   });
   const data = await response.json();
   if (!response.ok) throw Error(data.msg || data.error_description || data.error || 'Sign-in failed');
+  if(signup)track('sign_up',{method:'password'});
   if (!data.access_token) { signupMode(false); return notice('Check your email to confirm your account, then sign in. / أكد بريدك الإلكتروني ثم سجل الدخول'); }
-  session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); render(); notice('Signed in. Paid AI requires a verified subscription.');
+  track('login',{method:'password'});session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); render(); notice('Signed in. Paid AI requires a verified subscription.');
 }
 $('login').onsubmit = async e => {
   e.preventDefault();
@@ -54,8 +56,8 @@ $('login').onsubmit = async e => {
 $('signup').onclick = () => signupMode(true);
 $('backLogin').onclick = () => signupMode(false);
 $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/v1/logout`,{method:'POST',headers:{apikey:config.key,Authorization:`Bearer ${session.access_token}`}}).catch(()=>{});session=null;sessionStorage.removeItem('mostaed_account');render();notice('Signed out.');};
-$('subscribe').onclick = async () => { $('subscribe').disabled=true;try{const d=await api('/api/checkout',{plan:'pro'});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){notice(e.message);$('subscribe').disabled=!config.billingEnabled;}};
-$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){notice(e.message);}};
+$('subscribe').onclick = async () => { $('subscribe').disabled=true;try{track('begin_checkout',{plan:'pro'});const d=await api('/api/checkout',{plan:'pro'});track('checkout_redirected',{plan:'pro'});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);$('subscribe').disabled=!config.billingEnabled;}};
+$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});track('payment_verified',{environment:d.sandbox?'sandbox':'live'});notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){notice(e.message);}};
 
 $('google').onclick = async () => {
   $('google').disabled = true;
@@ -106,7 +108,7 @@ try {
     session = null; sessionStorage.removeItem('mostaed_account');
     render(); notice('Choose a new password below. / اختر كلمة مرور جديدة');
   }
-  const googleSignedIn = await googleCallback();
+  const googleSignedIn = await googleCallback();if(googleSignedIn)track('login',{method:'google'});
   render();
   if (!recoveryToken) notice(googleSignedIn ? 'Signed in with Google. Paid AI requires a verified subscription.'
     : config.billingEnabled ? 'Sign in before subscribing.' : 'Free practice is available. Paid subscriptions are not open yet.');
