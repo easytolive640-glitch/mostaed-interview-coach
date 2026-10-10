@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import { validSubscription, verifiedSubscription } from '../lib/server/paypal.mjs';
 import evaluate from '../api/evaluate.mjs';
 import webhook from '../api/paypal-webhook.mjs';
+import { questionBank } from '../practice-questions.mjs';
 Object.assign(process.env,{PAYPAL_MODE:'live',PAYPAL_CLIENT_ID:'fixture',PAYPAL_CLIENT_SECRET:'fixture',PAYPAL_PRO_PLAN_ID:'P-EXPECTED',PAYPAL_WEBHOOK_ID:'WH-FIXTURE',SUPABASE_URL:'https://fixture.test',SUPABASE_PUBLISHABLE_KEY:'fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture',OPENAI_API_KEY:'fixture',PAID_AI_ENABLED:'true'});
 const uid='12345678-1234-1234-1234-123456789abc';
 const active=()=>({id:'I-EXPECTED',status:'ACTIVE',plan_id:'P-EXPECTED',custom_id:uid,quantity:'1',billing_info:{next_billing_time:new Date(Date.now()+86400000).toISOString(),failed_payments_count:0,last_payment:{amount:{currency_code:'USD',value:'7.99'},time:new Date().toISOString()}}});
 const response=()=>({code:0,body:null,setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;},end(){return this;}});
-const body={category:'hr',language:'english',responses:Array.from({length:15},(_,i)=>({questionId:String(i),question:'Tell me about yourself',answer:'I have relevant experience.'}))};
+const body={category:'hr',language:'english',responses:questionBank.hr.slice(0,15).map(q=>({questionId:q.id,question:q.english,answer:'I have relevant experience.'}))};
 const original=global.fetch;
 function mock(fn){global.fetch=fn;}
 const json=data=>new Response(JSON.stringify(data),{status:200,headers:{'Content-Type':'application/json'}});
