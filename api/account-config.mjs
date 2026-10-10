@@ -5,7 +5,9 @@ import accountAuth from '../lib/server/account-auth.mjs';
 import historyHandler from '../lib/server/evaluation-history.mjs';
 import { billingPlans, paypalPlanId } from '../lib/server/billing-plans.mjs';
 import { paypalConfigured } from '../lib/server/paypal.mjs';
+import supportHandler from '../lib/server/support.mjs';
 export default async function handler(req, res) {
+  if (req.query?.support === '1') return supportHandler(req,res);
   if (req.query?.admin === '1') return adminHandler(req,res);
   if (req.query?.coaching === '1') return coachingHandler(req,res);
   if (req.method === 'GET' && req.query?.history === '1') return historyHandler(req,res);
