@@ -5,16 +5,17 @@ import {translate} from './locales.mjs';
 initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs';
 const $ = id => document.getElementById(id);
+let selectedPlan=new URLSearchParams(location.search).get('plan')==='starter'?'starter':'pro';
 let config, session, recoveryToken, creatingAccount = false;
 let noticeSource='';
 const notice = text => { noticeSource=text; $('notice').removeAttribute('data-i18n');$('notice').textContent = localizeMessage(text,currentLanguage()); };
-document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSource)notice(noticeSource);});
+document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSource)notice(noticeSource);if(config)render();});
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
-  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.billingEnabled;
+  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.plans?.[selectedPlan]?.available; $('planAvailability').textContent=translate(config?.plans?.[selectedPlan]?.available?'planReady':'planUnavailable',currentLanguage());
 }
 async function api(path, body) {
   const response = await fetch(path, { method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${session?.access_token || ''}`}, body:JSON.stringify(body) });
-  const data = await response.json(); if (!response.ok) throw Error(data.error || 'Request unavailable'); return data;
+  const data = await response.json(); if (!response.ok) throw Error((data.error || 'Request unavailable') + (data.reference ? ' · Reference: '+data.reference : '')); return data;
 }
 function signupMode(enabled) {
   creatingAccount=enabled; $('signupFields').hidden=!enabled; $('signupFields').disabled=!enabled;
@@ -56,8 +57,10 @@ $('login').onsubmit = async e => {
 $('signup').onclick = () => signupMode(true);
 $('backLogin').onclick = () => signupMode(false);
 $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/v1/logout`,{method:'POST',headers:{apikey:config.key,Authorization:`Bearer ${session.access_token}`}}).catch(()=>{});session=null;sessionStorage.removeItem('mostaed_account');render();notice('Signed out.');};
-$('subscribe').onclick = async () => { $('subscribe').disabled=true;try{track('begin_checkout',{plan:'pro'});const d=await api('/api/checkout',{plan:'pro'});track('checkout_redirected',{plan:'pro'});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);$('subscribe').disabled=!config.billingEnabled;}};
-$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});track('payment_verified',{environment:d.sandbox?'sandbox':'live'});notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){notice(e.message);}};
+$('subscribe').onclick = async () => { $('subscribe').disabled=true;try{track('begin_checkout',{plan:selectedPlan});const d=await api('/api/checkout',{plan:selectedPlan});track('checkout_redirected',{plan:selectedPlan});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);render();}};
+$('billingPlan').value=selectedPlan;
+$('billingPlan').onchange=()=>{selectedPlan=$('billingPlan').value;render();};
+$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});track('payment_verified',{environment:d.sandbox?'sandbox':'live'});notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){track('checkout_failed',{stage:'verification'});notice(e.message);}};
 
 $('google').onclick = async () => {
   $('google').disabled = true;

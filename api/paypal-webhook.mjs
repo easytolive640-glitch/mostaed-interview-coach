@@ -1,5 +1,6 @@
 import { paypalConfigured, paypalRequest, syncSubscription } from '../lib/server/paypal.mjs';
 import sandboxWebhook from '../lib/server/paypal-sandbox-webhook.mjs';
+import { paymentLog } from '../lib/server/payment-logs.mjs';
 export default async function handler(req, res) {
   if (req.query?.sandbox === '1') return sandboxWebhook(req,res);
   res.setHeader('Cache-Control', 'no-store');
@@ -15,7 +16,10 @@ export default async function handler(req, res) {
         transmission_id: req.headers[names[2]], transmission_sig: req.headers[names[3]],
         transmission_time: req.headers[names[4]], webhook_id: process.env.PAYPAL_WEBHOOK_ID, webhook_event: body }),
     });
-    if (check.verification_status !== 'SUCCESS') return res.status(400).end();
+    if (check.verification_status !== 'SUCCESS') {
+      paymentLog('webhook','error',{error:{code:'INVALID_SIGNATURE'}});
+      return res.status(400).end();
+    }
     const event = body.event_type || '';
     const block = ['PAYMENT.SALE.REFUNDED','PAYMENT.SALE.REVERSED','BILLING.SUBSCRIPTION.PAYMENT.FAILED'].includes(event);
     const subscriptionEvent = event.startsWith('BILLING.SUBSCRIPTION.');
@@ -23,6 +27,7 @@ export default async function handler(req, res) {
     const id = subscriptionEvent ? body.resource?.id : body.resource?.billing_agreement_id;
     if (!/^I-[A-Z0-9]+$/.test(id || '')) return res.status(400).end();
     await syncSubscription(id, block);
+    paymentLog('webhook','processed');
     return res.status(200).end();
-  } catch { return res.status(503).end(); }
+  } catch (error) { paymentLog('webhook','error',{error}); return res.status(503).end(); }
 }
