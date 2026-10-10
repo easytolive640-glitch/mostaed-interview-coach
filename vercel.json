@@ -10,6 +10,10 @@
   },
   "rewrites": [
     {
+      "source": "/api/support",
+      "destination": "/api/account-config?support=1"
+    },
+    {
       "source": "/api/admin",
       "destination": "/api/account-config?admin=1"
     },
