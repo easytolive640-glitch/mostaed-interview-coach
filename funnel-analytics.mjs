@@ -12,7 +12,7 @@ export function initAnalytics(){
  window.dataLayer=window.dataLayer||[];
  window.gtag=window.gtag||function(){window.dataLayer.push(arguments);};
  window.gtag('js',new Date());
- window.gtag('set','linker',{domains:['mostaed-interview-coach.vercel.app','easytolive640-glitch.github.io']});
+ window.gtag('set','linker',{domains:['mostaedcoach.com','easytolive640-glitch.github.io']});
  const config={page_location:safePageLocation(url),page_referrer:document.referrer?new URL(document.referrer).origin:'',allow_google_signals:false,allow_ad_personalization_signals:false};
  // Accept only campaign identifiers, never arbitrary query strings or OAuth fragments.
  for(const [key,param] of [['campaign_source','utm_source'],['campaign_medium','utm_medium'],['campaign_name','utm_campaign'],['campaign_content','utm_content']]){const value=url.searchParams.get(param);if(value&&/^[a-zA-Z0-9_-]{1,80}$/.test(value))config[key]=value;}
