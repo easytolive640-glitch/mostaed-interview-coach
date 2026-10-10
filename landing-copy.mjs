@@ -153,33 +153,33 @@ Object.assign(landingCopy, {
     "GRUNDLAGEN ÜBEN"
   ],
   "starterDesc": [
-    "A lighter AI plan, planned for regular practice.",
-    "باقة ذكية أخف مخطط لها للتدريب المنتظم.",
-    "Une formule IA plus légère, prévue pour un entraînement régulier.",
-    "Un plan de IA más ligero, previsto para practicar con regularidad.",
-    "Ein kleinerer KI-Tarif für regelmäßiges Üben ist geplant."
-  ],
+  "Focused AI practice with CV and voice feedback.",
+  "تدريب ذكي مركز مع ملاحظات على السيرة والصوت.",
+  "Entraînement IA ciblé avec retour sur le CV et l’audio.",
+  "Práctica de IA enfocada con comentarios sobre CV y audio.",
+  "Gezielte KI-Übung mit Feedback zu Lebenslauf und Audio."
+],
   "starterLimit": [
-    "Planned: 20 evaluations per month",
-    "مخطط: 20 تقييماً شهرياً",
-    "Prévu : 20 évaluations par mois",
-    "Previsto: 20 evaluaciones al mes",
-    "Geplant: 20 Auswertungen pro Monat"
-  ],
+  "Up to 20 evaluations per month",
+  "حتى 20 تقييماً شهرياً",
+  "Jusqu’à 20 évaluations par mois",
+  "Hasta 20 evaluaciones al mes",
+  "Bis zu 20 Auswertungen pro Monat"
+],
   "starterQuestions": [
-    "Planned: 10 written questions per session",
-    "مخطط: 10 أسئلة كتابية لكل جلسة",
-    "Prévu : 10 questions écrites par séance",
-    "Previsto: 10 preguntas escritas por sesión",
-    "Geplant: 10 schriftliche Fragen pro Sitzung"
-  ],
+  "10 written questions per session",
+  "10 أسئلة كتابية لكل جلسة",
+  "10 questions écrites par séance",
+  "10 preguntas escritas por sesión",
+  "10 schriftliche Fragen pro Sitzung"
+],
   "starterNote": [
-    "Proposed price · not open for purchase yet",
-    "سعر مقترح · غير متاح للشراء بعد",
-    "Prix indicatif · achat pas encore disponible",
-    "Precio propuesto · aún no disponible para comprar",
-    "Vorgesehener Preis · noch nicht buchbar"
-  ],
+  "Monthly subscription until cancelled",
+  "اشتراك شهري حتى الإلغاء",
+  "Abonnement mensuel jusqu’à résiliation",
+  "Suscripción mensual hasta cancelar",
+  "Monatliches Abonnement bis zur Kündigung"
+],
   "comingSoon": [
     "Coming soon",
     "قريباً",
@@ -237,12 +237,12 @@ Object.assign(landingCopy, {
     "Monatlich wechselnde Fragen passend zum Beruf"
   ],
   "planIntro": [
-    "Choose free practice, explore the upcoming Starter plan, or prepare with AI Pro.",
-    "اختر التدريب المجاني أو استكشف باقة Starter القادمة أو استعد مع AI Pro.",
-    "Choisissez l’entraînement gratuit, découvrez la future formule Starter ou préparez-vous avec AI Pro.",
-    "Elige la práctica gratuita, conoce el próximo plan Starter o prepárate con AI Pro.",
-    "Wählen Sie kostenlose Übungen, entdecken Sie den geplanten Starter-Tarif oder bereiten Sie sich mit AI Pro vor."
-  ],
+  "Choose free practice, AI Starter or AI Pro.",
+  "اختر التدريب المجاني أو AI Starter أو AI Pro.",
+  "Choisissez l’entraînement gratuit, AI Starter ou AI Pro.",
+  "Elige práctica gratuita, AI Starter o AI Pro.",
+  "Wählen Sie kostenlose Übungen, AI Starter oder AI Pro."
+],
   "checkAccess": [
     "View subscription & access",
     "عرض الاشتراك والوصول",

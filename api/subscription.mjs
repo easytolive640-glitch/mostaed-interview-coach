@@ -14,7 +14,10 @@ export default async function handler(req, res) {
     // Explicit payment verification still requires PayPal, even for a tester.
     const testAccess = temporaryTestAccess(user);
     if (!req.body?.subscriptionId && testAccess && testAiConfigured()) return res.status(200).json(testAccess);
-    if (!paypalConfigured()) return res.status(503).json({ error: 'Verification unavailable' });
+    if (!paypalConfigured()) {
+      const reference = paymentLog('verification','error',{userId:user.id,error:{code:'PAYPAL_NOT_CONFIGURED'}});
+      return res.status(503).json({ error: 'Verification unavailable', reference });
+    }
     // A return URL or a client-supplied ID never grants entitlement by itself.
     const saved = await serviceRpc('paid_subscription_for_user', { p_user_id: user.id });
     const id = req.body?.subscriptionId || saved?.subscription_id;
@@ -23,7 +26,10 @@ export default async function handler(req, res) {
       const reference = paymentLog('verification','error',{userId:user.id,error:{code:'PAYMENT_NOT_VERIFIED'}});
       return res.status(403).json({ error: 'A verified active payment is required', reference });
     }
-    if (!await syncSubscription(id)) return res.status(503).json({ error: 'Account update unavailable' });
+    if (!await syncSubscription(id)) {
+      const reference = paymentLog('verification','error',{userId:user.id,error:{code:'ACCOUNT_UPDATE_FAILED'}});
+      return res.status(503).json({ error: 'Account update unavailable', reference });
+    }
     const plan = subscriptionPlan(verified);
     paymentLog('verification','verified',{userId:user.id,plan});
     return res.status(200).json({ plan, questions:billingPlans[plan].questions, limit:billingPlans[plan].limit, active: process.env.PAYPAL_MODE === 'live', sandbox: process.env.PAYPAL_MODE !== 'live' });
