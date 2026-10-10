@@ -9,6 +9,7 @@ if (form) {
     const inputs = [...questions.querySelectorAll('textarea')];
     const answered = inputs.filter(input => input.value.trim().length >= 2).length;
     const language = document.getElementById('language').value;
+    progress.max = inputs.length || 15;
     progress.value = answered;
     progressText.textContent = translate('progress',language,{count:answered,total:inputs.length||15});
     inputs.forEach((input, index) => {
@@ -16,7 +17,7 @@ if (form) {
       if (card.querySelector('.question-counter')) return;
       const counter = document.createElement('p');
       counter.className = 'question-counter';
-      counter.textContent = `${translate('question',language)} ${index + 1} / 15`;
+      counter.textContent = `${translate('question',language)} ${index + 1} / ${inputs.length}`;
       const hint = document.createElement('p');
       hint.className = 'question-hint';
       hint.textContent = translate('starHint',language);
