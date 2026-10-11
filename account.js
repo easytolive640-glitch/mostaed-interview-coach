@@ -13,6 +13,11 @@ document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSo
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
   $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.plans?.[selectedPlan]?.available; $('planAvailability').textContent=translate(config?.plans?.[selectedPlan]?.available?'planReady':'planUnavailable',currentLanguage());
 }
+async function checkLoginAlert() {
+  if(!session?.access_token)return;
+  // Notification failures never prevent sign-in or practice.
+  try { await api('/api/account-config?login_alert=1',{}); } catch {}
+}
 async function api(path, body) {
   const response = await fetch(path, { method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${session?.access_token || ''}`}, body:JSON.stringify(body) });
   const data = await response.json(); if (!response.ok) throw Error((data.error || 'Request unavailable') + (data.reference ? ' · Reference: '+data.reference : '')); return data;
@@ -40,7 +45,7 @@ async function authenticate(signup) {
   if (!response.ok) throw Error(data.msg || data.error_description || data.error || 'Sign-in failed');
   if(signup)track('sign_up',{method:'password'});
   if (!data.access_token) { signupMode(false); return notice('Check your email to confirm your account, then sign in. / أكد بريدك الإلكتروني ثم سجل الدخول'); }
-  track('login',{method:'password'});session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); render(); notice('Signed in. Paid AI requires a verified subscription.');
+  track('login',{method:'password'});session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); void checkLoginAlert(); render(); notice('Signed in. Paid AI requires a verified subscription.');
 }
 $('login').onsubmit = async e => {
   e.preventDefault();
@@ -113,8 +118,14 @@ try {
   }
   const googleSignedIn = await googleCallback();if(googleSignedIn)track('login',{method:'google'});
   render();
+  if(session&&!recoveryToken)void checkLoginAlert();
   if (!recoveryToken) notice(googleSignedIn ? 'Signed in with Google. Paid AI requires a verified subscription.'
     : config.billingEnabled ? 'Sign in before subscribing.' : 'Free practice is available. Paid subscriptions are not open yet.');
+  if(session && new URLSearchParams(location.search).get('login_alert_test')==='1') {
+    history.replaceState(null,'','/account.html');
+    const result=await api('/api/account-config?login_alert=1',{action:'test'});
+    notice(result.message);
+  }
 } catch(e) {
   if (!config?.url || !config?.key) $('login').querySelectorAll('button').forEach(b=>b.disabled=true);
   notice(e.message);

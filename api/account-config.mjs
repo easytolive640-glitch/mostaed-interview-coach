@@ -1,3 +1,4 @@
+import loginAlertHandler from '../lib/server/new-user-alerts.mjs';
 import adminHandler from '../lib/server/admin.mjs';
 import coachingHandler from '../lib/server/coaching.mjs';
 import { testAiConfigured } from '../lib/server/paid-access.mjs';
@@ -7,6 +8,7 @@ import { billingPlans, paypalPlanId } from '../lib/server/billing-plans.mjs';
 import { paypalConfigured } from '../lib/server/paypal.mjs';
 import supportHandler from '../lib/server/support.mjs';
 export default async function handler(req, res) {
+  if (req.query?.login_alert === '1') return loginAlertHandler(req,res);
   if (req.query?.support === '1') return supportHandler(req,res);
   if (req.query?.admin === '1') return adminHandler(req,res);
   if (req.query?.coaching === '1') return coachingHandler(req,res);
