@@ -1,6 +1,8 @@
 class FreeLocalizations {
   static const languages = ['english', 'arabic', 'french', 'spanish', 'german'];
   static const _copy = <String, List<String>>{
+    "upgrade": ["View AI coaching plans", "عرض خطط التدريب بالذكاء الاصطناعي", "Voir les offres de coaching IA", "Ver planes de coaching con IA", "KI-Coaching-Pläne ansehen"],
+    "upgradeLead": ["Want detailed AI feedback? Paid plans add answer-by-answer guidance, optional CV and voice feedback, and account history.", "هل تريد ملاحظات تفصيلية؟ الخطط المدفوعة تضيف توجيهاً لكل إجابة، وملاحظات اختيارية على السيرة الذاتية والصوت، وسجلاً في حسابك.", "Vous souhaitez des retours IA détaillés ? Les offres payantes ajoutent des conseils par réponse, des retours facultatifs sur le CV et la voix, et un historique dans votre compte.", "¿Quieres comentarios detallados de IA? Los planes de pago añaden orientación por respuesta, comentarios opcionales sobre CV y voz e historial en tu cuenta.", "Möchten Sie detailliertes KI-Feedback? Bezahlte Pläne bieten Hinweise zu jeder Antwort, optionales Feedback zu Lebenslauf und Stimme sowie einen Verlauf im Konto."],
     "hr": ["Human resources", "الموارد البشرية", "Ressources humaines", "Recursos humanos", "Personalwesen"],
     "customerService": ["Customer service", "خدمة العملاء", "Service client", "Atención al cliente", "Kundenservice"],
     "itCloud": ["IT support and cloud", "الدعم الفني والسحابة", "Support informatique et cloud", "Soporte informático y nube", "IT-Support und Cloud"],

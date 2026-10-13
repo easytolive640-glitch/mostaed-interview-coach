@@ -7,6 +7,7 @@ import 'question_bank.dart';
 import 'services/evaluation_service.dart';
 import 'services/history_service.dart';
 import 'services/practice_tracking.dart';
+import 'services/paid_plans.dart';
 
 void main() => runApp(const MostaedApp());
 
@@ -425,6 +426,15 @@ class ResultScreen extends StatelessWidget {
               title: tr('improvements'),
               items: result.improvements,
             ),
+            if (PaidPlans.available) ...[
+              const SizedBox(height: 20),
+              Text(tr('upgradeLead')),
+              const SizedBox(height: 8),
+              FilledButton(
+                onPressed: () => PaidPlans.open(result.language.name),
+                child: Text(tr('upgrade')),
+              ),
+            ],
             const SizedBox(height: 12),
             FilledButton(
               onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
