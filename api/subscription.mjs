@@ -2,6 +2,7 @@ import { authenticatedUser, serviceRpc, temporaryTestAccess, testAiConfigured } 
 import { paypalConfigured, verifiedSubscription, syncSubscription } from '../lib/server/paypal.mjs';
 import { billingPlans, subscriptionPlan } from '../lib/server/billing-plans.mjs';
 import { paymentLog } from '../lib/server/payment-logs.mjs';
+import { createHash } from 'node:crypto';
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -32,7 +33,13 @@ export default async function handler(req, res) {
     }
     const plan = subscriptionPlan(verified);
     paymentLog('verification','verified',{userId:user.id,plan});
-    return res.status(200).json({ plan, questions:billingPlans[plan].questions, limit:billingPlans[plan].limit, active: process.env.PAYPAL_MODE === 'live', sandbox: process.env.PAYPAL_MODE !== 'live' });
+    const live = process.env.PAYPAL_MODE === 'live';
+    const receipt = verified.verifiedPayment;
+    // Never expose the raw PayPal transaction or account identifier to Analytics.
+    const purchase = live && typeof receipt?.id === 'string' && receipt.id.length > 0
+      ? { transaction_id: createHash('sha256').update('mostaed-purchase:' + receipt.id).digest('hex'), value: receipt.value, currency: receipt.currency, plan }
+      : undefined;
+    return res.status(200).json({ plan, questions:billingPlans[plan].questions, limit:billingPlans[plan].limit, active: live, sandbox: !live, ...(purchase ? {purchase} : {}) });
   } catch (error) {
     const reference = paymentLog('verification','error',{userId:user?.id,error});
     return res.status(503).json({ error: 'Verification unavailable', reference });
