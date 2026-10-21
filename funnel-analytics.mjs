@@ -5,6 +5,20 @@ const allowedValues={method:['password','google'],plan:['pro','starter'],languag
 export function safeParams(params={}){return Object.fromEntries(Object.entries(params).filter(([key,value])=>allowedValues[key]?.includes(value)));}
 export function safePageLocation(location){return location.origin+location.pathname;}
 export function track(event,params={}){try{if(allowedEvents.has(event)&&typeof window.gtag==='function')window.gtag('event',event,safeParams(params));}catch{/* Measurement must never interrupt practice or payment. */}}
+// Called only with the authenticated verification API response, never URL parameters.
+export function trackVerifiedPurchase(result){
+ try{
+  const p=result?.purchase;
+  if(result?.active!==true||result.sandbox!==false||!p||!/^[a-f0-9]{64}$/.test(p.transaction_id)||p.currency!=='USD')return false;
+  const prices={starter:3.99,pro:7.99};
+  if(!Object.hasOwn(prices,p.plan)||p.value!==prices[p.plan]||typeof window.gtag!=='function')return false;
+  const key='mostaed_purchase_'+p.transaction_id;
+  try{if(window.localStorage.getItem(key))return false;}catch{}
+  window.gtag('event','purchase',{transaction_id:p.transaction_id,currency:p.currency,value:p.value,items:[{item_id:p.plan,item_name:p.plan==='starter'?'AI Starter':'AI Pro',price:p.value,quantity:1}]});
+  try{window.localStorage.setItem(key,'1');}catch{}
+  return true;
+ }catch{return false;}
+}
 export function initAnalytics(){
  if(typeof window==='undefined'||typeof document==='undefined')return;
  if(window.mostaedFunnelInitialized)return;window.mostaedFunnelInitialized=true;
