@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {safeParams,safePageLocation,track,initAnalytics,measurementId} from '../funnel-analytics.mjs';
+import {safeParams,safePageLocation,track,trackVerifiedPurchase,initAnalytics,measurementId} from '../funnel-analytics.mjs';
+test('only verified live receipts report purchases, once per transaction',()=>{
+ const old=global.window;const calls=[];const values=new Map();
+ global.window={gtag:(...args)=>calls.push(args),localStorage:{getItem:k=>values.get(k),setItem:(k,v)=>values.set(k,v)}};
+ const receipt={active:true,sandbox:false,purchase:{transaction_id:'a'.repeat(64),value:3.99,currency:'USD',plan:'starter'}};
+ try{
+  for(const bad of [{},{active:false},{...receipt,sandbox:true},{...receipt,active:false},{...receipt,purchase:{...receipt.purchase,value:0}},{...receipt,purchase:{...receipt.purchase,transaction_id:'raw-provider-id'}}])assert.equal(trackVerifiedPurchase(bad),false);
+  assert.equal(calls.length,0);
+  assert.equal(trackVerifiedPurchase(receipt),true);assert.equal(trackVerifiedPurchase(receipt),false);
+  assert.equal(calls.length,1);assert.equal(calls[0][1],'purchase');assert.equal(calls[0][2].value,3.99);
+  assert.equal(trackVerifiedPurchase({...receipt,purchase:{...receipt.purchase,transaction_id:'b'.repeat(64)}}),true);
+ }finally{global.window=old;}
+});
 test('only controlled dimensions can leave the app',()=>{
  assert.deepEqual(safeParams({category:'customerService',language:'arabic',email:'person@example.com',answer:'private',cv:'private',voice:'private',amount:100,subscriptionId:'I-123',method:'password'}),{category:'customerService',language:'arabic',method:'password'});
  assert.deepEqual(safeParams({category:'secret text',language:'other',method:'email@example.com',stage:'raw server error'}),{});
