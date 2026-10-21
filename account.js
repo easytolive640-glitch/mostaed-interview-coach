@@ -1,4 +1,4 @@
-import {track} from './funnel-analytics.mjs';
+import {track,trackVerifiedPurchase} from './funnel-analytics.mjs';
 import {localizeMessage} from './localized-messages.mjs';
 import {initLocalization,currentLanguage,applyLocale} from './app-localization.mjs';
 import {translate} from './locales.mjs';
@@ -65,7 +65,7 @@ $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/
 $('subscribe').onclick = async () => { $('subscribe').disabled=true;try{track('begin_checkout',{plan:selectedPlan});const d=await api('/api/checkout',{plan:selectedPlan});track('checkout_redirected',{plan:selectedPlan});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);render();}};
 $('billingPlan').value=selectedPlan;
 $('billingPlan').onchange=()=>{selectedPlan=$('billingPlan').value;render();};
-$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});track('payment_verified',{environment:d.sandbox?'sandbox':'live'});notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){track('checkout_failed',{stage:'verification'});notice(e.message);}};
+$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});track('payment_verified',{environment:d.sandbox?'sandbox':'live'});trackVerifiedPurchase(d);notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){track('checkout_failed',{stage:'verification'});notice(e.message);}};
 
 $('google').onclick = async () => {
   $('google').disabled = true;
@@ -121,6 +121,10 @@ try {
   if(session&&!recoveryToken)void checkLoginAlert();
   if (!recoveryToken) notice(googleSignedIn ? 'Signed in with Google. Paid AI requires a verified subscription.'
     : config.billingEnabled ? 'Sign in before subscribing.' : 'Free practice is available. Paid subscriptions are not open yet.');
+  // The return flag triggers a server check; it is never proof of payment.
+  if(session && !recoveryToken && new URLSearchParams(location.search).get('payment')==='return') {
+    await $('verify').onclick();
+  }
   if(session && new URLSearchParams(location.search).get('login_alert_test')==='1') {
     history.replaceState(null,'','/account.html');
     const result=await api('/api/account-config?login_alert=1',{action:'test'});
