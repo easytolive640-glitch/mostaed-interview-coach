@@ -1,0 +1,16 @@
+{
+  "name": "mostaed-notifications",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-30",
+  "compatibility_flags": ["nodejs_compat"],
+  "limits": {"cpu_ms": 50},
+  "observability": {"enabled": true, "head_sampling_rate": 1},
+  "d1_databases": [{"binding": "DB", "database_name": "mostaed-notifications", "database_id": "cdb2656f-5cdb-4824-a573-6142504ad775"}],
+  "send_email": [{"name": "EMAIL", "allowed_sender_addresses": ["info@mostaedcoach.com"]}],
+  "routes": [{"pattern": "mostaedcoach.com/api/notifications*", "zone_name": "mostaedcoach.com"}],
+  "triggers": {"crons": ["*/15 * * * *"]},
+  "vars": {
+    "SUPABASE_URL": "https://qxjcnrpqqdnzyykiodvf.supabase.co",
+    "SUPABASE_PUBLIC_KEY": "sb_publishable_QtOfrC2cNq6ycXSn9rkILw_D2C71fz6"
+  }
+}

@@ -17,6 +17,7 @@ async function checkLoginAlert() {
   if(!session?.access_token)return;
   // Notification failures never prevent sign-in or practice.
   try { await api('/api/account-config?login_alert=1',{}); } catch {}
+  try { await api('/api/notifications',{}); } catch {}
 }
 async function api(path, body) {
   const response = await fetch(path, { method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${session?.access_token || ''}`}, body:JSON.stringify(body) });
