@@ -61,7 +61,19 @@ class _HomeScreenState extends State<HomeScreen> {
       textDirection: isArabic ? TextDirection.rtl : TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(isArabic ? 'مستعد' : 'Mostaed'),
+          title: PaidPlans.available
+              ? TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    textStyle: Theme.of(context).textTheme.titleLarge,
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(0, 48),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  onPressed: () => PaidPlans.openHome(language.name),
+                  child: Text(isArabic ? 'مستعد' : 'Mostaed'),
+                )
+              : Text(isArabic ? 'مستعد' : 'Mostaed'),
           actions: [
             IconButton(
               tooltip: tr('history'),

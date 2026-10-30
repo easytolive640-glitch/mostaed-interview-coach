@@ -2,6 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mostaed_interview_coach/main.dart';
+import 'package:mostaed_interview_coach/models.dart';
+import 'package:mostaed_interview_coach/question_bank.dart';
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
@@ -20,15 +22,18 @@ void main() {
     await tester.pumpWidget(const MostaedApp());
     await tester.pumpAndSettle();
     for (final pair in [
-      ['Français', 'Ressources humaines', 'Parlez-moi de vous et de votre expérience professionnelle.'],
-      ['Español', 'Recursos humanos', 'Háblame de ti y de tu experiencia profesional.'],
-      ['Deutsch', 'Personalwesen', 'Erzählen Sie von sich und Ihrer Berufserfahrung.'],
+      ['Français', 'Ressources humaines', AppLanguage.french],
+      ['Español', 'Recursos humanos', AppLanguage.spanish],
+      ['Deutsch', 'Personalwesen', AppLanguage.german],
     ]) {
-      await tester.tap(find.text(pair[0]));
+      await tester.tap(find.text(pair[0] as String));
       await tester.pumpAndSettle();
-      await tester.tap(find.text(pair[1]));
+      await tester.tap(find.text(pair[1] as String));
       await tester.pumpAndSettle();
-      expect(find.text(pair[2]), findsOneWidget);
+      final question = QuestionBank.forCategory(InterviewCategory.hr).first;
+      final translated = question.text(pair[2] as AppLanguage);
+      expect(translated, isNot(question.english));
+      expect(find.text(translated), findsOneWidget);
       await tester.pageBack();
       await tester.pumpAndSettle();
     }

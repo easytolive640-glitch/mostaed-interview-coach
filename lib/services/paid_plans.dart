@@ -3,6 +3,11 @@ import 'paid_plans_stub.dart'
 
 class PaidPlans {
   static bool get available => implementation.available;
+  static void openHome(String language) {
+    const supported = ['english', 'arabic', 'french', 'spanish', 'german'];
+    final selected = supported.contains(language) ? language : 'english';
+    implementation.open(Uri.https('mostaedcoach.com', '/', {'lang': selected}).toString());
+  }
   static void open(String language) {
     const supported = ['english', 'arabic', 'french', 'spanish', 'german'];
     final selected = supported.contains(language) ? language : 'english';
