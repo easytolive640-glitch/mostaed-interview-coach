@@ -52,10 +52,11 @@ export async function checkSite(env,fetcher=fetch) {
   for(const path of ['/', '/api/account-config']) {
     let healthy=false;
     try {
-      const response=await fetcher(SITE+path,{signal:AbortSignal.timeout(10000),redirect:'error',headers:{'Cache-Control':'no-cache'}});
+      const response=await fetcher(SITE+path,{signal:AbortSignal.timeout(10000),redirect:'manual',headers:{'Cache-Control':'no-cache'}});
       healthy=response.ok;
+      console.log(JSON.stringify({event:'availability_check',path,status:response.status,healthy}));
       await response.body?.cancel();
-    } catch {}
+    } catch(e) {console.error(JSON.stringify({event:'availability_check_error',path,error:String(e.message).slice(0,200)}));}
     const old=await env.DB.prepare('SELECT failures FROM checks WHERE path=?').bind(path).first();
     const failures=healthy?0:(old?.failures||0)+1;
     await env.DB.prepare('INSERT INTO checks(path,failures,checked) VALUES(?,?,?) ON CONFLICT(path) DO UPDATE SET failures=excluded.failures,checked=excluded.checked').bind(path,failures,Date.now()).run();

@@ -28,7 +28,7 @@ test('health alerts need two consecutive failures; healthy response resets count
  await checkSite(env,async()=>new Response('',{status:503}));assert.equal(DB.jobs.size,0);
  await checkSite(env,async()=>new Response('',{status:503}));assert.equal(DB.jobs.size,2);
  await checkSite(env,async()=>new Response('',{status:503}));assert.equal(DB.jobs.size,2);
- await checkSite(env,async()=>new Response('',{status:200}));assert.equal(DB.checks.get('/').failures,0);
+ await checkSite(env,async(url,options)=>{assert.equal(options.redirect,'manual');return new Response('',{status:200});});assert.equal(DB.checks.get('/').failures,0);
 });
 test('claimed, exhausted or completed jobs cannot send again',async()=>{
  let sent=0;const env={DB:{prepare(){return {bind(){return {first:async()=>null}}}}},EMAIL:{send:async()=>sent++}};
