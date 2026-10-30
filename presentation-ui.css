@@ -92,6 +92,11 @@
 
 /* Detailed coaching report */
 .evaluation-report{line-height:1.7;overflow-wrap:anywhere}
+.report-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 24px}
+.report-actions button{padding:10px 18px;border:0;border-radius:10px;background:var(--ui-brand,#6235b5);color:white;font:inherit;font-weight:700;cursor:pointer}
+.report-actions button:disabled{opacity:.6;cursor:wait}
+.report-actions button:focus-visible{outline:3px solid #a98bdf;outline-offset:3px}
+.report-actions small{color:var(--ui-muted,#526078)}
 .evaluation-report h3{margin-top:32px}
 .evaluation-report h4{margin:12px 0 8px}
 .report-summary{font-size:1.08rem;color:var(--ui-ink)}

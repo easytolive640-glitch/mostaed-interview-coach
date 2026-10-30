@@ -4,7 +4,7 @@ import {initLocalization,applyLocale,currentLanguage} from './app-localization.m
 import {languages,translate} from './locales.mjs';
 initLocalization();
 import { paidQuestions } from './practice-questions.mjs';
-import { renderEvaluation } from './evaluation-report.mjs';
+import { renderEvaluation } from './evaluation-report.mjs?v=pdf-export-1';
 const $=id=>document.getElementById(id);
 let practiceTracked=false;
 $('practice').addEventListener('input',e=>{if(!practiceTracked&&e.target.tagName==='TEXTAREA'&&e.target.id.startsWith('answer')&&e.target.value.trim()){practiceTracked=true;track('paid_practice_started',{category:$('category').value,language:$('language').value});}});

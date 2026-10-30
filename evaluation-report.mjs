@@ -1,5 +1,6 @@
-import {reportText} from './report-translations.mjs';
+import {reportText} from './report-translations.mjs?v=pdf-export-1';
 import {appendScoreChart} from './score-chart.mjs';
+import {exportReportPdf} from './report-pdf.mjs';
 const labels={
   communication:['Communication','التواصل'],motivation:['Motivation','الدافع المهني'],teamwork:['Teamwork','العمل الجماعي'],selfAwareness:['Self-awareness','الوعي بالذات'],
   empathy:['Empathy','التعاطف'],resolution:['Problem resolution','حل المشكلات'],ownership:['Ownership','تحمل المسؤولية'],
@@ -11,6 +12,11 @@ export function renderEvaluation(container,evaluation,language='english',categor
   const ar=language==='arabic';const t=(en,arabic)=>reportText(en,arabic,language);
   const section=node('section',undefined,'evaluation-report');section.dir=ar?'rtl':'ltr';
   section.append(node('h2',t('Your coaching report','تقريرك التدريبي')+' · '+evaluation.score+'/100'));
+  const actions=node('div',undefined,'report-actions');actions.setAttribute('data-report-export','');
+  const exportButton=node('button',t('Export PDF','تصدير PDF'));exportButton.type='button';
+  const exportHelp=node('small',t('Choose Save as PDF in the print dialog.','اختر حفظ بصيغة PDF في نافذة الطباعة.'));exportHelp.setAttribute('role','status');
+  exportButton.onclick=async()=>{exportButton.disabled=true;try{await exportReportPdf(section,{language});}catch{exportHelp.textContent=t('PDF export could not open. Please try another browser.','تعذر فتح تصدير PDF. جرّب متصفحاً آخر.');}finally{exportButton.disabled=false;}};
+  actions.append(exportButton,exportHelp);section.append(actions);
   const categories={hr:['HR','الموارد البشرية'],customerService:['Customer Service','خدمة العملاء'],itCloud:['IT & Cloud','تقنية المعلومات والسحابة']};
   const cat=categories[category];if(cat)section.append(node('p',t('Interview category: ','نوع المقابلة: ')+t(cat[0],cat[1])));
   if(evaluation.summary)section.append(node('p',evaluation.summary,'report-summary'));
@@ -31,7 +37,7 @@ export function renderEvaluation(container,evaluation,language='english',categor
   }
   if(evaluation.answers?.length){
     section.append(node('h3',t('Question-by-question coaching','تدريب لكل سؤال')));
-    section.append(node('small',t('Open a question to see why it received its score and how to improve it.','افتح السؤال لمعرفة سبب الدرجة وكيفية تحسين إجابتك.')));
+    const answerHelp=node('small',t('Open a question to see why it received its score and how to improve it.','افتح السؤال لمعرفة سبب الدرجة وكيفية تحسين إجابتك.'));answerHelp.setAttribute('data-print-hide','');section.append(answerHelp);
     for(const a of evaluation.answers){const detail=node('details',undefined,'report-answer');
       detail.append(node('summary',t('Question ','السؤال ')+a.questionNumber+' · '+a.score+'/100'));
       detail.append(node('h4',a.question));paragraph(detail,t('Why this score:','سبب الدرجة:'),a.rationale);
