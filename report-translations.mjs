@@ -1,4 +1,7 @@
 const translations={
+'Export PDF':['Exporter en PDF','Exportar PDF','Als PDF exportieren'],
+'Choose Save as PDF in the print dialog.':['Choisissez Enregistrer au format PDF dans la fenêtre d’impression.','Elige Guardar como PDF en el diálogo de impresión.','Wählen Sie im Druckdialog Als PDF speichern.'],
+'PDF export could not open. Please try another browser.':['L’export PDF n’a pas pu s’ouvrir. Essayez un autre navigateur.','No se pudo abrir la exportación PDF. Prueba otro navegador.','Der PDF-Export konnte nicht geöffnet werden. Versuchen Sie einen anderen Browser.'],
 'Your coaching report':['Votre rapport de coaching','Tu informe de preparación','Ihr Coachingbericht'],
 'Interview category: ':['Type d’entretien : ','Categoría de entrevista: ','Interviewbereich: '],
 'HR':['Ressources humaines','Recursos humanos','Personalwesen'],'Customer Service':['Service client','Atención al cliente','Kundenservice'],'IT & Cloud':['Informatique et cloud','Informática y nube','IT und Cloud'],

@@ -2,7 +2,7 @@ import {localizeMessage} from './localized-messages.mjs';
 import {initLocalization,currentLanguage} from './app-localization.mjs';
 import {translate,languages} from './locales.mjs';
 initLocalization();
-import {renderEvaluation} from './evaluation-report.mjs';
+import {renderEvaluation} from './evaluation-report.mjs?v=pdf-export-1';
 const notice=document.getElementById('notice'), list=document.getElementById('history'), refresh=document.getElementById('refresh');
 async function loadHistory(){
   refresh.disabled=true;notice.removeAttribute('data-i18n');

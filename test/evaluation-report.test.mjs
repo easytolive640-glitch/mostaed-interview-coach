@@ -46,6 +46,9 @@ test('full reports render safely in all five languages; legacy history remains r
     const body=makeBody('customerService'),r=fixture(body);r.answers[0].suggestedAnswer='<img src=x onerror=alert(1)>';
     const root=new Element('div');renderEvaluation(root,checkedReport(r,body,false),language,'customerService');
     const nodes=allNodes(root);assert.equal(nodes.filter(n=>n.tag==='details').length,15);
+    const exportButtons=nodes.filter(n=>n.tag==='button');
+    assert.equal(exportButtons.length,1);assert.equal(typeof exportButtons[0].onclick,'function');
+    assert.equal(exportButtons[0].textContent,{english:'Export PDF',arabic:'تصدير PDF',french:'Exporter en PDF',spanish:'Exportar PDF',german:'Als PDF exportieren'}[language]);
     assert.equal(nodes.filter(n=>n.tag==='meter').length,4);assert.equal(nodes.some(n=>n.tag==='img'),false);
     assert.equal(nodes.some(n=>n.textContent==='<img src=x onerror=alert(1)>'),true);
     assert.equal(root.children[0].dir,language==='arabic'?'rtl':'ltr');
