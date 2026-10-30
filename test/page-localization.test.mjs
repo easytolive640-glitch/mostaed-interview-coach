@@ -29,7 +29,7 @@ test('language query works without storage and changing selection updates the sh
 });
 test('navigation keeps language, review parameters and hashes without touching external checkouts',()=>{
  const saved={location:globalThis.location,document:globalThis.document};
- const hrefs=['/','/coaching.html?review=abc#adminReview','/guides/','https://easytolive640-glitch.github.io/mostaed-interview-coach/','#pricing','https://www.paypal.com/checkoutnow?token=abc'];
+ const hrefs=['/','/coaching.html?review=abc#adminReview','/guides/','/freepractice','#pricing','https://www.paypal.com/checkoutnow?token=abc'];
  const links=hrefs.map(href=>({href,getAttribute(){return href;}}));
  try{globalThis.location={href:'https://example.test/account.html',origin:'https://example.test'};globalThis.document={querySelectorAll(){return links;}};syncLanguageLinks('spanish');
   for(const link of links.slice(0,4))assert.equal(new URL(link.href).searchParams.get('lang'),'spanish');
