@@ -14,6 +14,10 @@
       "destination": "/freepractice.html"
     },
     {
+      "source": "/freepractice/releases/:release/:path*",
+      "destination": "https://easytolive640-glitch.github.io/mostaed-interview-coach/:path*"
+    },
+    {
       "source": "/freepractice/:path*",
       "destination": "https://easytolive640-glitch.github.io/mostaed-interview-coach/:path*"
     },
@@ -108,6 +112,15 @@
     },
     {
       "source": "/freepractice",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/freepractice/:path*",
       "headers": [
         {
           "key": "Cache-Control",
