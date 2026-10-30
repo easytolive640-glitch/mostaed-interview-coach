@@ -32,7 +32,7 @@ void main() {
         expect(january.map((q) => q.id), QuestionBank.forPaidCategory(category, plan, asOf: DateTime.utc(2027, 1, 1)).map((q) => q.id));
         expect(january.map((q) => q.id).toList(), isNot(february.map((q) => q.id).toList()));
         expect(february.map((q) => q.id).toSet().length, february.length);
-        expect(february.take(5).map((q) => q.id), QuestionBank.forCategory(category).map((q) => q.id));
+        expect(february.take(5).map((q) => q.id), QuestionBank.forCategory(category, asOf: DateTime.utc(2027, 2, 1)).map((q) => q.id));
         for (final question in february) {
           expect(question.text(AppLanguage.arabic).trim(), isNotEmpty);
           expect(question.text(AppLanguage.english).trim(), isNotEmpty);

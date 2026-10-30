@@ -313,11 +313,13 @@ for (const [language,categories] of Object.entries(questionTranslations)) {
     questionBank[category].forEach((question,index)=>question[language]=translations[index]);
   }
 }
+// UTC calendar months keep the selection identical across devices and languages.
+export function freeQuestions(category, date = new Date()) {
+  return paidQuestions(category, date).slice(0, 5);
+}
 export function paidQuestions(category, date = new Date()) {
   const all = questionBank[category];
   if (!all) throw new Error("Invalid category");
-  const pool = all.slice(5);
-  const offset = ((date.getUTCFullYear()*12 + date.getUTCMonth()+1)*5)%pool.length;
-  return [...all.slice(0,5), ...Array.from({length:10},(_,i)=>pool[(offset+i)%pool.length])];
+  const offset = ((date.getUTCFullYear()*12 + date.getUTCMonth()+1)*5)%all.length;
+  return Array.from({length:15}, (_,i)=>all[(offset+i)%all.length]);
 }
-

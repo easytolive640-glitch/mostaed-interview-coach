@@ -3,8 +3,8 @@ import 'models.dart';
 enum PaidPlan { starter, pro }
 
 class QuestionBank {
-  static List<InterviewQuestion> forCategory(InterviewCategory category) =>
-      _questions[category]!.take(5).toList(growable: false);
+  static List<InterviewQuestion> forCategory(InterviewCategory category, {DateTime? asOf}) =>
+      forPaidCategory(category, PaidPlan.pro, asOf: asOf).take(5).toList(growable: false);
 
   /// Select once at session start and retain this list throughout the interview.
   /// [asOf] lets callers preview a calendar month and keeps the selection testable.
@@ -15,12 +15,11 @@ class QuestionBank {
   }) {
     final all = _questions[category]!;
     final date = (asOf ?? DateTime.now()).toUtc();
-    final pool = all.skip(5).toList(growable: false);
+    final pool = all;
     final offset = ((date.year * 12 + date.month) * 5) % pool.length;
-    final extraCount = plan == PaidPlan.starter ? 5 : 10;
+    final count = plan == PaidPlan.starter ? 10 : 15;
     return List.unmodifiable([
-      ...all.take(5),
-      for (var i = 0; i < extraCount; i++) pool[(offset + i) % pool.length],
+      for (var i = 0; i < count; i++) pool[(offset + i) % pool.length],
     ]);
   }
 

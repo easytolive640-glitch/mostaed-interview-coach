@@ -141,7 +141,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
 
   bool get isArabic => widget.language == AppLanguage.arabic;
   String tr(String key, [Map<String, Object> values = const {}]) => FreeLocalizations.text(key, widget.language.name, values);
-  List<InterviewQuestion> get interviewQuestions =>
+  late final List<InterviewQuestion> interviewQuestions =
       QuestionBank.forCategory(widget.category);
 
   @override
