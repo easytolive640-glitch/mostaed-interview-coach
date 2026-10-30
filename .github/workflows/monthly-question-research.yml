@@ -1,0 +1,65 @@
+name: Monthly question research
+on:
+  schedule:
+    - cron: '0 5 1 * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: monthly-question-research
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify research credential
+        env:
+          RESEARCH_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$RESEARCH_KEY" ]; then
+            echo '::error::Add the existing Mostaed key as the repository Actions secret OPENAI_API_KEY. Never put the value in code or logs.'
+            exit 1
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Research and revise questions
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          permission-profile: ':workspace'
+          codex-args: '--search'
+          prompt-file: .github/prompts/monthly-question-research.md
+          output-file: research-summary.md
+      - name: Validate JavaScript and server compatibility
+        run: node --test test/practice_questions.test.mjs test/evaluation-context.test.mjs test/localization.test.mjs
+      - name: Validate Flutter questions
+        run: flutter test test/question_bank_test.dart test/free_localization_test.dart
+      - name: Open content review pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="monthly-questions-$(date -u +%Y-%m)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "$branch"
+          git add practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart docs/question-research
+          if git diff --cached --quiet; then
+            echo 'No validated question updates were produced.'
+            exit 0
+          fi
+          git commit -m "Refresh researched interview questions $(date -u +%Y-%m)"
+          # gh authenticates without persisting a credential in the checkout.
+          gh auth setup-git
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title "Monthly researched interview questions $(date -u +%Y-%m)" --body-file research-summary.md
