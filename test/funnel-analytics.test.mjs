@@ -25,7 +25,7 @@ test('GA4 initialization preserves safe campaign identifiers, cross-domain confi
  global.window={location:{href:'https://mostaed-interview-coach.vercel.app/?utm_source=linkedin&utm_medium=organic_social&utm_campaign=oct2026&email=private#secret'}};
  global.document={referrer:'https://linkedin.com/feed/?private=secret',querySelector:()=>null,createElement:()=>({}),head:{append:s=>scripts.push(s)},addEventListener:(name,fn)=>{clicked=fn;}};
  try{initAnalytics();initAnalytics();const calls=window.dataLayer.map(x=>Array.from(x));assert.equal(scripts.length,1);assert.ok(scripts[0].src.endsWith(measurementId));const config=calls.find(x=>x[0]==='config')[2];assert.equal(config.campaign_source,'linkedin');assert.equal(config.page_location,'https://mostaed-interview-coach.vercel.app/');assert.equal(config.page_referrer,'https://linkedin.com');assert.ok(!JSON.stringify(calls).includes('private'));assert.equal(calls.find(x=>x[1]==='linker')[2].domains.length,2);
- clicked({target:{closest:()=>({href:'https://easytolive640-glitch.github.io/mostaed-interview-coach/'})}});assert.equal(window.dataLayer.at(-1)[1],'free_practice_clicked');
+ clicked({target:{closest:()=>({href:'https://mostaed-interview-coach.vercel.app/freepractice?lang=arabic'})}});assert.equal(window.dataLayer.at(-1)[1],'free_practice_clicked');
  clicked({target:{closest:()=>({href:'https://mostaed-interview-coach.vercel.app/paid-practice.html'})}});assert.equal(window.dataLayer.at(-1)[1],'paid_practice_clicked');
  }finally{global.window=previous.window;global.document=previous.document;}
 });

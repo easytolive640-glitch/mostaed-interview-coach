@@ -10,6 +10,14 @@
   },
   "rewrites": [
     {
+      "source": "/freepractice",
+      "destination": "/freepractice.html"
+    },
+    {
+      "source": "/freepractice/:path*",
+      "destination": "https://easytolive640-glitch.github.io/mostaed-interview-coach/:path*"
+    },
+    {
       "source": "/api/support",
       "destination": "/api/account-config?support=1"
     },
@@ -97,9 +105,28 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/freepractice",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     }
   ],
   "redirects": [
+    {
+      "source": "/freepractice.html",
+      "destination": "/freepractice",
+      "permanent": true
+    },
+    {
+      "source": "/freepractice/",
+      "destination": "/freepractice",
+      "permanent": true
+    },
     {
       "source": "/blogs/cv-achievements.html",
       "destination": "https://www.themuse.com/advice/professional-accomplishments-achievements-on-resume-examples",
