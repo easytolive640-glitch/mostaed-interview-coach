@@ -9,7 +9,7 @@ export async function createPkce() {
 export function googleAuthorizeUrl(projectUrl, redirectUrl, challenge) {
   const url = new URL('/auth/v1/authorize', projectUrl);
   if (url.protocol !== 'https:') throw new Error('Invalid account service URL');
-  url.search = new URLSearchParams({ provider: 'google', redirect_to: redirectUrl,
+  url.search = new URLSearchParams({ provider: 'google', prompt: 'select_account', redirect_to: redirectUrl,
     code_challenge: challenge, code_challenge_method: 's256' }).toString();
   return url.href;
 }

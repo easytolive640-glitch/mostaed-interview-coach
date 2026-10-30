@@ -3,7 +3,7 @@ import {localizeMessage} from './localized-messages.mjs';
 import {initLocalization,currentLanguage,applyLocale} from './app-localization.mjs';
 import {translate} from './locales.mjs';
 initLocalization();
-import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs';
+import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs?v=account-chooser-1';
 const $ = id => document.getElementById(id);
 let selectedPlan=new URLSearchParams(location.search).get('plan')==='starter'?'starter':'pro';
 let config, session, recoveryToken, creatingAccount = false;
