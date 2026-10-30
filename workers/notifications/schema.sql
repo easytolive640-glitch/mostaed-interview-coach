@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS mail_jobs (
+ id TEXT PRIMARY KEY, recipient TEXT NOT NULL, kind TEXT NOT NULL,
+ detail TEXT NOT NULL DEFAULT '', state TEXT NOT NULL DEFAULT 'pending',
+ attempts INTEGER NOT NULL DEFAULT 0, lease_until INTEGER NOT NULL DEFAULT 0,
+ created INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS pending_mail ON mail_jobs(state,lease_until,created);
+CREATE TABLE IF NOT EXISTS send_budget(day TEXT PRIMARY KEY, attempts INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS checks(path TEXT PRIMARY KEY,failures INTEGER NOT NULL,checked INTEGER NOT NULL);
