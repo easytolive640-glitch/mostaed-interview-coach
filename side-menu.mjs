@@ -23,10 +23,10 @@ if(nav&&links){
  const close=document.createElement('button');close.type='button';close.className='drawer-close';close.textContent='×';
  top.append(title,close);dialog.append(top,links);document.body.append(dialog);nav.append(button);
  const free=document.createElement('a');free.href='/freepractice';free.dataset.copy='startFree';
- const ai=document.createElement('a');ai.href='/paid-practice.html';ai.dataset.copy='startAI';
+ const ai=document.createElement('a');ai.href='#pricing';ai.dataset.copy='startAI';
  links.prepend(free,ai);
- const labels={english:['Menu','Close menu','Free practice','AI coaching'],arabic:['القائمة','إغلاق القائمة','التدريب المجاني','التدريب بالذكاء الاصطناعي'],french:['Menu','Fermer le menu','Entraînement gratuit','Coaching IA'],spanish:['Menú','Cerrar menú','Práctica gratuita','Coaching con IA'],german:['Menü','Menü schließen','Kostenlos üben','KI-Coaching']};
- const update=()=>{const lang=document.getElementById('landingLanguage')?.value||'english';const v=labels[lang]||labels.english;button.textContent='☰ '+v[0];button.setAttribute('aria-label',v[0]);title.textContent=v[0];close.setAttribute('aria-label',v[1]);free.textContent=v[2];ai.textContent=v[3];free.href='/freepractice?lang='+lang;ai.href='/paid-practice.html?lang='+lang;};
+ const labels={english:['Menu','Close menu','Free practice','AI coaching · Choose plan'],arabic:['القائمة','إغلاق القائمة','التدريب المجاني','التدريب الذكي · اختر الباقة'],french:['Menu','Fermer le menu','Entraînement gratuit','Coaching IA · Choisir une offre'],spanish:['Menú','Cerrar menú','Práctica gratuita','Coaching con IA · Elegir plan'],german:['Menü','Menü schließen','Kostenlos üben','KI-Coaching · Tarif wählen']};
+ const update=()=>{const lang=document.getElementById('landingLanguage')?.value||'english';const v=labels[lang]||labels.english;button.textContent='☰ '+v[0];button.setAttribute('aria-label',v[0]);title.textContent=v[0];close.setAttribute('aria-label',v[1]);free.textContent=v[2];ai.textContent=v[3];free.href='/freepractice?lang='+lang;ai.href='#pricing';};
  update();document.getElementById('landingLanguage')?.addEventListener('change',update);
  const finish=()=>{button.setAttribute('aria-expanded','false');document.body.classList.remove('drawer-open');button.focus();};
  button.addEventListener('click',()=>{dialog.showModal();button.setAttribute('aria-expanded','true');document.body.classList.add('drawer-open');});
