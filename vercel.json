@@ -10,6 +10,10 @@
   },
   "rewrites": [
     {
+      "source": "/api/career-feed",
+      "destination": "/api/account-config?careerFeed=1"
+    },
+    {
       "source": "/freepractice",
       "destination": "/freepractice.html"
     },
