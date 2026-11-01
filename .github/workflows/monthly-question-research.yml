@@ -34,14 +34,29 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
+      - name: Configure hosted research tools
+        run: |
+          mkdir -p "$RUNNER_TEMP/research-codex"
+          cat > "$RUNNER_TEMP/research-codex/config.toml" <<'TOML'
+          web_search = "live"
+          [model_providers.codex-action-responses-proxy.capabilities]
+          external_web_access = true
+          TOML
       - name: Research and revise questions
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           permission-profile: ':workspace'
-          codex-args: '["-c", "web_search=\"live\""]'
+          codex-home: ${{ runner.temp }}/research-codex
           prompt-file: .github/prompts/monthly-question-research.md
           output-file: research-summary.md
+      - name: Require actual question refresh
+        run: |
+          if git diff --quiet -- practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart; then
+            echo '::error::Research produced no question changes. See research summary; blocked research is not a successful refresh.'
+            cat research-summary.md
+            exit 1
+          fi
       - name: Validate JavaScript and server compatibility
         run: node --test test/practice_questions.test.mjs test/evaluation-context.test.mjs test/localization.test.mjs
       - name: Validate Flutter questions
