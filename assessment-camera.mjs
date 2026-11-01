@@ -2,11 +2,13 @@
 export function cameraIsLive(stream) {
   return !!stream?.getVideoTracks().some(track => track.readyState === 'live' && track.enabled && !track.muted);
 }
-export function initAssessmentCamera({video, button, status, submit, consent, canSubmit = () => true}) {
+export function initAssessmentCamera({video, button, status, submit, consent, canSubmit = () => true, onAvailabilityChange = () => {}}) {
+  let lastReady=false;
   let stream, opening = false, busy = false, disposed = false;
   const message = (en, ar) => `${en} / ${ar}`;
   const update = () => {
     const ready = consent.checked && cameraIsLive(stream);
+    if(ready!==lastReady){lastReady=ready;onAvailabilityChange(ready);}
     submit.disabled = busy || !ready || !canSubmit();
     status.textContent = ready
       ? message('Camera active. Keep it on until submission.', 'الكاميرا تعمل. أبقها مفتوحة حتى إرسال التقييم.')
@@ -35,5 +37,5 @@ export function initAssessmentCamera({video, button, status, submit, consent, ca
   const interval = setInterval(update, 1000);
   window.addEventListener('pagehide', () => { disposed = true; clearInterval(interval); stop(); });
   update();
-  return {requireCamera: update, setBusy(value) { busy = value; update(); }};
+  return {isReady:()=>consent.checked && cameraIsLive(stream),requireCamera: update, setBusy(value) { busy = value; update(); }};
 }

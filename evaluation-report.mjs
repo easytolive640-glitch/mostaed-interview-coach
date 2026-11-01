@@ -1,3 +1,4 @@
+import {renderCameraReview} from './assessment-recording.mjs';
 import {assessmentLevels} from './level-questions.mjs';
 import {reportText} from './report-translations.mjs?v=pdf-export-1';
 import {appendScoreChart} from './score-chart.mjs';
@@ -60,4 +61,5 @@ export function renderEvaluation(container,evaluation,language='english',categor
     section.append(node('p',t('Revise the lowest-scoring answers, rehearse the follow-ups, then repeat the practice to compare progress in your history.','حسّن الإجابات الأقل درجة وتدرّب على أسئلة المتابعة، ثم أعد التدريب لمقارنة تقدمك في سجل حسابك.')));
   }
   container.append(section);
+  if(evaluation.cameraReview)renderCameraReview(container,evaluation.cameraReview);
 }

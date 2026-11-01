@@ -1,3 +1,4 @@
+import {validCameraEvidence,reviewCamera} from '../lib/server/camera-review.mjs';
 import {languages} from '../locales.mjs';
 import { verifiedSubscription } from '../lib/server/paypal.mjs';
 import { authenticatedUser, configured, serviceRpc, temporaryTestAccess, testAiConfigured, reserveTestEvaluation } from '../lib/server/paid-access.mjs';
@@ -95,6 +96,7 @@ export default async function handler(req, res) {
   }
   // Fail closed before the provider can be billed. CORS and IP limits are not payment checks.
   if (!configured() && !testAiConfigured()) return res.status(503).json({ error: 'Paid AI is not available' });
+  if (!validCameraEvidence(req.body?.cameraReview)) return res.status(400).json({error:'Camera recording and consent required / تسجيل الكاميرا والموافقة مطلوبان'});
   if (!validate(req.body)) return res.status(400).json({ error: 'Invalid request' });
   let user;
   try {
@@ -129,6 +131,7 @@ export default async function handler(req, res) {
   const languageInstruction = `Write all feedback, suggested answers and practice exercises in ${languages[req.body.language].feedback}.`;
 
   try {
+    const cameraReviewPromise=reviewCamera(req.body.cameraReview);
     const voiceAnswer = req.body.voice ? await transcribe(req.body.voice) : null;
     const context = evaluationContext(req.body, voiceAnswer);
     const model = process.env.OPENAI_MODEL || 'gpt-5-nano';
@@ -187,6 +190,7 @@ export default async function handler(req, res) {
     if(req.body.level) evaluation.level=req.body.level;
     evaluation.strengths = readableFeedback(evaluation.strengths, req.body);
     evaluation.improvements = readableFeedback(evaluation.improvements, req.body);
+    evaluation.cameraReview=await cameraReviewPromise;
     let historySaved = false;
     try { await saveEvaluation(user, req.body, evaluation); historySaved = true; }
     catch { console.error('Evaluation history save unavailable'); }
