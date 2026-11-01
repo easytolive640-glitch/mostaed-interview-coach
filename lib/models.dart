@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'free_localizations.dart';
 import 'question_translations.dart';
+import 'level_question_translations.dart';
 
 enum AppLanguage { arabic, english, french, spanish, german }
 extension AppLanguageUi on AppLanguage {
@@ -28,8 +29,8 @@ class InterviewQuestion {
   final String english;
   final List<String> keywords;
   String text(AppLanguage language) => language == AppLanguage.arabic ? arabic :
-      language == AppLanguage.english ? english : (translatedQuestions[language.name]?[id] ?? english);
-  List<String> keywordsFor(AppLanguage language) => translatedKeywords[language.name]?[id] ?? keywords;
+      language == AppLanguage.english ? english : (levelQuestionTranslations[language.name]?[id] ?? translatedQuestions[language.name]?[id] ?? english);
+  List<String> keywordsFor(AppLanguage language) => (levelQuestionTranslations[language.name]?.containsKey(id) ?? false) ? (const {'french':['étape','démarche','risque','vérifier','résultat','informations','exemple'], 'spanish':['paso','enfoque','riesgo','verificar','resultado','información','ejemplo'], 'german':['schritt','vorgehen','risiko','prüfen','ergebnis','informationen','beispiel']}[language.name] ?? keywords) : translatedKeywords[language.name]?[id] ?? keywords;
 }
 
 class InterviewResult {

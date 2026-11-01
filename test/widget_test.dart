@@ -18,7 +18,7 @@ void main() {
     expect(find.text('Customer service'), findsOneWidget);
   });
 
-  testWidgets('new languages retain localized navigation and show level question fallback', (tester) async {
+  testWidgets('new languages show localized navigation and level questions', (tester) async {
     await tester.pumpWidget(const MostaedApp());
     await tester.pumpAndSettle();
     for (final pair in [
@@ -32,7 +32,7 @@ void main() {
       await tester.pumpAndSettle();
       final question = QuestionBank.forCategory(InterviewCategory.hr, level: 'entry').first;
       final translated = question.text(pair[2] as AppLanguage);
-      expect(translated, question.english);
+      expect(translated, isNot(question.english));
       expect(find.text(translated), findsOneWidget);
       await tester.pageBack();
       await tester.pumpAndSettle();

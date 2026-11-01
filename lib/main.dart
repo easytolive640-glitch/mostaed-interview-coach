@@ -115,8 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
               items: const [DropdownMenuItem(value: 'entry', child: Text('Entry Level / مبتدئ')),DropdownMenuItem(value: 'mid', child: Text('Mid-Level / متوسط')),DropdownMenuItem(value: 'expert', child: Text('Expert / خبير')),DropdownMenuItem(value: 'consultant', child: Text('Consultant / استشاري'))],
               onChanged: (value) { if(value != null) setState(() => selectedLevel = value); },
             ),
-            if (language != AppLanguage.arabic && language != AppLanguage.english)
-              const Text('Level question sets currently use English in this language.'),
             const SizedBox(height: 16),
             for (final category in InterviewCategory.values)
               Card(
