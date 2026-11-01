@@ -21,7 +21,7 @@ export function initAssessmentRecording({video, status, onFailure}) {
         const mime=['video/webm;codecs=vp8','video/webm','video/mp4'].find(type=>MediaRecorder.isTypeSupported(type));if(!mime)throw Error();
         recorder=new MediaRecorder(video.srcObject,{mimeType:mime,videoBitsPerSecond:100000});
         const current=recorder;
-        recorder.ondataavailable=e=>{if(current!==recorder)return;if(e.data.size){bytes+=e.data.size;if(bytes>32000000){reset();fail();return;}chunks.push(e.data);}};
+        recorder.ondataavailable=e=>{if(current!==recorder)return;if(e.data.size){bytes+=e.data.size;if(bytes>64000000){reset();fail();return;}chunks.push(e.data);}};
         recorder.onerror=()=>{if(current===recorder)fail();};recorder.onstop=()=>{if(current===recorder&&active)fail();};
         recorder.start(1000);startedAt=Date.now();active=true;
         if(!capture())throw Error();timer=setInterval(()=>{if(!capture())fail();},10000);

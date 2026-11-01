@@ -57,3 +57,8 @@ test('full reports render safely in all five languages; legacy history remains r
   assert.equal(allNodes(root).some(n=>n.textContent==='Legacy strength'),true);
   delete globalThis.document;
 });
+test('blank timeout answers receive zero rather than model-awarded marks',()=>{
+ const body=makeBody('hr',10);body.responses[0].answer='';
+ const report=checkedReport(fixture(body),body,false);
+ assert.equal(report.answers[0].score,0);assert.equal(report.textScore,72);assert.equal(body.responses[0].answer,'');
+});
