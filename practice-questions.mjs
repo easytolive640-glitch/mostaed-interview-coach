@@ -28,13 +28,13 @@ export const questionBank = {
     },
     {
       "id": "hr_6",
-      "arabic": "صف ملاحظات نقدية تلقيتها. كيف استوضحتها وغيرت أسلوبك وتحققت من تحسن أدائك؟",
-      "english": "Describe critical feedback you received. How did you clarify it, change your approach, and check whether you improved?"
+      "arabic": "صف ملاحظات نقدية كان تقبلها صعباً. كيف استوضحت المشكلة المحددة في المهمة واتفقت على تغيير عملي وتحققت من تقدمك؟",
+      "english": "Describe critical feedback that was hard to hear. How did you clarify the specific task issue, agree on a practical change, and check your progress?"
     },
     {
       "id": "hr_7",
-      "arabic": "تم تقديم موعدي تسليم في الوقت نفسه. كيف تعيد ترتيب العمل وتؤكد الالتزامات المعدلة مع المعنيين؟",
-      "english": "Two deadlines move forward at once. How would you reprioritize work and confirm the revised commitments with those affected?"
+      "arabic": "تم تقديم موعدي تسليم دون زيادة قدرتك على الإنجاز. كيف تشرح المفاضلات وتقترح أولويات معدلة وتؤكد الالتزامات مع جميع المعنيين؟",
+      "english": "Two deadlines move forward, but your capacity is unchanged. How would you explain the tradeoffs, propose revised priorities, and confirm commitments with everyone affected?"
     },
     {
       "id": "hr_8",
@@ -93,8 +93,8 @@ export const questionBank = {
     },
     {
       "id": "hr_19",
-      "arabic": "صف كيف استوضحت احتياجات أحد أصحاب المصلحة. ما الملاحظات التي غيرت فهمك وكيف أكدت النتيجة المتفق عليها؟",
-      "english": "Describe how you clarified a stakeholder’s needs. What feedback changed your understanding, and how did you confirm the agreed outcome?"
+      "arabic": "صف كيف استوضحت احتياجات أحد أصحاب المصلحة حين قدم أشخاص روايات متعارضة. ما الملاحظات التي غيرت فهمك وكيف أكدت نتيجة مشتركة قبل بدء العمل؟",
+      "english": "Describe clarifying a stakeholder’s needs when different people gave conflicting accounts. What feedback changed your understanding, and how did you confirm a shared outcome before starting work?"
     },
     {
       "id": "hr_20",
@@ -110,8 +110,8 @@ export const questionBank = {
     },
     {
       "id": "cs_2",
-      "arabic": "اذكر موقفاً حوّلت فيه تجربة سيئة إلى إيجابية.",
-      "english": "Describe turning a bad customer experience into a positive one."
+      "arabic": "صف كيف حسنت تجربة سيئة لعميل. كيف أقررت بالشكوى وتحققت من الوقائع واتفقت على معالجة واستخدمت الملاحظات لمنع تكرار المشكلة؟",
+      "english": "Describe turning a poor customer experience around. How did you acknowledge the complaint, establish the facts, agree on a remedy, and use the feedback to prevent a repeat?"
     },
     {
       "id": "cs_3",
@@ -180,8 +180,8 @@ export const questionBank = {
     },
     {
       "id": "cs_16",
-      "arabic": "كيف تتعامل مع طلب عميل عبر أكثر من قناة دون تكرار العمل؟",
-      "english": "How do you handle a customer request across multiple channels without duplicating work?"
+      "arabic": "يتواصل عميل عبر المحادثة والبريد بشأن المشكلة نفسها التي لم تحل. كيف توحد سجل الحالة وتنسق المسؤولية وتنقل السياق بين القنوات دون تكرار العمل أو الأسئلة؟",
+      "english": "A customer contacts chat and email about the same unresolved issue. How would you reconcile the case history, coordinate ownership, and pass context between channels without duplicate work or repeated questions?"
     },
     {
       "id": "cs_17",
@@ -190,8 +190,8 @@ export const questionBank = {
     },
     {
       "id": "cs_18",
-      "arabic": "يرسل عميل بيانات حساسة في محادثة دعم. كيف تحد من جمعها ومشاركتها والوصول إليها أثناء حل المشكلة وفق سياسة الشركة؟",
-      "english": "A customer includes sensitive data in a support conversation. How would you limit its collection, sharing, and access while resolving the issue under company policy?"
+      "arabic": "ينشر عميل بيانات حساسة في محادثة دعم ويطلب حذفها. كيف تحد من انكشافها وتشرح إجراءات الحذف المعتمدة وتواصل حل المشكلة باستخدام البيانات الضرورية فقط؟",
+      "english": "A customer posts sensitive data in a support conversation and asks for its deletion. How would you limit further exposure, explain the approved deletion process, and continue resolving the issue with only necessary data?"
     },
     {
       "id": "cs_19",
@@ -217,8 +217,8 @@ export const questionBank = {
     },
     {
       "id": "it_3",
-      "arabic": "تملك خدمة صلاحيات أوسع مما تحتاج. اشرح مبدأ أقل الصلاحيات وكيف تستخدم أدلة الوصول لتقليل الصلاحيات بأمان بمرور الوقت.",
-      "english": "A service has broader permissions than it needs. Explain least privilege and how you would use access evidence to reduce permissions safely over time."
+      "arabic": "تملك خدمة صلاحيات زائدة. كيف تستخدم سجلات الوصول وتحليل السياسات لتحديد الوصول غير المستخدم وتقليل الصلاحيات بأمان وجدولة مراجعات للاحتياجات المتغيرة؟",
+      "english": "A service has excessive permissions. How would you use access logs and policy analysis to identify unused access, reduce permissions safely, and schedule reviews for changing needs?"
     },
     {
       "id": "it_4",
@@ -282,8 +282,8 @@ export const questionBank = {
     },
     {
       "id": "it_16",
-      "arabic": "قبل نشر خدمة جديدة، كيف تتحقق من أن سياسة الوصول تسمح بالإجراءات المطلوبة وتمنع الإجراءات غير الضرورية؟",
-      "english": "Before deploying a new service, how would you verify that its access policy allows required actions and denies unnecessary ones?"
+      "arabic": "قبل نشر خدمة، كيف تختبر أن دورها يسمح بالإجراءات المطلوبة ويرفض غير الضرورية، بما يشمل الوصول المقيد بحدود الصلاحيات أو سياسات المؤسسة؟",
+      "english": "Before deploying a service, how would you test that its role permits required actions and rejects unnecessary ones, including access constrained by permission boundaries or organization policies?"
     },
     {
       "id": "it_17",
