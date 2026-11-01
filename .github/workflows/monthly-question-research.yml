@@ -38,6 +38,8 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: node scripts/research-question-evidence.mjs
+      - name: Preserve published wording for open sessions
+        run: node scripts/snapshot-question-bank.mjs
       - name: Research and revise questions
         uses: openai/codex-action@v1
         with:
@@ -64,7 +66,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
-          git add practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart docs/question-research
+          git add practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart lib/server/question-bank-history.mjs docs/question-research
           if git diff --cached --quiet; then
             echo 'No validated question updates were produced.'
             exit 0

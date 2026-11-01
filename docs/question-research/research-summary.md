@@ -12,6 +12,6 @@ Validation passed: `node --test test/practice_questions.test.mjs test/localizati
 
 Banks retain 20 questions per category, stable competency IDs, UTC monthly selection, and counts of 5 free / 10 Starter / 15 Pro. November free and paid selections each include refreshed topics in every category. Stored history schemas and session selection behavior are unchanged.
 
-Limitation requiring publication review: an already-open paid client with old wording cannot submit after a future server bank deployment because existing validation requires exact current text. Cross-deployment version compatibility cannot be fixed within the permitted content files; this change preserves session selection within a running client but does not claim to solve that existing server constraint. Page dates were not independently verified, and automated translation checks do not replace linguistic review.
+Open-session compatibility is now implemented: the server accepts exact previously published wording and evaluates the question actually shown to the user. Unrecognized wording and duplicate IDs remain rejected. A pre-edit workflow snapshot preserves published banks for future refreshes. Validation after this fix: 21 JavaScript tests passed, including all five languages for existing sessions. Automated translation checks do not replace linguistic review.
 
 This is content prepared for a review pull request, not a deployed update. No commit, push, merge, or GitHub action was performed. Unrelated pre-existing workspace changes were left untouched.
