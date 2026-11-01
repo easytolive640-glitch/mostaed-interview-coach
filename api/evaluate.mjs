@@ -1,3 +1,4 @@
+import {assessmentTerminated} from '../lib/server/assessment-lock.mjs';
 import {validCameraEvidence,reviewCamera} from '../lib/server/camera-review.mjs';
 import {languages} from '../locales.mjs';
 import { verifiedSubscription } from '../lib/server/paypal.mjs';
@@ -105,6 +106,7 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'Account verification unavailable' });
   }
   if (!user) return res.status(401).json({ error: 'Sign in to use paid AI' });
+  try {if(await assessmentTerminated(user))return res.status(403).json({error:'Assessment terminated. Restarting is not allowed. Contact support.'});}catch{return res.status(503).json({error:'Assessment status verification unavailable'});}
   let access;
   try {
     if (temporaryTestAccess(user) && testAiConfigured()) {
