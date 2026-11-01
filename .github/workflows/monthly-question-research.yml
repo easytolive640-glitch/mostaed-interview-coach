@@ -34,20 +34,15 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - name: Configure hosted research tools
-        run: |
-          mkdir -p "$RUNNER_TEMP/research-codex"
-          cat > "$RUNNER_TEMP/research-codex/config.toml" <<'TOML'
-          web_search = "live"
-          [model_providers.codex-action-responses-proxy.capabilities]
-          external_web_access = true
-          TOML
+      - name: Gather live primary-source evidence
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node scripts/research-question-evidence.mjs
       - name: Research and revise questions
         uses: openai/codex-action@v1
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           permission-profile: ':workspace'
-          codex-home: ${{ runner.temp }}/research-codex
           prompt-file: .github/prompts/monthly-question-research.md
           output-file: research-summary.md
       - name: Require actual question refresh
