@@ -46,7 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final prefs = await SharedPreferences.getInstance();
     final requested = Uri.base.queryParameters['lang'] ?? prefs.getString('mostaed_language');
     final match = AppLanguage.values.where((item) => item.name == requested);
-    if (mounted && !selectedManually && match.isNotEmpty) setState(() => language = match.first);
+    if (mounted && !selectedManually && match.isNotEmpty) {
+      setState(() => language = match.first);
+    }
   }
   Future<void> selectLanguage(AppLanguage value) async {
     selectedManually = true;
