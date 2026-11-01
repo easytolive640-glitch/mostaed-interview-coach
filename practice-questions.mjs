@@ -28,13 +28,13 @@ export const questionBank = {
     },
     {
       "id": "hr_6",
-      "arabic": "صف موقفاً تلقيت فيه ملاحظات نقدية وكيف استفدت منها.",
-      "english": "Describe a time you received critical feedback and how you used it."
+      "arabic": "صف ملاحظات نقدية تلقيتها. كيف استوضحتها وغيرت أسلوبك وتحققت من تحسن أدائك؟",
+      "english": "Describe critical feedback you received. How did you clarify it, change your approach, and check whether you improved?"
     },
     {
       "id": "hr_7",
-      "arabic": "كيف ترتب أولوياتك عندما تتغير المواعيد النهائية؟",
-      "english": "How do you prioritize when deadlines change?"
+      "arabic": "تم تقديم موعدي تسليم في الوقت نفسه. كيف تعيد ترتيب العمل وتؤكد الالتزامات المعدلة مع المعنيين؟",
+      "english": "Two deadlines move forward at once. How would you reprioritize work and confirm the revised commitments with those affected?"
     },
     {
       "id": "hr_8",
@@ -88,13 +88,13 @@ export const questionBank = {
     },
     {
       "id": "hr_18",
-      "arabic": "كيف توضح إنجازاتك باستخدام أرقام أو أدلة؟",
-      "english": "How do you demonstrate your achievements with measures or evidence?"
+      "arabic": "اختر إنجازاً مهنياً. كيف تشرح مساهمتك وتدعم النتيجة بمقاييس مناسبة أو أدلة أخرى؟",
+      "english": "Choose a work achievement. How would you explain your contribution and support the outcome with relevant measures or other evidence?"
     },
     {
       "id": "hr_19",
-      "arabic": "ما الخطوات التي تتخذها لفهم احتياجات أصحاب المصلحة؟",
-      "english": "What steps do you take to understand stakeholder needs?"
+      "arabic": "صف كيف استوضحت احتياجات أحد أصحاب المصلحة. ما الملاحظات التي غيرت فهمك وكيف أكدت النتيجة المتفق عليها؟",
+      "english": "Describe how you clarified a stakeholder’s needs. What feedback changed your understanding, and how did you confirm the agreed outcome?"
     },
     {
       "id": "hr_20",
@@ -120,8 +120,8 @@ export const questionBank = {
     },
     {
       "id": "cs_4",
-      "arabic": "ماذا تفعل إذا لم تعرف الإجابة؟",
-      "english": "What do you do when you do not know the answer?"
+      "arabic": "يسأل عميل عن أمر لا تستطيع التحقق منه. كيف تبحث عن إجابة موثوقة وترتب التحويل إلى موظف دون أن يكرر العميل مشكلته؟",
+      "english": "A customer asks something you cannot verify. How would you seek a reliable answer and arrange a human handoff without making the customer repeat the issue?"
     },
     {
       "id": "cs_5",
@@ -135,8 +135,8 @@ export const questionBank = {
     },
     {
       "id": "cs_7",
-      "arabic": "صف موقفاً صعّدت فيه مشكلة إلى فريق آخر وتابعت حلها.",
-      "english": "Describe escalating an issue to another team and following it through."
+      "arabic": "صف مشكلة صعّدتها إلى فريق آخر. كيف قررت التصعيد ونقلت السياق وتابعت مع العميل؟",
+      "english": "Describe an issue you escalated to another team. How did you decide to escalate, pass on the context, and follow up with the customer?"
     },
     {
       "id": "cs_8",
@@ -185,13 +185,13 @@ export const questionBank = {
     },
     {
       "id": "cs_17",
-      "arabic": "كيف تتحقق من دقة إجابة اقترحتها أداة ذكاء اصطناعي للعميل؟",
-      "english": "How do you check the accuracy of an AI suggested reply before sending it to a customer?"
+      "arabic": "تقدم مسودة ذكاء اصطناعي إجابة للعميل لا تستطيع تأكيدها. كيف تراجع الإرشادات المعتمدة وتقرر تصحيحها أو تصعيدها قبل الإرسال؟",
+      "english": "An AI draft gives a customer an answer you cannot confirm. How would you check approved guidance and decide whether to correct it or escalate before sending?"
     },
     {
       "id": "cs_18",
-      "arabic": "صف طريقة الحفاظ على خصوصية بيانات العميل أثناء حل مشكلة.",
-      "english": "How do you protect customer data while resolving an issue?"
+      "arabic": "يرسل عميل بيانات حساسة في محادثة دعم. كيف تحد من جمعها ومشاركتها والوصول إليها أثناء حل المشكلة وفق سياسة الشركة؟",
+      "english": "A customer includes sensitive data in a support conversation. How would you limit its collection, sharing, and access while resolving the issue under company policy?"
     },
     {
       "id": "cs_19",
@@ -217,8 +217,8 @@ export const questionBank = {
     },
     {
       "id": "it_3",
-      "arabic": "اشرح مبدأ أقل الصلاحيات.",
-      "english": "Explain the principle of least privilege."
+      "arabic": "تملك خدمة صلاحيات أوسع مما تحتاج. اشرح مبدأ أقل الصلاحيات وكيف تستخدم أدلة الوصول لتقليل الصلاحيات بأمان بمرور الوقت.",
+      "english": "A service has broader permissions than it needs. Explain least privilege and how you would use access evidence to reduce permissions safely over time."
     },
     {
       "id": "it_4",
@@ -272,18 +272,18 @@ export const questionBank = {
     },
     {
       "id": "it_14",
-      "arabic": "ما خطواتك بعد اكتشاف انقطاع إقليمي لخدمة سحابية؟",
-      "english": "What are your steps after discovering a regional cloud outage?"
+      "arabic": "يؤثر انقطاع سحابي إقليمي في بيئة الإنتاج. كيف تنسق أدوار الاستجابة وإجراءات التعافي وتحديثات أصحاب المصلحة باستخدام خطة الحوادث؟",
+      "english": "A regional cloud outage affects production. How would you coordinate response roles, recovery actions, and stakeholder updates using the incident plan?"
     },
     {
       "id": "it_15",
-      "arabic": "كيف تختبر خطة التعافي من الكوارث دون تعطيل المستخدمين؟",
-      "english": "How do you test a disaster recovery plan without disrupting users?"
+      "arabic": "كيف تنفذ تمرين تعافٍ من الكوارث بحدود أمان واضحة وتختبر الوصول الطارئ وتحدث دليل الإجراءات دون تعطيل المستخدمين؟",
+      "english": "How would you run a disaster recovery drill with clear safety limits, test emergency access, and update the runbook without disrupting users?"
     },
     {
       "id": "it_16",
-      "arabic": "كيف تتحقق من سلامة إعدادات الصلاحيات قبل نشر خدمة جديدة؟",
-      "english": "How do you verify access permissions before deploying a new service?"
+      "arabic": "قبل نشر خدمة جديدة، كيف تتحقق من أن سياسة الوصول تسمح بالإجراءات المطلوبة وتمنع الإجراءات غير الضرورية؟",
+      "english": "Before deploying a new service, how would you verify that its access policy allows required actions and denies unnecessary ones?"
     },
     {
       "id": "it_17",

@@ -18,7 +18,9 @@ void main() {
       for (final question in pro) {
         for (final language in AppLanguage.values) {
           expect(question.text(language).trim(), isNotEmpty);
-          if (language != AppLanguage.english) expect(question.text(language), isNot(question.english));
+          if (language != AppLanguage.english) {
+            expect(question.text(language), isNot(question.english));
+          }
         }
       }
     }
