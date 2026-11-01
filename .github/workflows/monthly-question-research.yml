@@ -58,15 +58,17 @@ jobs:
         run: node --test test/practice_questions.test.mjs test/evaluation-context.test.mjs test/localization.test.mjs
       - name: Validate Flutter questions
         run: flutter test test/question_bank_test.dart test/free_localization_test.dart
+      - name: Version free-practice assets
+        run: node scripts/version-free-practice.mjs
       - name: Open content review pull request
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          branch="monthly-questions-$(date -u +%Y-%m)-${GITHUB_RUN_ID}"
+          branch="monthly-questions-$(date -u +%Y-%m)-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
-          git add practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart lib/server/question-bank-history.mjs docs/question-research
+          git add practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart lib/server/question-bank-history.mjs freepractice.html docs/question-research
           if git diff --cached --quiet; then
             echo 'No validated question updates were produced.'
             exit 0
