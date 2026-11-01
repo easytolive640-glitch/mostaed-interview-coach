@@ -1,10 +1,11 @@
+import 'level_questions.dart';
 import 'models.dart';
 
 enum PaidPlan { starter, pro }
 
 class QuestionBank {
-  static List<InterviewQuestion> forCategory(InterviewCategory category, {DateTime? asOf}) =>
-      forPaidCategory(category, PaidPlan.pro, asOf: asOf).take(5).toList(growable: false);
+  static List<InterviewQuestion> forCategory(InterviewCategory category, {DateTime? asOf, String? level}) =>
+      level != null ? List.unmodifiable(levelQuestions[category]![level]!) : forPaidCategory(category, PaidPlan.pro, asOf: asOf).take(5).toList(growable: false);
 
   /// Select once at session start and retain this list throughout the interview.
   /// [asOf] lets callers preview a calendar month and keeps the selection testable.

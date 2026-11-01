@@ -1,3 +1,4 @@
+import {levelQuestionBank} from './level-questions.mjs';
 import {questionTranslations} from './question-translations.mjs';
 export const questionBank = {
   "hr": [
@@ -314,12 +315,21 @@ for (const [language,categories] of Object.entries(questionTranslations)) {
   }
 }
 // UTC calendar months keep the selection identical across devices and languages.
-export function freeQuestions(category, date = new Date()) {
+export function freeQuestions(category, date = new Date(), level) {
+  if (level) return selectLevelQuestions(category, level, 'free', date);
   return paidQuestions(category, date).slice(0, 5);
 }
-export function paidQuestions(category, date = new Date()) {
+export function paidQuestions(category, date = new Date(), level) {
+  if (level) return selectLevelQuestions(category, level, 'paid', date);
   const all = questionBank[category];
   if (!all) throw new Error("Invalid category");
   const offset = ((date.getUTCFullYear()*12 + date.getUTCMonth()+1)*5)%all.length;
   return Array.from({length:15}, (_,i)=>all[(offset+i)%all.length]);
+}
+
+function selectLevelQuestions(category, level, access, date) {
+  const all = levelQuestionBank[category]?.[level]?.filter(q=>q.access===access);
+  if (!all) throw Error('Invalid assessment level');
+  const offset=((date.getUTCFullYear()*12+date.getUTCMonth()+1)*5)%all.length;
+  return Array.from({length:access==='free'?5:15},(_,i)=>all[(offset+i)%all.length]);
 }

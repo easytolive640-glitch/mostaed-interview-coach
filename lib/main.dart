@@ -38,6 +38,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AppLanguage language = AppLanguage.arabic;
   bool get isArabic => language == AppLanguage.arabic;
+  String selectedLevel = 'entry';
   bool selectedManually = false;
   String tr(String key, [Map<String, Object> values = const {}]) => FreeLocalizations.text(key, language.name, values);
   @override
@@ -108,6 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
             Text(tr('lead')),
             const SizedBox(height: 24),
+            DropdownButtonFormField<String>(
+              value: selectedLevel,
+              decoration: InputDecoration(labelText: isArabic ? 'مستوى التقييم' : 'Assessment level'),
+              items: const [DropdownMenuItem(value: 'entry', child: Text('Entry Level / مبتدئ')),DropdownMenuItem(value: 'mid', child: Text('Mid-Level / متوسط')),DropdownMenuItem(value: 'expert', child: Text('Expert / خبير')),DropdownMenuItem(value: 'consultant', child: Text('Consultant / استشاري'))],
+              onChanged: (value) { if(value != null) setState(() => selectedLevel = value); },
+            ),
+            const SizedBox(height: 16),
             for (final category in InterviewCategory.values)
               Card(
                 child: ListTile(
@@ -120,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => InterviewScreen(
+                        level: selectedLevel,
                         category: category,
                         language: language,
                       ),
@@ -137,9 +146,11 @@ class _HomeScreenState extends State<HomeScreen> {
 class InterviewScreen extends StatefulWidget {
   const InterviewScreen({
     super.key,
+    this.level,
     required this.category,
     required this.language,
   });
+  final String? level;
   final InterviewCategory category;
   final AppLanguage language;
 
@@ -156,7 +167,7 @@ class _InterviewScreenState extends State<InterviewScreen> {
   bool get isArabic => widget.language == AppLanguage.arabic;
   String tr(String key, [Map<String, Object> values = const {}]) => FreeLocalizations.text(key, widget.language.name, values);
   late final List<InterviewQuestion> interviewQuestions =
-      QuestionBank.forCategory(widget.category);
+      QuestionBank.forCategory(widget.category, level: widget.level);
 
   @override
   void initState() {

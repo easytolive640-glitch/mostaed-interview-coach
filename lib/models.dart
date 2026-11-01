@@ -28,7 +28,7 @@ class InterviewQuestion {
   final String english;
   final List<String> keywords;
   String text(AppLanguage language) => language == AppLanguage.arabic ? arabic :
-      language == AppLanguage.english ? english : translatedQuestions[language.name]![id]!;
+      language == AppLanguage.english ? english : (translatedQuestions[language.name]?[id] ?? english);
   List<String> keywordsFor(AppLanguage language) => translatedKeywords[language.name]?[id] ?? keywords;
 }
 

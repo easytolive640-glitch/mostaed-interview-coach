@@ -184,6 +184,7 @@ export default async function handler(req, res) {
       throw new Error('The AI response did not complete');
     }
     const evaluation = checkedReport(JSON.parse(extractOutput(response)), req.body, Boolean(voiceAnswer));
+    if(req.body.level) evaluation.level=req.body.level;
     evaluation.strengths = readableFeedback(evaluation.strengths, req.body);
     evaluation.improvements = readableFeedback(evaluation.improvements, req.body);
     let historySaved = false;

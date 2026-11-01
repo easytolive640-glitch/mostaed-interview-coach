@@ -1,3 +1,4 @@
+import {assessmentLevels} from './level-questions.mjs';
 import {reportText} from './report-translations.mjs?v=pdf-export-1';
 import {appendScoreChart} from './score-chart.mjs';
 import {exportReportPdf} from './report-pdf.mjs';
@@ -19,6 +20,7 @@ export function renderEvaluation(container,evaluation,language='english',categor
   actions.append(exportButton,exportHelp);section.append(actions);
   const categories={hr:['HR','الموارد البشرية'],customerService:['Customer Service','خدمة العملاء'],itCloud:['IT & Cloud','تقنية المعلومات والسحابة']};
   const cat=categories[category];if(cat)section.append(node('p',t('Interview category: ','نوع المقابلة: ')+t(cat[0],cat[1])));
+  if(assessmentLevels[evaluation.level]) section.append(node('p',(ar?'مستوى التقييم: ':'Assessment level: ')+assessmentLevels[evaluation.level][ar?1:0]));
   if(evaluation.summary)section.append(node('p',evaluation.summary,'report-summary'));
   appendScoreChart(section,evaluation,language);
   if(evaluation.scoringWeights){const w=evaluation.scoringWeights;section.append(node('small',reportText(
