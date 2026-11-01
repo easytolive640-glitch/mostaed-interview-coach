@@ -10,16 +10,22 @@ export function createAttemptGuard(onChange = () => {}) {
     get invalid() { return invalid; }
   };
 }
-export function initAssessmentFocus({start, restart, status, questions, onChange, onRestart, cameraReady = () => true, beforeStart = () => true}) {
-  const guard = createAttemptGuard(() => {
-    questions.disabled = !guard.canSubmit() || !cameraReady();
+export function initAssessmentFocus({start, restart, status, questions, questionExtras = [], onChange, onRestart, cameraReady = () => true, beforeStart = () => true}) {
+  const refreshVisibility = () => {
+    const locked = !guard.canSubmit() || !cameraReady();
+    questions.disabled = locked;
+    questions.hidden = locked;
+    for(const element of questionExtras) element.hidden = locked;
     start.disabled = guard.started || !cameraReady();
+  };
+  const guard = createAttemptGuard(() => {
+    refreshVisibility();
     restart.hidden = !guard.started;
     status.textContent = guard.invalid
       ? 'The assessment was interrupted (tab or camera). Submission is blocked. Restart to begin a new attempt; your current answers will be cleared. / انقطع التقييم (التبويب أو الكاميرا). الإرسال محظور. أعد البدء لمحاولة جديدة؛ ستُمسح الإجابات الحالية.'
       : guard.started
         ? 'Assessment started. Keep this tab visible until you submit. / بدأ التقييم. أبقِ هذا التبويب ظاهراً حتى الإرسال.'
-        : 'Before starting, prepare your CV and voice answer and enable your camera. Switching tabs, minimizing the browser, or locking the screen after starting blocks submission. Other open tabs cannot be inspected. / جهّز السيرة والإجابة الصوتية وشغّل الكاميرا قبل البدء. تبديل التبويب أو تصغير المتصفح أو قفل الشاشة بعد البدء يمنع الإرسال. لا يمكن فحص التبويبات الأخرى.';
+        : 'Before starting, prepare your CV and enable your camera. Switching tabs, minimizing the browser, or locking the screen after starting blocks submission. Other open tabs cannot be inspected. / جهّز السيرة وشغّل الكاميرا قبل البدء. تبديل التبويب أو تصغير المتصفح أو قفل الشاشة بعد البدء يمنع الإرسال. لا يمكن فحص التبويبات الأخرى.';
     onChange();
   });
   start.addEventListener('click', () => { if (document.visibilityState === 'visible' && cameraReady() && beforeStart()) guard.start(); });
@@ -30,5 +36,5 @@ export function initAssessmentFocus({start, restart, status, questions, onChange
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') guard.leave(); });
   window.addEventListener('pagehide', () => guard.leave());
   guard.reset();
-  return Object.assign(guard,{refresh(){questions.disabled=!guard.canSubmit()||!cameraReady();start.disabled=guard.started||!cameraReady();}});
+  return Object.assign(guard,{refresh:refreshVisibility});
 }

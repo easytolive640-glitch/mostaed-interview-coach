@@ -1,5 +1,5 @@
 import {initAssessmentRecording} from './assessment-recording.mjs';
-import {initAssessmentFocus} from './assessment-focus.mjs';
+import {initAssessmentFocus} from './assessment-focus.mjs?v=hide-questions-1';
 import {initAssessmentCamera} from './assessment-camera.mjs';
 import {track} from './funnel-analytics.mjs';
 import {localizeMessage} from './localized-messages.mjs';
@@ -12,7 +12,7 @@ const $=id=>document.getElementById(id);
 let focusGuard;
 const cameraRecording=initAssessmentRecording({video:$('cameraPreview'),status:$('recordingStatus'),onFailure:()=>focusGuard?.leave()});
 const camera=initAssessmentCamera({video:$('cameraPreview'),button:$('openCamera'),status:$('cameraStatus'),submit:$('submit'),consent:$('cameraConsent'),canSubmit:()=>!!focusGuard?.canSubmit()&&cameraRecording.active,onAvailabilityChange:ready=>{focusGuard?.refresh();if(!ready&&focusGuard?.started){cameraRecording.reset();focusGuard.leave();}}});
-focusGuard=initAssessmentFocus({start:$('startAssessment'),restart:$('restartAssessment'),status:$('focusStatus'),questions:$('questionFields'),cameraReady:()=>camera.isReady(),beforeStart:()=>cameraRecording.start(),onChange:()=>camera.requireCamera(),onRestart:()=>{cameraRecording.reset();renderQuestions();$('result').hidden=true;}});
+focusGuard=initAssessmentFocus({start:$('startAssessment'),restart:$('restartAssessment'),status:$('focusStatus'),questions:$('questionFields'),questionExtras:[$('voiceQuestion')],cameraReady:()=>camera.isReady(),beforeStart:()=>cameraRecording.start(),onChange:()=>camera.requireCamera(),onRestart:()=>{cameraRecording.reset();renderQuestions();$('result').hidden=true;}});
 for(const event of ['copy','cut','paste','drop','dragstart']) $('questions').addEventListener(event,e=>{e.preventDefault();});
 $('questions').addEventListener('beforeinput',e=>{if(['insertFromPaste','insertFromDrop','insertFromYank'].includes(e.inputType))e.preventDefault();});
 let practiceTracked=false;
