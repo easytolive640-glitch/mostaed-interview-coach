@@ -2,12 +2,12 @@
 export function cameraIsLive(stream) {
   return !!stream?.getVideoTracks().some(track => track.readyState === 'live' && track.enabled && !track.muted);
 }
-export function initAssessmentCamera({video, button, status, submit, consent}) {
+export function initAssessmentCamera({video, button, status, submit, consent, canSubmit = () => true}) {
   let stream, opening = false, busy = false, disposed = false;
   const message = (en, ar) => `${en} / ${ar}`;
   const update = () => {
     const ready = consent.checked && cameraIsLive(stream);
-    submit.disabled = busy || !ready;
+    submit.disabled = busy || !ready || !canSubmit();
     status.textContent = ready
       ? message('Camera active. Keep it on until submission.', 'الكاميرا تعمل. أبقها مفتوحة حتى إرسال التقييم.')
       : message('Camera required. Submission is blocked until your camera is active.', 'الكاميرا مطلوبة. لن يُرسل التقييم حتى تعمل الكاميرا.');
