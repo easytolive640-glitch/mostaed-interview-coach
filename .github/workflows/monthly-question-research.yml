@@ -39,7 +39,7 @@ jobs:
         with:
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
           permission-profile: ':workspace'
-          codex-args: '--search'
+          codex-args: '["-c", "web_search=\"live\""]'
           prompt-file: .github/prompts/monthly-question-research.md
           output-file: research-summary.md
       - name: Validate JavaScript and server compatibility
