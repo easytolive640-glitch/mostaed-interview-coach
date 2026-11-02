@@ -494,3 +494,84 @@ Object.assign(landingCopy,{
 Object.assign(landingCopy,{"approvedCoaches":["Approved career coaches","المدربون المهنيون المعتمدون","Coachs professionnels approuvés","Coaches profesionales aprobados","Freigegebene Karrierecoaches"],"coachSubmitted":["Application saved. Mostaed will review your profile before publication.","تم حفظ الطلب. ستراجع مستعد ملفك قبل نشره.","Candidature enregistrée. Mostaed examinera votre profil avant publication.","Solicitud guardada. Mostaed revisará tu perfil antes de publicarlo.","Bewerbung gespeichert. Mostaed prüft Ihr Profil vor der Veröffentlichung."]});
 
 Object.assign(landingCopy,{"heroLead":["Practise HR, customer service and IT & cloud interviews with AI feedback, CV context and a voice answer. Coming next: 1:1 career coaching for interview preparation, CV guidance and your next career step. Coach applications are open.","تدرّب على مقابلات الموارد البشرية وخدمة العملاء وتقنية المعلومات والسحابة، مع ملاحظات الذكاء الاصطناعي وسياق السيرة الذاتية وإجابة صوتية. قريباً: جلسات فردية 1:1 مع مدرب مهني للاستعداد للمقابلات وتحسين السيرة وتحديد خطوتك المهنية التالية. تسجيل المدربين متاح.","Préparez vos entretiens RH, service client, informatique et cloud avec des conseils IA, votre CV et une réponse audio. À venir : coaching individuel 1:1 pour les entretiens, le CV et votre prochaine étape professionnelle. Les candidatures de coachs sont ouvertes.","Practica entrevistas de RR. HH., atención al cliente, informática y nube con comentarios de IA, contexto del CV y una respuesta de voz. Próximamente: coaching profesional 1:1 para entrevistas, CV y tu próximo paso. El registro de coaches está abierto.","Üben Sie Interviews für Personalwesen, Kundenservice, IT und Cloud mit KI-Feedback, Lebenslaufkontext und einer Audioantwort. Demnächst: persönliches 1:1-Karrierecoaching für Interviews, Lebenslauf und Ihren nächsten Schritt. Coach-Bewerbungen sind geöffnet."],"heroCoachingAction":["Explore 1:1 coaching","اكتشف جلسات التدريب الفردي","Découvrir le coaching 1:1","Explorar coaching 1:1","1:1-Coaching entdecken"]});
+
+// All six published interview categories, in every landing-page language.
+Object.assign(landingCopy,{
+  "roleMarketing": [
+    "Marketing",
+    "التسويق",
+    "Marketing",
+    "Marketing",
+    "Marketing"
+  ],
+  "roleSales": [
+    "Sales",
+    "المبيعات",
+    "Vente",
+    "Ventas",
+    "Vertrieb"
+  ],
+  "roleDevelopment": [
+    "Software Development",
+    "تطوير البرمجيات",
+    "Développement logiciel",
+    "Desarrollo de software",
+    "Softwareentwicklung"
+  ],
+  "roleMarketingBody": [
+    "Audience research, campaign strategy, experiments and measuring results.",
+    "دراسة الجمهور واستراتيجية الحملات والتجارب وقياس النتائج.",
+    "Étude du public, stratégie de campagne, expérimentation et mesure des résultats.",
+    "Investigación de audiencias, estrategia de campañas, experimentación y medición de resultados.",
+    "Zielgruppenanalyse, Kampagnenstrategie, Experimente und Erfolgsmessung."
+  ],
+  "roleSalesBody": [
+    "Customer discovery, value selling, negotiation and pipeline management.",
+    "اكتشاف احتياجات العملاء والبيع بالقيمة والتفاوض وإدارة مسار المبيعات.",
+    "Découverte des besoins, vente par la valeur, négociation et gestion du pipeline.",
+    "Descubrimiento de necesidades, venta de valor, negociación y gestión del embudo.",
+    "Bedarfsermittlung, wertorientierter Vertrieb, Verhandlung und Pipeline-Management."
+  ],
+  "roleDevelopmentBody": [
+    "Debugging, testing, APIs, secure coding and system design tradeoffs.",
+    "تصحيح الأخطاء والاختبارات والواجهات البرمجية والبرمجة الآمنة ومفاضلات تصميم الأنظمة.",
+    "Débogage, tests, API, programmation sécurisée et compromis de conception.",
+    "Depuración, pruebas, API, programación segura y decisiones de diseño de sistemas.",
+    "Fehlersuche, Tests, APIs, sichere Programmierung und Abwägungen beim Systementwurf."
+  ],
+  "roleFreeAction": [
+    "Free practice →",
+    "التدريب المجاني ←",
+    "Entraînement gratuit →",
+    "Práctica gratuita →",
+    "Kostenlos üben →"
+  ],
+  "rolePaidAction": [
+    "Paid AI practice →",
+    "التدريب الذكي المدفوع ←",
+    "Entraînement IA payant →",
+    "Práctica de IA de pago →",
+    "Kostenpflichtige KI-Übung →"
+  ],
+  "roleLead": [
+    "Six job categories in free and paid practice. Choose Entry, Mid-Level, Expert or Consultant in any of our five languages.",
+    "ستة مجالات وظيفية في التدريب المجاني والمدفوع. اختر مستوى مبتدئ أو متوسط أو خبير أو استشاري بأي من لغاتنا الخمس.",
+    "Six catégories dans les offres gratuites et payantes. Choisissez Débutant, Intermédiaire, Expert ou Consultant dans nos cinq langues.",
+    "Seis categorías en la práctica gratuita y de pago. Elige nivel inicial, intermedio, experto o consultor en nuestros cinco idiomas.",
+    "Sechs Berufsfelder für kostenlose und kostenpflichtige Übungen. Wählen Sie Einstieg, Mittelstufe, Experte oder Beratung in unseren fünf Sprachen."
+  ],
+  "feature2Body": [
+    "Choose HR, Customer Service, IT & Cloud, Marketing, Sales or Software Development. Skill charts and guidance follow your category.",
+    "اختر الموارد البشرية أو خدمة العملاء أو تقنية المعلومات والسحابة أو التسويق أو المبيعات أو تطوير البرمجيات. تتكيف رسوم المهارات والملاحظات مع مجالك.",
+    "Choisissez RH, service client, informatique et cloud, marketing, vente ou développement logiciel. Graphiques et conseils suivent votre catégorie.",
+    "Elige RR. HH., atención al cliente, informática y nube, marketing, ventas o desarrollo de software. Los gráficos y consejos se adaptan a tu categoría.",
+    "Wählen Sie Personalwesen, Kundenservice, IT und Cloud, Marketing, Vertrieb oder Softwareentwicklung. Diagramme und Hinweise passen zu Ihrem Bereich."
+  ],
+  "heroLead": [
+    "Practise HR, Customer Service, IT & Cloud, Marketing, Sales and Software Development interviews with AI feedback, CV context and a voice answer. Coming next: 1:1 career coaching for interview preparation, CV guidance and your next career step. Coach applications are open.",
+    "تدرّب على مقابلات الموارد البشرية وخدمة العملاء وتقنية المعلومات والسحابة والتسويق والمبيعات وتطوير البرمجيات، مع ملاحظات الذكاء الاصطناعي وسياق السيرة الذاتية وإجابة صوتية. قريباً: جلسات فردية 1:1 مع مدرب مهني للاستعداد للمقابلات وتحسين السيرة وتحديد خطوتك المهنية التالية. تسجيل المدربين متاح.",
+    "Préparez vos entretiens RH, service client, informatique et cloud, marketing, vente et développement logiciel avec des conseils IA, votre CV et une réponse audio. À venir : coaching individuel 1:1 pour les entretiens, le CV et votre prochaine étape professionnelle. Les candidatures de coachs sont ouvertes.",
+    "Practica entrevistas de RR. HH., atención al cliente, informática y nube, marketing, ventas y desarrollo de software con comentarios de IA, contexto del CV y una respuesta de voz. Próximamente: coaching profesional 1:1 para entrevistas, CV y tu próximo paso. El registro de coaches está abierto.",
+    "Üben Sie Interviews für Personalwesen, Kundenservice, IT und Cloud, Marketing, Vertrieb und Softwareentwicklung mit KI-Feedback, Lebenslaufkontext und einer Audioantwort. Demnächst: persönliches 1:1-Karrierecoaching für Interviews, Lebenslauf und Ihren nächsten Schritt. Coach-Bewerbungen sind geöffnet."
+  ]
+});

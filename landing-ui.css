@@ -83,3 +83,4 @@ nav{height:auto;min-height:88px;gap:24px}.nav{flex-wrap:wrap;justify-content:fle
 @media(prefers-reduced-motion:reduce){.role-card,.landing-page .btn{transition:none}}
 
 .coach-photo,.coach-avatar{width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:16px}.coach-avatar{display:grid;place-items:center;background:linear-gradient(135deg,#5839a8,#247b79);color:#fff;font-size:2rem}.coach-brief{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.role-actions{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
