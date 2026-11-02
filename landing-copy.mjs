@@ -575,3 +575,21 @@ Object.assign(landingCopy,{
     "Üben Sie Interviews für Personalwesen, Kundenservice, IT und Cloud, Marketing, Vertrieb und Softwareentwicklung mit KI-Feedback, Lebenslaufkontext und einer Audioantwort. Demnächst: persönliches 1:1-Karrierecoaching für Interviews, Lebenslauf und Ihren nächsten Schritt. Coach-Bewerbungen sind geöffnet."
   ]
 });
+
+// Voice-answer feedback is included in both paid AI plans.
+Object.assign(landingCopy,{
+  "voicePlans": [
+    "AI STARTER + AI PRO",
+    "AI STARTER + AI PRO",
+    "AI STARTER + AI PRO",
+    "AI STARTER + AI PRO",
+    "AI STARTER + AI PRO"
+  ],
+  "voiceBody": [
+    "Record or upload one optional voice answer with either AI plan: 10 written answers with AI Starter or 15 with AI Pro. Both plans give feedback on your answer’s content and relevance.",
+    "سجّل أو ارفع إجابة صوتية اختيارية مع أي باقة ذكاء اصطناعي: 10 إجابات كتابية مع AI Starter أو 15 مع AI Pro. تقدم الباقتان ملاحظات حول محتوى إجابتك ومدى ارتباطها بالسؤال.",
+    "Enregistrez ou importez une réponse audio facultative avec chaque offre IA : 10 réponses écrites avec AI Starter ou 15 avec AI Pro. Les deux offres évaluent le contenu et la pertinence de votre réponse.",
+    "Graba o sube una respuesta de voz opcional con cualquiera de los planes de IA: 10 respuestas escritas con AI Starter o 15 con AI Pro. Ambos evalúan el contenido y la pertinencia de tu respuesta.",
+    "Nehmen Sie mit jedem KI-Tarif optional eine Audioantwort auf oder laden Sie sie hoch: 10 schriftliche Antworten mit AI Starter oder 15 mit AI Pro. Beide Tarife geben Feedback zu Inhalt und Relevanz."
+  ]
+});
