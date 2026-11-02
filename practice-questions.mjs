@@ -1,3 +1,4 @@
+import {careerQuestionBank} from './career-categories.mjs';
 import {levelQuestionBank} from './level-questions.mjs';
 import {questionTranslations} from './question-translations.mjs';
 export const questionBank = {
@@ -308,6 +309,7 @@ export const questionBank = {
     }
   ]
 };
+Object.assign(questionBank, careerQuestionBank);
 for (const [language,categories] of Object.entries(questionTranslations)) {
   for (const [category,translations] of Object.entries(categories)) {
     if(translations.length !== questionBank[category].length) throw Error('Incomplete question translation');

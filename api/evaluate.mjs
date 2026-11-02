@@ -10,7 +10,7 @@ import { reportSchema, checkedReport } from '../lib/server/evaluation-report.mjs
 
 import { saveEvaluation } from '../lib/server/evaluation-history.mjs';
 
-const allowedCategories = new Set(['hr', 'customerService', 'itCloud']);
+const allowedCategories = new Set(['hr', 'customerService', 'itCloud', 'marketing', 'sales', 'softwareDevelopment']);
 const allowedLanguages = new Set(Object.keys(languages));
 const allowedOrigins = () => new Set([
   'https://mostaed-interview-coach.vercel.app',

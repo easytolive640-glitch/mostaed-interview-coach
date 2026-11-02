@@ -49,7 +49,7 @@ jobs:
           output-file: research-summary.md
       - name: Require actual question refresh
         run: |
-          if git diff --quiet -- practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart; then
+          if git diff --quiet -- career-categories.mjs level-questions.mjs lib/level_questions.dart lib/level_question_translations.dart practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart; then
             echo '::error::Research produced no question changes. See research summary; blocked research is not a successful refresh.'
             cat research-summary.md
             exit 1
@@ -68,7 +68,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git switch -c "$branch"
-          git add practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart lib/server/question-bank-history.mjs freepractice.html docs/question-research
+          git add career-categories.mjs level-questions.mjs lib/level_questions.dart lib/level_question_translations.dart practice-questions.mjs question-translations.mjs lib/question_bank.dart lib/question_translations.dart lib/server/question-bank-history.mjs freepractice.html docs/question-research
           if git diff --cached --quiet; then
             echo 'No validated question updates were produced.'
             exit 0

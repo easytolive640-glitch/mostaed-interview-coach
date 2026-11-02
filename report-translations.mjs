@@ -1,4 +1,15 @@
 const translations={
+"Audience insight":["Connaissance du public", "Conocimiento del público", "Zielgruppenverständnis"],
+"Campaign strategy":["Stratégie de campagne", "Estrategia de campaña", "Kampagnenstrategie"],
+"Measurement":["Mesure", "Medición", "Erfolgsmessung"],
+"Needs discovery":["Découverte des besoins", "Descubrimiento de necesidades", "Bedarfsermittlung"],
+"Value selling":["Vente par la valeur", "Venta de valor", "Wertorientierter Vertrieb"],
+"Negotiation":["Négociation", "Negociación", "Verhandlung"],
+"Pipeline management":["Gestion du pipeline", "Gestión del embudo", "Pipeline-Management"],
+'Marketing':['Marketing','Marketing','Marketing'],
+'Sales':['Vente','Ventas','Vertrieb'],
+'Software Development':['Développement logiciel','Desarrollo de software','Softwareentwicklung'],
+
 'Export PDF':['Exporter en PDF','Exportar PDF','Als PDF exportieren'],
 'Choose Save as PDF in the print dialog.':['Choisissez Enregistrer au format PDF dans la fenêtre d’impression.','Elige Guardar como PDF en el diálogo de impresión.','Wählen Sie im Druckdialog Als PDF speichern.'],
 'PDF export could not open. Please try another browser.':['L’export PDF n’a pas pu s’ouvrir. Essayez un autre navigateur.','No se pudo abrir la exportación PDF. Prueba otro navegador.','Der PDF-Export konnte nicht geöffnet werden. Versuchen Sie einen anderen Browser.'],

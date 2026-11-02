@@ -10,7 +10,7 @@ extension AppLanguageUi on AppLanguage {
     AppLanguage.french => 'Français', AppLanguage.spanish => 'Español', AppLanguage.german => 'Deutsch',
   };
 }
-enum InterviewCategory { hr, customerService, itCloud }
+enum InterviewCategory { hr, customerService, itCloud, marketing, sales, softwareDevelopment }
 
 extension InterviewCategoryUi on InterviewCategory {
   String label(AppLanguage language) => FreeLocalizations.text(name, language.name);
@@ -19,6 +19,9 @@ extension InterviewCategoryUi on InterviewCategory {
         InterviewCategory.hr => Icons.people_alt_outlined,
         InterviewCategory.customerService => Icons.headset_mic_outlined,
         InterviewCategory.itCloud => Icons.cloud_outlined,
+        InterviewCategory.marketing => Icons.campaign_outlined,
+        InterviewCategory.sales => Icons.sell_outlined,
+        InterviewCategory.softwareDevelopment => Icons.code_outlined,
       };
 }
 

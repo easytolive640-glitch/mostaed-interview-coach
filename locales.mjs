@@ -1,3 +1,4 @@
+import {careerLabels} from './career-categories.mjs';
 import {blogCopy} from './blog-copy.mjs';
 import {pageCopy} from './page-copy.mjs';
 export const languages={english:{code:'en',name:'English',feedback:'English'},arabic:{code:'ar',name:'العربية',feedback:'clear Modern Standard Arabic'},french:{code:'fr',name:'Français',feedback:'French'},spanish:{code:'es',name:'Español',feedback:'Spanish'},german:{code:'de',name:'Deutsch',feedback:'German'}};
@@ -51,3 +52,5 @@ export function rememberLanguage(language){
 }
 
 ui.adminDashboard=["Admin dashboard", "لوحة الإدارة", "Tableau administrateur", "Panel de administración", "Admin-Dashboard"];
+
+Object.assign(ui, careerLabels);

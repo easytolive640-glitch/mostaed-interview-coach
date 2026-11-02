@@ -1,3 +1,4 @@
+import {careerLevelQuestions} from './career-categories.mjs';
 export const assessmentLevels = {"entry": ["Entry Level", "مبتدئ"], "mid": ["Mid-Level", "متوسط"], "expert": ["Expert", "خبير"], "consultant": ["Consultant", "استشاري"]};
 export const levelQuestionBank = {
   "hr": {
@@ -2432,3 +2433,5 @@ export const levelQuestionBank = {
   }
 };
 export const levelRubrics = {"entry": "Assess fundamentals, safe first steps, willingness to ask for help, and clear explanations. Academic or training examples are valid.", "mid": "Assess independent execution, practical troubleshooting, ownership, prioritization, and verification.", "expert": "Assess complex tradeoffs, systemic risks, architecture or operating models, leadership, and measurable outcomes.", "consultant": "Assess discovery, assumptions, options, business value, scope, stakeholder alignment, recommendations, and handover."};
+
+Object.assign(levelQuestionBank, careerLevelQuestions);

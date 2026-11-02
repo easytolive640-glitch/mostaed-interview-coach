@@ -4,6 +4,14 @@ import {reportText} from './report-translations.mjs?v=pdf-export-1';
 import {appendScoreChart} from './score-chart.mjs';
 import {exportReportPdf} from './report-pdf.mjs';
 const labels={
+audienceInsight:['Audience insight', 'فهم الجمهور'],
+campaignStrategy:['Campaign strategy', 'استراتيجية الحملات'],
+measurement:['Measurement', 'القياس'],
+discovery:['Needs discovery', 'اكتشاف الاحتياجات'],
+valueSelling:['Value selling', 'البيع بالقيمة'],
+negotiation:['Negotiation', 'التفاوض'],
+pipelineManagement:['Pipeline management', 'إدارة مسار المبيعات'],
+
   communication:['Communication','التواصل'],motivation:['Motivation','الدافع المهني'],teamwork:['Teamwork','العمل الجماعي'],selfAwareness:['Self-awareness','الوعي بالذات'],
   empathy:['Empathy','التعاطف'],resolution:['Problem resolution','حل المشكلات'],ownership:['Ownership','تحمل المسؤولية'],
   technicalAccuracy:['Technical accuracy','الدقة التقنية'],troubleshooting:['Troubleshooting','استكشاف الأعطال'],security:['Security','الأمان'],reliability:['Reliability','الموثوقية'],
@@ -19,7 +27,7 @@ export function renderEvaluation(container,evaluation,language='english',categor
   const exportHelp=node('small',t('Choose Save as PDF in the print dialog.','اختر حفظ بصيغة PDF في نافذة الطباعة.'));exportHelp.setAttribute('role','status');
   exportButton.onclick=async()=>{exportButton.disabled=true;try{await exportReportPdf(section,{language});}catch{exportHelp.textContent=t('PDF export could not open. Please try another browser.','تعذر فتح تصدير PDF. جرّب متصفحاً آخر.');}finally{exportButton.disabled=false;}};
   actions.append(exportButton,exportHelp);section.append(actions);
-  const categories={hr:['HR','الموارد البشرية'],customerService:['Customer Service','خدمة العملاء'],itCloud:['IT & Cloud','تقنية المعلومات والسحابة']};
+  const categories={marketing:['Marketing','التسويق'],sales:['Sales','المبيعات'],softwareDevelopment:['Software Development','تطوير البرمجيات'],hr:['HR','الموارد البشرية'],customerService:['Customer Service','خدمة العملاء'],itCloud:['IT & Cloud','تقنية المعلومات والسحابة']};
   const cat=categories[category];if(cat)section.append(node('p',t('Interview category: ','نوع المقابلة: ')+t(cat[0],cat[1])));
   if(assessmentLevels[evaluation.level]) section.append(node('p',(ar?'مستوى التقييم: ':'Assessment level: ')+assessmentLevels[evaluation.level][ar?1:0]));
   if(evaluation.summary)section.append(node('p',evaluation.summary,'report-summary'));

@@ -5,11 +5,14 @@ const key = process.env.OPENAI_API_KEY;
 if (!key) throw new Error('Missing research API credential');
 const date = new Date().toISOString().slice(0,10);
 const categories = [
+  ['marketing', 'Marketing interviews: audience research, campaign measurement, experimentation, budgets and responsible AI content', ['developers.google.com','support.google.com','business.linkedin.com']],
+  ['sales', 'Sales interviews: discovery, qualification, negotiation, pipeline forecasting and customer value', ['salesforce.com','hubspot.com','business.linkedin.com']],
+  ['softwareDevelopment', 'Software development interviews: debugging, tests, secure APIs, code review and system design tradeoffs', ['developer.mozilla.org','docs.github.com','owasp.org']],
   ['hr', 'HR interviews: feedback, changing priorities, stakeholder communication and ethical AI use', ['cipd.org','shrm.org','careers.microsoft.com','amazon.jobs']],
   ['customerService', 'Customer service interviews: complaint handling, escalation, privacy and AI assisted service', ['instituteofcustomerservice.com','salesforce.com','amazon.jobs']],
   ['itCloud', 'IT/cloud interviews: least privilege, incident response, resilience, cost and AI generated infrastructure review', ['docs.aws.amazon.com','learn.microsoft.com','cloud.google.com','amazon.jobs']]
 ];
-const bank = await readFile('practice-questions.mjs','utf8');
+const bank = (await Promise.all(['practice-questions.mjs','career-categories.mjs','level-questions.mjs'].map(p=>readFile(p,'utf8')))).join('\n');
 const evidence = [];
 for (const [category, topic, domains] of categories) {
   const response = await fetch('https://api.openai.com/v1/responses', {
