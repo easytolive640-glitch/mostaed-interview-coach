@@ -593,3 +593,21 @@ Object.assign(landingCopy,{
     "Nehmen Sie mit jedem KI-Tarif optional eine Audioantwort auf oder laden Sie sie hoch: 10 schriftliche Antworten mit AI Starter oder 15 mit AI Pro. Beide Tarife geben Feedback zu Inhalt und Relevanz."
   ]
 });
+
+// CV feedback is available in both paid AI plans.
+Object.assign(landingCopy,{
+  "cvPlans": [
+    "AI STARTER + AI PRO · CV",
+    "AI STARTER + AI PRO · CV",
+    "AI STARTER + AI PRO · CV",
+    "AI STARTER + AI PRO · CV",
+    "AI STARTER + AI PRO · CV"
+  ],
+  "cvBody": [
+    "Add relevant experience and skills as text or a .txt file with AI Starter or AI Pro. Both plans compare your answers with your CV context and show where your examples support your experience or need clarification.",
+    "أضف الخبرات والمهارات كنص أو ملف ‎.txt مع AI Starter أو AI Pro. تقارن الباقتان إجاباتك بسياق سيرتك الذاتية وتوضحان أين تدعم أمثلتك خبراتك وأين تحتاج إلى توضيح.",
+    "Ajoutez votre expérience et vos compétences sous forme de texte ou de fichier .txt avec AI Starter ou AI Pro. Les deux offres comparent vos réponses à votre CV et relèvent les points cohérents ou à clarifier.",
+    "Añade experiencia y habilidades como texto o archivo .txt con AI Starter o AI Pro. Ambos planes comparan tus respuestas con tu CV y señalan dónde tus ejemplos respaldan tu experiencia o necesitan aclaración.",
+    "Fügen Sie Erfahrung und Fähigkeiten als Text oder .txt-Datei mit AI Starter oder AI Pro hinzu. Beide Tarife vergleichen Ihre Antworten mit Ihrem Lebenslauf und zeigen passende Beispiele sowie Klärungsbedarf."
+  ]
+});
