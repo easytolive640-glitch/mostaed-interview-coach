@@ -9,7 +9,31 @@ import historyHandler from '../lib/server/evaluation-history.mjs';
 import { billingPlans, paypalPlanId } from '../lib/server/billing-plans.mjs';
 import { paypalConfigured } from '../lib/server/paypal.mjs';
 import supportHandler from '../lib/server/support.mjs';
+async function exchangeRate(req, res) {
+  if (req.method !== 'GET') return res.status(405).end();
+  try {
+    const response = await fetch('https://api.frankfurter.dev/v2/rate/USD/EGP', {
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!response.ok) throw new Error('Exchange rate unavailable');
+    const {base, quote, rate, date} = await response.json();
+    const age = Date.now() - Date.parse(date);
+    if (base !== 'USD' || quote !== 'EGP' || !Number.isFinite(rate) || rate <= 0 ||
+        !Number.isFinite(age) || age < 0 || age > 7 * 86400000) {
+      throw new Error('Exchange rate unavailable');
+    }
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
+    const plans = Object.fromEntries(Object.entries(billingPlans).map(([plan, details]) =>
+      [plan, Math.round(Math.round(details.amount * 100) * rate)]));
+    return res.status(200).json({rate, date, plans});
+  } catch {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(503).json({error: 'Exchange rate unavailable'});
+  }
+}
+
 export default async function handler(req, res) {
+  if (req.query?.exchangeRate === '1') return exchangeRate(req,res);
   if (req.query?.assessment === '1') return assessmentHandler(req,res);
   if (req.query?.careerFeed === '1') return careerFeedHandler(req,res);
   if (req.query?.login_alert === '1') return loginAlertHandler(req,res);
