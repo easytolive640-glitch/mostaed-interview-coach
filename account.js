@@ -7,15 +7,24 @@ initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs?v=account-chooser-1';
 const $ = id => document.getElementById(id);
 let selectedPlan=new URLSearchParams(location.search).get('plan')==='starter'?'starter':'pro';
-let quote;
-void paymentQuote().then(x=>{quote=x;if(config)render();}).catch(()=>{});
+let quote, quoteFailed=false;
+void paymentQuote().then(value=>{quote=value;if(config)render();}).catch(()=>{quoteFailed=true;if(config)render();});
 let config, session, recoveryToken, creatingAccount = false;
 let noticeSource='';
 const notice = text => { noticeSource=text; $('notice').removeAttribute('data-i18n');$('notice').textContent = localizeMessage(text,currentLanguage()); };
 document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSource)notice(noticeSource);if(config)render();});
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
-  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !quote || !config?.plans?.[selectedPlan]?.available; $('planAvailability').textContent=translate(config?.plans?.[selectedPlan]?.available?'planReady':'planUnavailable',currentLanguage());
-  if(quote) $('planAvailability').textContent=egp(quote.plans[selectedPlan])+' · '+$('planAvailability').textContent;
+  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · ');
+  const language=currentLanguage();
+  const amount=quote?.plans?.[selectedPlan];
+  const hasPrice=Number.isSafeInteger(amount)&&amount>0;
+  const available=Boolean(config?.plans?.[selectedPlan]?.available);
+  const checkout=$('subscribe');
+  const label=translate('checkout',language);
+  checkout.removeAttribute('data-i18n');
+  checkout.textContent=hasPrice ? label+' · '+egp(amount) : label;
+  checkout.disabled=!available||!hasPrice;
+  $('planAvailability').textContent=translate(!available?'planUnavailable':hasPrice?'planReady':quoteFailed?'checkoutPriceUnavailable':'checkoutPriceLoading',language);
 }
 async function checkLoginAlert() {
   if(!session?.access_token)return;
