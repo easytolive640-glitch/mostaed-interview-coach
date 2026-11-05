@@ -47,11 +47,11 @@ export const topics=[
       "de": "Audio und Lebenslauf"
     },
     "answer": {
-      "en": "Free practice is text-only. Paid practice has 15 written answers, optional CV text and one optional voice answer. Paste CV text or upload .txt; PDF and Word are not supported here. Audio: WAV, WebM or MP4, up to 2 MB. Consent is required before sending CV or audio. Do not upload them in this chat.",
-      "ar": "يتضمن التدريب المدفوع 15 إجابة كتابية وسيرة نصية وإجابة صوتية اختياريتين. الصق السيرة أو ارفع .txt؛ لا يدعم PDF أو Word هنا. الصوت WAV أو WebM أو MP4 حتى 2 ميجابايت. يلزم موافقتك قبل الإرسال. لا ترفعهما في هذه الدردشة.",
-      "fr": "L’entraînement payant comprend 15 réponses écrites, un CV texte facultatif et une réponse audio facultative. Collez le CV ou importez .txt ; PDF et Word ne sont pas pris en charge ici. Audio : WAV, WebM ou MP4, 2 Mo maximum. Consentement requis avant l’envoi. Ne les envoyez pas dans ce chat.",
-      "es": "La práctica de pago usa 15 respuestas escritas, CV de texto opcional y una respuesta de audio opcional. Pega el CV o sube .txt; aquí no se admite PDF ni Word. Audio: WAV, WebM o MP4 hasta 2 MB. Se requiere consentimiento antes de enviar. No los subas a este chat.",
-      "de": "Die kostenpflichtige Übung nutzt 15 Textantworten, optionalen Lebenslauftext und eine optionale Audioantwort. Text einfügen oder .txt hochladen; PDF und Word werden hier nicht unterstützt. Audio: WAV, WebM oder MP4 bis 2 MB. Zustimmung vor dem Senden erforderlich. Nicht in diesen Chat hochladen."
+      "en": "Free practice is text-only. Paid practice has 15 written answers, required CV text and one required voice answer. Paste CV text or upload .txt; PDF and Word are not supported here. Audio: WAV, WebM or MP4, up to 2 MB. Consent is required before sending CV or audio. Do not upload them in this chat.",
+      "ar": "يتضمن التدريب المدفوع 15 إجابة كتابية وسيرة نصية وإجابة صوتية إلزاميتين. الصق السيرة أو ارفع .txt؛ لا يدعم PDF أو Word هنا. الصوت WAV أو WebM أو MP4 حتى 2 ميجابايت. يلزم موافقتك قبل الإرسال. لا ترفعهما في هذه الدردشة.",
+      "fr": "L’entraînement payant comprend 15 réponses écrites, un CV texte obligatoire et une réponse audio facultative. Collez le CV ou importez .txt ; PDF et Word ne sont pas pris en charge ici. Audio : WAV, WebM ou MP4, 2 Mo maximum. Consentement requis avant l’envoi. Ne les envoyez pas dans ce chat.",
+      "es": "La práctica de pago usa 15 respuestas escritas, CV de texto obligatorio y una respuesta de audio obligatorio. Pega el CV o sube .txt; aquí no se admite PDF ni Word. Audio: WAV, WebM o MP4 hasta 2 MB. Se requiere consentimiento antes de enviar. No los subas a este chat.",
+      "de": "Die kostenpflichtige Übung nutzt 15 Textantworten, requireden Lebenslauftext und eine requirede Audioantwort. Text einfügen oder .txt hochladen; PDF und Word werden hier nicht unterstützt. Audio: WAV, WebM oder MP4 bis 2 MB. Zustimmung vor dem Senden erforderlich. Nicht in diesen Chat hochladen."
     }
   },
   {

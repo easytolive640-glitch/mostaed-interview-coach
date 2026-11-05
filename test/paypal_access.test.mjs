@@ -8,7 +8,7 @@ Object.assign(process.env,{PAYPAL_MODE:'live',PAYPAL_CLIENT_ID:'fixture',PAYPAL_
 const uid='12345678-1234-1234-1234-123456789abc';
 const active=()=>({id:'I-EXPECTED',status:'ACTIVE',plan_id:'P-EXPECTED',custom_id:uid,quantity:'1',billing_info:{next_billing_time:new Date(Date.now()+86400000).toISOString(),failed_payments_count:0,last_payment:{amount:{currency_code:'USD',value:'7.99'},time:new Date().toISOString()}}});
 const response=()=>({code:0,body:null,setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;},end(){return this;}});
-const body={cameraReview:{consent:true,recording:true,durationSeconds:0,frames:[{seconds:0,image:'data:image/jpeg;base64,'+Buffer.from([255,216,255,...Array(30).fill(0)]).toString('base64')}]},category:'hr',language:'english',responses:questionBank.hr.slice(0,15).map(q=>({questionId:q.id,question:q.english,answer:'I have relevant experience.'}))};
+const body={cvText:'Relevant professional experience and skills for this role.',cvConsent:true,voice:{question:'Tell me about your experience',format:'webm',data:Buffer.from([26,69,223,163,...Array(30).fill(0)]).toString('base64')},cameraReview:{consent:true,recording:true,durationSeconds:0,frames:[{seconds:0,image:'data:image/jpeg;base64,'+Buffer.from([255,216,255,...Array(30).fill(0)]).toString('base64')}]},category:'hr',language:'english',responses:questionBank.hr.slice(0,15).map(q=>({questionId:q.id,question:q.english,answer:'I have relevant experience.'}))};
 const original=global.fetch;
 function mock(fn){global.fetch=fn;}
 const json=data=>new Response(JSON.stringify(data),{status:200,headers:{'Content-Type':'application/json'}});

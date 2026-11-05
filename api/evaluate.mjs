@@ -45,12 +45,10 @@ function validate(body) {
   if (!body || !allowedCategories.has(body.category) ||
       !allowedLanguages.has(body.language) || !Array.isArray(body.responses) ||
       ![10, 15].includes(body.responses.length)) return false;
-  if (body.cvText !== undefined &&
-      (typeof body.cvText !== 'string' || body.cvText.trim().length < 30 ||
-       body.cvText.length > 6000 || body.cvConsent !== true)) return false;
-  if (body.voice !== undefined &&
-      (!body.voice || typeof body.voice.question !== 'string' || body.voice.question.trim().length < 5 ||
-       body.voice.question.length > 300 || !audioBytes(body.voice))) return false;
+  if (typeof body.cvText !== 'string' || body.cvText.trim().length < 30 ||
+       body.cvText.length > 6000 || body.cvConsent !== true) return false;
+  if (!body.voice || typeof body.voice.question !== 'string' || body.voice.question.trim().length < 5 ||
+       body.voice.question.length > 300 || !audioBytes(body.voice)) return false;
   return validCategoryQuestions(body) && body.responses.every((item) =>
     typeof item?.questionId === 'string' && item.questionId.length <= 32 &&
     typeof item?.question === 'string' && item.question.length <= 300 &&

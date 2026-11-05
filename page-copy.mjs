@@ -224,11 +224,11 @@ export const pageCopy={
     "Temporärer KI-Testzugang: insgesamt {limit} Versuche, endet am {date}. Lebenslauf und Audio enthalten. Anbieterfehler zählen ebenfalls als Versuch."
   ],
   "proAccess": [
-    "AI Pro: 15 text questions, optional CV context and one voice answer.",
-    "AI Pro: 15 سؤالاً كتابياً وسيرة اختيارية وإجابة صوتية واحدة.",
-    "AI Pro : 15 questions écrites, CV facultatif et une réponse audio.",
-    "AI Pro: 15 preguntas escritas, CV opcional y una respuesta de audio.",
-    "AI Pro: 15 Textfragen, optionaler Lebenslauf und eine Audioantwort."
+    "AI Pro: 15 text questions, required CV context and one voice answer.",
+    "AI Pro: 15 سؤالاً كتابياً وسيرة إلزامية وإجابة صوتية واحدة.",
+    "AI Pro : 15 questions écrites, CV obligatoire et une réponse audio.",
+    "AI Pro: 15 preguntas escritas, CV obligatorio y una respuesta de audio.",
+    "AI Pro: 15 Textfragen, requireder Lebenslauf und eine Audioantwort."
   ],
   "accountPageTitle": [
     "Mostaed · Account",
