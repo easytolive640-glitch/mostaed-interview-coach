@@ -25,3 +25,28 @@ test('camera required before start and fields lock immediately when camera becom
   ready=false;guard.refresh();assert.equal(questions.disabled,true);
  }finally{global.document=oldDocument;global.window=oldWindow;}
 });
+
+test('questions stay locked until the server reserves the start', async () => {
+  const oldDocument = global.document, oldWindow = global.window;
+  const element = () => ({addEventListener(name, fn) { this[name] = fn; }});
+  const start = element(), questions = element();
+  let resolve;
+  const reservation = new Promise(done => { resolve = done; });
+  global.document = {visibilityState:'visible',addEventListener(){}};
+  global.window = {addEventListener(){}};
+  try {
+    const guard = initAssessmentFocus({start,restart:element(),status:{},questions,
+      onChange(){},beforeStart:() => reservation});
+    const pending = start.click();
+    assert.equal(questions.hidden, true);
+    assert.equal(start.disabled, true);
+    assert.equal(guard.started, false);
+    resolve(true);
+    await pending;
+    assert.equal(questions.hidden, false);
+    assert.equal(guard.started, true);
+  } finally {
+    global.document = oldDocument;
+    global.window = oldWindow;
+  }
+});

@@ -25,4 +25,30 @@ test('signed-in free account never calls PayPal or OpenAI',async()=>{const calls
 test('sandbox request without authentication never bills AI',async()=>{process.env.PAYPAL_MODE='sandbox';let calls=0;mock(async()=>{calls++;throw Error('Unexpected');});const res=response();await evaluate({method:'POST',headers:{},body},res);assert.equal(res.code,401);assert.equal(calls,0);process.env.PAYPAL_MODE='live';});
 test('invalid webhook signature cannot write entitlement',async()=>{const calls=[];mock(async u=>{calls.push(u);if(u.endsWith('/token'))return json({access_token:'fixture'});return json({verification_status:'FAILURE'});});const res=response();await webhook({method:'POST',headers:Object.fromEntries(['auth-algo','cert-url','transmission-id','transmission-sig','transmission-time'].map(k=>['paypal-'+k,'fixture'])),body:{event_type:'BILLING.SUBSCRIPTION.ACTIVATED',resource:{id:'I-EXPECTED'}}},res);assert.equal(res.code,400);assert.equal(calls.some(u=>u.includes('/rpc/')),false);});
 test('terminated account cannot submit or consume AI quota',async()=>{const calls=[];mock(async u=>{calls.push(u);if(u.endsWith('/auth/v1/user'))return json({id:uid});if(u.includes('/rest/v1/evaluation_history?'))return json([{id:'terminated'}]);throw Error('Unexpected provider or reservation call');});const res=response();await evaluate({method:'POST',headers:{authorization:'Bearer fixture'},body},res);assert.equal(res.code,403);assert.match(res.body.error,/terminated/);assert.equal(calls.length,2);});
+test('a reused paid attempt cannot call OpenAI', async () => {
+  let claims = 0;
+  mock(async (url, options) => {
+    assert.ok(!url.startsWith('https://api.openai.com'));
+    if (url.endsWith('/auth/v1/user')) return json({id:uid});
+    if (url.includes('/rest/v1/evaluation_history?')) return json([]);
+    if (url.endsWith('/rpc/paid_subscription_for_user')) return json({subscription_id:'I-EXPECTED',plan:'pro'});
+    if (url.endsWith('/token')) return json({access_token:'fixture'});
+    if (url.includes('/transactions?')) return json({transactions:[{
+      id:'PAYMENT',status:'COMPLETED',time:new Date().toISOString(),
+      amount_with_breakdown:{gross_amount:{currency_code:'USD',value:'7.99'}},
+    }]});
+    if (url.endsWith('/subscriptions/I-EXPECTED')) return json(active());
+    if (url.endsWith('/rpc/claim_assessment_submission')) {
+      claims++;
+      assert.equal(JSON.parse(options.body).p_attempt_id,'12345678-1234-4234-8234-123456789abc');
+      return json(false);
+    }
+    throw Error('Unexpected request');
+  });
+  const res=response();
+  await evaluate({method:'POST',headers:{authorization:'Bearer fixture'},
+    body:{...body,attemptId:'12345678-1234-4234-8234-123456789abc'}},res);
+  assert.equal(claims,1);
+  assert.equal(res.code,409);
+});
 test.after(()=>{global.fetch=original;});

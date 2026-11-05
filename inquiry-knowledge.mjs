@@ -29,11 +29,11 @@ export const topics=[
       "de": "Tarife und Preise"
     },
     "answer": {
-      "en": "Free practice is available. AI Starter is listed at USD 3.99/month, coming soon. AI Pro is listed at USD 7.99/month with up to 100 evaluations. AI access requires verification. Sandbox payments never unlock live AI; live card checkout is still being tested.",
-      "ar": "التدريب المجاني متاح. تعرض AI Starter بسعر 3.99 دولار شهرياً وتأتي قريباً. تعرض AI Pro بسعر 7.99 دولار وحتى 100 تقييم شهرياً. يلزم وصول مؤكد للذكاء الاصطناعي. الدفع التجريبي لا يفتح الوصول الحقيقي، والدفع الحقيقي بالبطاقات قيد الاختبار.",
-      "fr": "L’entraînement gratuit est disponible. AI Starter : 3,99 USD/mois, prochainement. AI Pro : 7,99 USD/mois, jusqu’à 100 évaluations. L’accès IA doit être vérifié. Les paiements sandbox ne débloquent pas l’IA réelle ; le paiement réel par carte est encore en test.",
-      "es": "La práctica gratuita está disponible. AI Starter: 3,99 USD/mes, próximamente. AI Pro: 7,99 USD/mes y hasta 100 evaluaciones. La IA requiere acceso verificado. El sandbox nunca desbloquea IA real; el pago real con tarjeta sigue en pruebas.",
-      "de": "Kostenlose Übung ist verfügbar. AI Starter: 3,99 USD/Monat, demnächst. AI Pro: 7,99 USD/Monat mit bis zu 100 Auswertungen. KI-Zugang muss bestätigt sein. Sandbox-Zahlungen schalten keine echte KI frei; echte Kartenzahlungen werden noch getestet."
+      "en": "Free practice is available. AI Starter is listed at USD 3.99/month, coming soon. AI Pro is listed at USD 7.99/month with up to 10 test starts. AI access requires verification. Sandbox payments never unlock live AI; live card checkout is still being tested.",
+      "ar": "التدريب المجاني متاح. تعرض AI Starter بسعر 3.99 دولار شهرياً وتأتي قريباً. تعرض AI Pro بسعر 7.99 دولار وحتى 10 محاولات اختبار شهرياً. يلزم وصول مؤكد للذكاء الاصطناعي. الدفع التجريبي لا يفتح الوصول الحقيقي، والدفع الحقيقي بالبطاقات قيد الاختبار.",
+      "fr": "L’entraînement gratuit est disponible. AI Starter : 3,99 USD/mois, prochainement. AI Pro : 7,99 USD/mois, jusqu’à 10 tentatives de test. L’accès IA doit être vérifié. Les paiements sandbox ne débloquent pas l’IA réelle ; le paiement réel par carte est encore en test.",
+      "es": "La práctica gratuita está disponible. AI Starter: 3,99 USD/mes, próximamente. AI Pro: 7,99 USD/mes y hasta 10 intentos de prueba. La IA requiere acceso verificado. El sandbox nunca desbloquea IA real; el pago real con tarjeta sigue en pruebas.",
+      "de": "Kostenlose Übung ist verfügbar. AI Starter: 3,99 USD/Monat, demnächst. AI Pro: 7,99 USD/Monat mit bis zu 10 Testversuche. KI-Zugang muss bestätigt sein. Sandbox-Zahlungen schalten keine echte KI frei; echte Kartenzahlungen werden noch getestet."
     }
   },
   {

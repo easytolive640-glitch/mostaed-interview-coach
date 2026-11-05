@@ -11,13 +11,14 @@ export function createAttemptGuard(onChange = () => {}) {
     get invalid() { return invalid; }
   };
 }
-export function initAssessmentFocus({start, restart, status, questions, questionExtras = [], onChange, onRestart, cameraReady = () => true, beforeStart = () => true}) {
+export function initAssessmentFocus({start, restart, status, questions, questionExtras = [], onChange, onRestart, cameraReady = () => true, beforeStart = () => true, onStarted = () => {}, onStartError = () => {}}) {
+  let starting = false;
   const refreshVisibility = () => {
     const locked = !guard.canSubmit() || !cameraReady();
     questions.disabled = locked;
     questions.hidden = locked;
     for(const element of questionExtras) element.hidden = locked;
-    start.disabled = guard.invalid || guard.started || !cameraReady();
+    start.disabled = starting || guard.invalid || guard.started || !cameraReady();
   };
   const guard = createAttemptGuard(() => {
     refreshVisibility();
@@ -29,7 +30,24 @@ export function initAssessmentFocus({start, restart, status, questions, question
         : 'Before starting, prepare your CV and enable your camera. Switching tabs, minimizing the browser, or locking the screen after starting blocks submission. Other open tabs cannot be inspected. / جهّز السيرة وشغّل الكاميرا قبل البدء. تبديل التبويب أو تصغير المتصفح أو قفل الشاشة بعد البدء يمنع الإرسال. لا يمكن فحص التبويبات الأخرى.';
     onChange();
   });
-  start.addEventListener('click', () => { if (document.visibilityState === 'visible' && cameraReady() && beforeStart()) guard.start(); });
+  start.addEventListener('click', async () => {
+    if (starting || guard.started || guard.invalid ||
+        document.visibilityState !== 'visible' || !cameraReady()) return;
+    starting = true;
+    refreshVisibility();
+    try {
+      const result = beforeStart();
+      const ready = typeof result?.then === 'function' ? await result : result;
+      if (ready && document.visibilityState === 'visible' && cameraReady() && guard.start()) {
+        onStarted();
+      }
+    } catch (error) {
+      onStartError(error);
+    } finally {
+      starting = false;
+      refreshVisibility();
+    }
+  });
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') guard.leave(); });
   window.addEventListener('pagehide', () => guard.leave());
   guard.reset();

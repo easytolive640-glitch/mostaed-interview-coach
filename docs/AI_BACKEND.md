@@ -79,13 +79,11 @@ CV selection on the landing page is local-only and does not send a file anywhere
 
 ## Usage and cost limits
 
-The current proposal is 20 AI evaluation attempts per UTC calendar month for
-Starter and 100 for Pro. Each Starter evaluation covers 10 text answers and each
-Pro evaluation covers 15; one optional voice answer can be included in both.
-Attempts are reserved before an OpenAI request, even
-if it fails, to bound API spend. The endpoint also rejects test purchases,
-unapproved stores, mismatched customer emails, and missing configuration.
-Audio can require an additional provider request and incur additional cost.
+Starter allows five paid test starts and Pro allows ten per verified subscription
+renewal. Each start authorizes one submission, claimed before the first AI request.
+Starter covers 10 written answers and Pro covers 15. A voice answer is optional.
+Camera review and voice transcription can add provider requests to one submission.
+Apply `docs/assessment_attempts.sql` before deploying this API.
 
 ## Evaluation API shape (for the future paid client)
 
