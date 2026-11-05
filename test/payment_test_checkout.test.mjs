@@ -5,7 +5,6 @@ import { callbackText,verifiedCallback,callbackStatus,paymobTestConfigured } fro
 import checkout from '../api/paymob-checkout.mjs';
 import webhook from '../api/paymob-webhook.mjs';
 import status from '../api/paymob-test-status.mjs';
-import paypal from '../api/paypal-sandbox.mjs';
 const uid='12345678-1234-1234-1234-123456789abc';
 Object.assign(process.env,{PAYMOB_MODE:'test',PAYMOB_SECRET_KEY:'egy_sk_test_fixture',PAYMOB_PUBLIC_KEY:'egy_pk_test_fixture',PAYMOB_HMAC_SECRET:'test-fixture',PAYMOB_CARD_INTEGRATION_ID:'5957916',SUPABASE_URL:'https://fixture.test',SUPABASE_PUBLISHABLE_KEY:'fixture',SUPABASE_SERVICE_ROLE_KEY:'fixture',PAYPAL_SANDBOX_CLIENT_ID:'sandbox-fixture',PAYPAL_SANDBOX_CLIENT_SECRET:'sandbox-fixture',PAYPAL_SANDBOX_PRO_PLAN_ID:'P-SANDBOX'});
 const original=global.fetch;
@@ -72,24 +71,8 @@ test('payment status is requested for authenticated user, never client-supplied 
  global.fetch=async(u,o)=>u.endsWith('/auth/v1/user')?json({id:uid}):(assert.equal(JSON.parse(o.body).p_user_id,uid),json(null));
  const r=res();await status(req({reference:'mostaed-test-'+uid,userId:'other'}),r);assert.equal(r.code,404);
 });
-test('PayPal sandbox create calls only sandbox host, returns sandbox URL, never writes entitlements',async()=>{
- const calls=[];global.fetch=async(u,o)=>{
- calls.push(u);
- if(u.endsWith('/auth/v1/user'))return json({id:uid});
- if(u.endsWith('/token'))return json({access_token:'fixture'});
- if(u.includes('/plans/'))return json({status:'ACTIVE',billing_cycles:[{tenure_type:'REGULAR',frequency:{interval_unit:'MONTH',interval_count:1},pricing_scheme:{fixed_price:{currency_code:'USD',value:'7.99'}}}]});
- assert.equal(JSON.parse(o.body).custom_id,uid);
- return json({id:'I-SANDBOX',links:[{rel:'approve',href:'https://www.sandbox.paypal.com/approval'}]});
- };
- const r=res();await paypal(req({action:'create'}),r);assert.equal(r.code,200);assert.equal(r.body.testMode,true);
- assert.equal(calls.some(u=>u.includes('api-m.paypal.com') || u.includes('/rpc/')),false);
-});
-test('PayPal subscription for another customer cannot verify',async()=>{
- global.fetch=async u=>u.endsWith('/auth/v1/user')?json({id:uid}):u.endsWith('/token')?json({access_token:'fixture'}):json({custom_id:'other',status:'ACTIVE'});
- const r=res();await paypal(req({action:'verify',subscriptionId:'I-SANDBOX'}),r);assert.equal(r.body.verified,false);assert.equal(r.body.liveAiUnlocked,false);
-});
-test('sandbox ACTIVE metadata without completed payment is rejected',async()=>{
- global.fetch=async u=>u.endsWith('/auth/v1/user')?json({id:uid}):u.endsWith('/token')?json({access_token:'fixture'}):u.includes('/transactions?')?json({transactions:[]}):json({custom_id:uid,plan_id:'P-SANDBOX',status:'ACTIVE',billing_info:{next_billing_time:new Date(Date.now()+86400000).toISOString(),last_payment:{time:new Date().toISOString(),amount:{currency_code:'USD',value:'7.99'}}}});
- const r=res();await paypal(req({action:'verify',subscriptionId:'I-SANDBOX'}),r);assert.equal(r.body.verified,false);assert.equal(r.body.liveAiUnlocked,false);
+test('retired PayPal sandbox cannot create new checkouts',async()=>{
+ const {default:retired}=await import('../api/paypal-sandbox.mjs');
+ const r=res();retired(req({action:'create'}),r);assert.equal(r.code,410);
 });
 test.after(()=>{global.fetch=original;});

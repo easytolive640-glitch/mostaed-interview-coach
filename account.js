@@ -1,3 +1,4 @@
+import {egp,paymentQuote,confirmPaymobBilling} from './paymob-billing.mjs';
 import {track,trackVerifiedPurchase} from './funnel-analytics.mjs';
 import {localizeMessage} from './localized-messages.mjs';
 import {initLocalization,currentLanguage,applyLocale} from './app-localization.mjs';
@@ -6,12 +7,15 @@ initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs?v=account-chooser-1';
 const $ = id => document.getElementById(id);
 let selectedPlan=new URLSearchParams(location.search).get('plan')==='starter'?'starter':'pro';
+let quote;
+void paymentQuote().then(x=>{quote=x;if(config)render();}).catch(()=>{});
 let config, session, recoveryToken, creatingAccount = false;
 let noticeSource='';
 const notice = text => { noticeSource=text; $('notice').removeAttribute('data-i18n');$('notice').textContent = localizeMessage(text,currentLanguage()); };
 document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSource)notice(noticeSource);if(config)render();});
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
-  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !config?.plans?.[selectedPlan]?.available; $('planAvailability').textContent=translate(config?.plans?.[selectedPlan]?.available?'planReady':'planUnavailable',currentLanguage());
+  $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · '); $('subscribe').disabled = !quote || !config?.plans?.[selectedPlan]?.available; $('planAvailability').textContent=translate(config?.plans?.[selectedPlan]?.available?'planReady':'planUnavailable',currentLanguage());
+  if(quote) $('planAvailability').textContent=egp(quote.plans[selectedPlan])+' · '+$('planAvailability').textContent;
 }
 async function checkLoginAlert() {
   if(!session?.access_token)return;
@@ -65,10 +69,20 @@ $('login').onsubmit = async e => {
 $('signup').onclick = () => signupMode(true);
 $('backLogin').onclick = () => signupMode(false);
 $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/v1/logout`,{method:'POST',headers:{apikey:config.key,Authorization:`Bearer ${session.access_token}`}}).catch(()=>{});session=null;sessionStorage.removeItem('mostaed_account');render();notice('Signed out.');};
-$('subscribe').onclick = async () => { $('subscribe').disabled=true;try{track('begin_checkout',{plan:selectedPlan});const d=await api('/api/checkout',{plan:selectedPlan});track('checkout_redirected',{plan:selectedPlan});sessionStorage.setItem('mostaed_pending_subscription',d.subscriptionId);location.assign(d.url);}catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);render();}};
+$('subscribe').onclick = async () => {
+ $('subscribe').disabled=true;
+ try{
+  const quotedAmount=quote?.plans?.[selectedPlan];
+  const billing=await confirmPaymobBilling(quotedAmount);if(!billing)return;
+  track('begin_checkout',{plan:selectedPlan});
+  const d=await api('/api/checkout',{plan:selectedPlan,billing,quotedAmount});
+  sessionStorage.setItem('mostaed_paymob_reference',d.reference);track('checkout_redirected',{plan:selectedPlan});location.assign(d.url);
+ }catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);}
+ finally{render();}
+};
 $('billingPlan').value=selectedPlan;
 $('billingPlan').onchange=()=>{selectedPlan=$('billingPlan').value;render();};
-$('verify').onclick = async () => {try{const d=await api('/api/subscription',{subscriptionId:sessionStorage.getItem('mostaed_pending_subscription')});track('payment_verified',{environment:d.sandbox?'sandbox':'live'});trackVerifiedPurchase(d);notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){track('checkout_failed',{stage:'verification'});notice(e.message);}};
+$('verify').onclick = async () => {try{const d=await api('/api/subscription',{checkPayment:true,reference:sessionStorage.getItem('mostaed_paymob_reference')});sessionStorage.removeItem('mostaed_paymob_reference');track('payment_verified',{environment:d.sandbox?'sandbox':'live'});trackVerifiedPurchase(d);notice(d.sandbox?'Sandbox payment verified. Live AI remains disabled.':'Payment verified for your account.');}catch(e){track('checkout_failed',{stage:'verification'});notice(e.message);}};
 
 $('google').onclick = async () => {
   $('google').disabled = true;

@@ -1,7 +1,7 @@
 import {assessmentTerminated, validAttemptId} from '../lib/server/assessment-lock.mjs';
 import {validCameraEvidence,reviewCamera} from '../lib/server/camera-review.mjs';
 import {languages} from '../locales.mjs';
-import { verifiedSubscription } from '../lib/server/paypal.mjs';
+import { verifiedAccess } from '../lib/server/paymob-live.mjs';
 import { authenticatedUser, configured, serviceRpc, temporaryTestAccess, testAiConfigured, reserveTestEvaluation } from '../lib/server/paid-access.mjs';
 
 import { categoryRubrics, validCategoryQuestions, evaluationContext, readableFeedback } from '../lib/server/evaluation-context.mjs';
@@ -117,7 +117,7 @@ export default async function handler(req, res) {
     if (req.body.responses.length !== (subscription.plan === 'pro' ? 15 : 10)) {
       return res.status(400).json({ error: 'Question count does not match subscription plan' });
     }
-    if (!await verifiedSubscription(subscription.subscription_id, user.id)) {
+    if (!await verifiedAccess(subscription.subscription_id, user.id)) {
       return res.status(403).json({ error: 'Active paid subscription required' });
     }
     if (!validAttemptId(req.body.attemptId)) {

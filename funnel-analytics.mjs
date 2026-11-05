@@ -9,7 +9,7 @@ export function track(event,params={}){try{if(allowedEvents.has(event)&&typeof w
 export function trackVerifiedPurchase(result){
  try{
   const p=result?.purchase;
-  if(result?.active!==true||result.sandbox!==false||!p||!/^[a-f0-9]{64}$/.test(p.transaction_id)||p.currency!=='USD')return false;
+  if(result?.active!==true||result.sandbox!==false||!p||!/^[a-f0-9]{64}$/.test(p.transaction_id)||!['EGP','USD'].includes(p.currency))return false;
   const prices={starter:3.99,pro:7.99};
   if(!Object.hasOwn(prices,p.plan)||p.value!==prices[p.plan]||typeof window.gtag!=='function')return false;
   const key='mostaed_purchase_'+p.transaction_id;

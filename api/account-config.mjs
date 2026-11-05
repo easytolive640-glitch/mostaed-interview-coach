@@ -7,26 +7,15 @@ import coachingHandler from '../lib/server/coaching.mjs';
 import { testAiConfigured } from '../lib/server/paid-access.mjs';
 import accountAuth from '../lib/server/account-auth.mjs';
 import historyHandler from '../lib/server/evaluation-history.mjs';
-import { billingPlans, paypalPlanId } from '../lib/server/billing-plans.mjs';
-import { paypalConfigured } from '../lib/server/paypal.mjs';
+import { billingPlans } from '../lib/server/billing-plans.mjs';
+import { exchangeQuote, liveReady } from '../lib/server/paymob-live.mjs';
 import supportHandler from '../lib/server/support.mjs';
 async function exchangeRate(req, res) {
   if (req.method !== 'GET') return res.status(405).end();
   try {
-    const response = await fetch('https://api.frankfurter.dev/v2/rate/USD/EGP', {
-      signal: AbortSignal.timeout(4000),
-    });
-    if (!response.ok) throw new Error('Exchange rate unavailable');
-    const {base, quote, rate, date} = await response.json();
-    const age = Date.now() - Date.parse(date);
-    if (base !== 'USD' || quote !== 'EGP' || !Number.isFinite(rate) || rate <= 0 ||
-        !Number.isFinite(age) || age < 0 || age > 7 * 86400000) {
-      throw new Error('Exchange rate unavailable');
-    }
+    const quote = await exchangeQuote();
     res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
-    const plans = Object.fromEntries(Object.entries(billingPlans).map(([plan, details]) =>
-      [plan, Math.round(Math.round(details.amount * 100) * rate)]));
-    return res.status(200).json({rate, date, plans});
+    return res.status(200).json(quote);
   } catch {
     res.setHeader('Cache-Control', 'no-store');
     return res.status(503).json({error: 'Exchange rate unavailable'});
@@ -48,8 +37,8 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end();
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY) return res.status(503).json({ error: 'Customer accounts are not available yet' });
   return res.status(200).json({ url: process.env.SUPABASE_URL, key: process.env.SUPABASE_PUBLISHABLE_KEY,
-    billingEnabled: process.env.BILLING_ENABLED === 'true' && paypalConfigured(),
-    plans:Object.fromEntries(Object.entries(billingPlans).map(([plan,details])=>[plan,{amount:details.amount,questions:details.questions,limit:details.limit,available:process.env.BILLING_ENABLED === 'true' && paypalConfigured() && Boolean(paypalPlanId(plan))}])),
+    billingEnabled: liveReady(),
+    plans:Object.fromEntries(Object.entries(billingPlans).map(([plan,details])=>[plan,{questions:details.questions,limit:details.limit,available:liveReady()}])),
     aiEnabled: process.env.PAID_AI_ENABLED === 'true' || testAiConfigured() });
 }
 

@@ -29,11 +29,11 @@ export const topics=[
       "de": "Tarife und Preise"
     },
     "answer": {
-      "en": "Free practice is available. AI Starter is listed at USD 3.99/month, coming soon. AI Pro is listed at USD 7.99/month with up to 10 test starts. AI access requires verification. Sandbox payments never unlock live AI; live card checkout is still being tested.",
-      "ar": "التدريب المجاني متاح. تعرض AI Starter بسعر 3.99 دولار شهرياً وتأتي قريباً. تعرض AI Pro بسعر 7.99 دولار وحتى 10 محاولات اختبار شهرياً. يلزم وصول مؤكد للذكاء الاصطناعي. الدفع التجريبي لا يفتح الوصول الحقيقي، والدفع الحقيقي بالبطاقات قيد الاختبار.",
-      "fr": "L’entraînement gratuit est disponible. AI Starter : 3,99 USD/mois, prochainement. AI Pro : 7,99 USD/mois, jusqu’à 10 tentatives de test. L’accès IA doit être vérifié. Les paiements sandbox ne débloquent pas l’IA réelle ; le paiement réel par carte est encore en test.",
-      "es": "La práctica gratuita está disponible. AI Starter: 3,99 USD/mes, próximamente. AI Pro: 7,99 USD/mes y hasta 10 intentos de prueba. La IA requiere acceso verificado. El sandbox nunca desbloquea IA real; el pago real con tarjeta sigue en pruebas.",
-      "de": "Kostenlose Übung ist verfügbar. AI Starter: 3,99 USD/Monat, demnächst. AI Pro: 7,99 USD/Monat mit bis zu 10 Testversuche. KI-Zugang muss bestätigt sein. Sandbox-Zahlungen schalten keine echte KI frei; echte Kartenzahlungen werden noch getestet."
+      "en": "Free practice is available. A one-time payment in EGP covers 30 days. Starter includes 5 test starts and Pro includes 10. Check /checkout.html for current prices and Paymob availability.",
+      "ar": "التدريب المجاني متاح. دفعة واحدة بالجنيه المصري تغطي ٣٠ يومًا. تتضمن Starter خمس محاولات وPro عشر محاولات. راجع صفحة الدفع لمعرفة الأسعار وتوفر Paymob.",
+      "fr": "L’entraînement gratuit est disponible. Un paiement en EGP couvre 30 jours. Starter inclut 5 tests, Pro en inclut 10. Consultez la page de paiement pour les tarifs.",
+      "es": "La práctica gratuita está disponible. Un pago en EGP cubre 30 días. Starter incluye 5 intentos y Pro incluye 10. Consulta la página de pago para los precios.",
+      "de": "Kostenloses Üben ist verfügbar. Eine Zahlung in EGP gilt für 30 Tage. Starter umfasst 5 Versuche und Pro 10. Die aktuellen Preise stehen auf der Checkout-Seite."
     }
   },
   {
