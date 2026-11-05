@@ -20,7 +20,7 @@ actionable feedback before the real interview.
 - Planned Starter interviews have 10 text questions plus one recorded voice answer;
   planned Pro interviews have 15 text questions plus one recorded voice answer.
   Paid AI evaluation requires account and subscription verification.
-- Proposed monthly Starter and Pro limits of 20 and 100 AI evaluations; final prices and limits require cost validation.
+- Starter and Pro allow 5 and 10 paid test starts per verified subscription cycle, respectively.
 
 ## Key screens
 

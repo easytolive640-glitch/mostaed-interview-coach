@@ -1,4 +1,4 @@
-import {assessmentTerminated} from '../lib/server/assessment-lock.mjs';
+import {assessmentTerminated, validAttemptId} from '../lib/server/assessment-lock.mjs';
 import {validCameraEvidence,reviewCamera} from '../lib/server/camera-review.mjs';
 import {languages} from '../locales.mjs';
 import { verifiedSubscription } from '../lib/server/paypal.mjs';
@@ -122,7 +122,15 @@ export default async function handler(req, res) {
     if (!await verifiedSubscription(subscription.subscription_id, user.id)) {
       return res.status(403).json({ error: 'Active paid subscription required' });
     }
-    access = await serviceRpc('reserve_ai_evaluation', { p_user_id: user.id });
+    if (!validAttemptId(req.body.attemptId)) {
+      return res.status(403).json({ error: 'Start a paid test before submitting' });
+    }
+    access = { allowed: await serviceRpc('claim_assessment_submission', {
+      p_user_id: user.id,
+      p_subscription_id: subscription.subscription_id,
+      p_attempt_id: req.body.attemptId,
+    }) === true };
+    if (!access.allowed) return res.status(409).json({ error: 'This test attempt has expired or has already been submitted. / انتهت صلاحية المحاولة أو سبق إرسالها.' });
     }
   } catch (error) {
     console.error('Access verification failed', error instanceof Error ? error.message : 'Unknown error');

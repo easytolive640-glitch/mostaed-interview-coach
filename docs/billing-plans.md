@@ -1,7 +1,9 @@
 # Paid plans and payment diagnostics
 
-AI Starter is USD 3.99 monthly, 10 written questions, up to 20 evaluations per
-UTC calendar month. AI Pro is USD 7.99 monthly, 15 questions, up to 100.
+AI Starter is USD 3.99 monthly, 10 written questions, up to 5 paid test starts per
+verified billing cycle. AI Pro is USD 7.99 monthly, 15 questions, up to 10.
+Apply `docs/assessment_attempts.sql` in Supabase before deploying the updated app.
+A start is reserved after camera recording begins. Each start authorizes one AI submission.
 Both support optional CV context and one voice answer.
 
 Set `PAYPAL_STARTER_PLAN_ID` and `PAYPAL_PRO_PLAN_ID` to separate active,
