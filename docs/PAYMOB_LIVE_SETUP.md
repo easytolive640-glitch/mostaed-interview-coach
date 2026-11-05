@@ -1,0 +1,9 @@
+# Paymob EGP cutover
+
+New checkout uses Paymob Unified Checkout for AI Starter and Pro, extra attempts and career coaching. Plans are one payment for 30 days with manual renewal. The EGP amount is quoted before redirect and stored with the local order. The signed Paymob transaction callback fulfills the order. The browser redirect does not authorize fulfillment.
+
+1. Apply `paymob_live.sql` in the target Supabase project after the existing paid access, assessment top-up and coaching migrations. Run the migration and callback smoke tests in staging before production.
+2. Deploy with `PAYMOB_LIVE_ENABLED=false`. After Paymob approves MostaedTestLive, set the approved live card Integration ID and the live public key, secret key and HMAC secret in Vercel (`PAYMOB_CARD_INTEGRATION_ID`, `PAYMOB_PUBLIC_KEY`, `PAYMOB_SECRET_KEY`, `PAYMOB_HMAC_SECRET`). Set `ALLOWED_ORIGIN=https://mostaedcoach.com` and configure the transaction processed webhook at `https://mostaedcoach.com/api/paymob-webhook`. Keep the existing Paymob sandbox credentials on a separate deployment.
+3. Verify an EGP transaction and callback with an authorized test purchase before opening public traffic. Test both plan allowances, the extra attempt credit, coaching and Zoom creation, failed payments, callback replay and refunds. `BILLING_ENABLED=true` and `PAYMOB_LIVE_ENABLED=true` gate live checkout; paid AI and coaching retain their independent feature flags.
+4. New PayPal checkout is retired. Existing PayPal subscribers and records are not migrated or cancelled automatically; retain legacy verification and webhook settings until existing agreements are reconciled. Check the active legacy subscribers before retiring recurring agreements in the PayPal dashboard.
+5. A charge that cannot be matched or arrives after an expired booking requires reconciliation and, where appropriate, a refund in Paymob. Monitor callback errors and payment transactions during rollout.

@@ -44,29 +44,17 @@ $('billing').onsubmit=async e=>{
   }catch(e){say('cardNotice',e.message);$('billing').hidden=false;$('cardStart').disabled=false;}
 };
 $('cardStatus').onclick=checkCard;
-$('paypalStart').onclick=async()=>{
-  $('paypalStart').disabled=true;
-  try{const d=await api('/api/paypal-sandbox',{action:'create'});sessionStorage.setItem('mostaed_paypal_sandbox_subscription',d.subscriptionId);location.assign(d.url);}
-  catch(e){say('paypalNotice',e.message);$('paypalStart').disabled=false;}
-};
-async function checkPaypal(){
-  try{const d=await api('/api/paypal-sandbox',{action:'verify',subscriptionId:sessionStorage.getItem('mostaed_paypal_sandbox_subscription')});say('paypalNotice',d.verified?'Sandbox subscription payment verified. No live AI access was granted.':'No completed sandbox subscription payment found yet. Live AI remains locked.');}
-  catch(e){say('paypalNotice',e.message);}
-}
-$('paypalStatus').onclick=checkPaypal;
+
 try {
   session=JSON.parse(sessionStorage.getItem('mostaed_account') || 'null');
   if(!session?.access_token || session.expires_at*1000<Date.now()) session=null;
   $('signIn').hidden=Boolean(session);
   const r=await fetch('/api/payment-test-config');config=await r.json();if(!r.ok) throw Error('Test settings unavailable');
   say('paymobConfig',config.paymobReady?'Test keys detected. Database setup is also required.':'Paymob test credentials are not ready.');
-  say('paypalConfig',config.paypalSandboxReady?'Sandbox credentials detected.':'Sandbox is not configured yet. Separate sandbox client ID, secret and USD 7.99 monthly plan ID are required.');
-  $('cardStart').disabled=!session || !config.paymobReady;$('paypalStart').disabled=!session || !config.paypalSandboxReady;
+  $('cardStart').disabled=!session || !config.paymobReady;
   $('cardStatus').hidden=!sessionStorage.getItem('mostaed_paymob_test_reference');
-  $('paypalStatus').hidden=!sessionStorage.getItem('mostaed_paypal_sandbox_subscription');
   // Redirect query parameters are never trusted for paid status.
   const params=new URLSearchParams(location.search);const provider=params.get('provider');const cancelled=params.get('cancelled');
   if(location.search) history.replaceState(null,'','/checkout-test.html?lang='+currentLanguage());
   if(session && provider==='paymob') await checkCard();
-  if(session && provider==='paypal') {if(cancelled==='true') say('paypalNotice','Sandbox checkout cancelled. No AI access was granted.');else await checkPaypal();}
-}catch(e){say('cardNotice',e.message);say('paypalNotice',e.message);}
+}catch(e){say('cardNotice',e.message);}
