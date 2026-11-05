@@ -1,7 +1,7 @@
 import {syncLanguageLinks} from './language-navigation.mjs';
 import {applyGuideCards} from './guide-localization.mjs';
 import {languages,translate,preferredLanguage,rememberLanguage} from './locales.mjs';
-import {landingCopy} from './landing-copy.mjs';
+import {landingCopy} from './landing-copy.mjs?v=test-starts-1';
 const select=document.getElementById('landingLanguage');
 let egpPlans;
 function applyPrices(){
