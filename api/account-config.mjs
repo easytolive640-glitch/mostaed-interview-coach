@@ -1,3 +1,4 @@
+import topUpHandler from '../lib/server/assessment-topup.mjs';
 import assessmentHandler from '../lib/server/assessment-lock.mjs';
 import careerFeedHandler from '../lib/server/career-feed.mjs';
 import loginAlertHandler from '../lib/server/new-user-alerts.mjs';
@@ -34,6 +35,7 @@ async function exchangeRate(req, res) {
 
 export default async function handler(req, res) {
   if (req.query?.exchangeRate === '1') return exchangeRate(req,res);
+  if (req.query?.topup === '1') return topUpHandler(req, res);
   if (req.query?.assessment === '1') return assessmentHandler(req,res);
   if (req.query?.careerFeed === '1') return careerFeedHandler(req,res);
   if (req.query?.login_alert === '1') return loginAlertHandler(req,res);
