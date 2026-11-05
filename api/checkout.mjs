@@ -4,7 +4,7 @@ export default async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   if(req.method==='GET'){
     const path=req.query?.returnTo;
-    const safe=typeof path==='string' && (['/account.html?payment=return','/paid-practice.html?topup=return'].includes(path) ||
+    const safe=typeof path==='string' && (['/account.html?payment=return','/paid-practice.html?topup=return','/checkout-test.html?provider=paymob'].includes(path) ||
       /^\/coaching\.html\?booking=[a-f0-9-]{36}$/i.test(path));
     res.setHeader('Referrer-Policy','no-referrer');
     res.setHeader('Location',safe?path:'/checkout.html');

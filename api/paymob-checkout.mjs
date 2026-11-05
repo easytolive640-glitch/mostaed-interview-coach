@@ -1,10 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { authenticatedUser, serviceRpc } from '../lib/server/paid-access.mjs';
-import { paymobTestConfigured, createTestIntention } from '../lib/server/paymob-test.mjs';
+import { paymobTestConfigured, createTestIntention, unifiedCheckoutUrl, TEST_AMOUNT } from '../lib/server/paymob-test.mjs';
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   if (req.method !== 'POST') return res.status(405).json({error:'Method not allowed'});
-  const origin=process.env.ALLOWED_ORIGIN || 'https://mostaed-interview-coach.vercel.app';
+  const origin=new URL(process.env.ALLOWED_ORIGIN || 'https://mostaedcoach.com').origin;
   if (req.headers.origin && req.headers.origin !== origin) return res.status(403).json({error:'Origin not allowed'});
   if (!paymobTestConfigured()) return res.status(503).json({error:'Paymob test credentials are not configured. Live checkout is disabled.'});
   try {
@@ -23,7 +23,8 @@ export default async function handler(req,res) {
     const data=await createTestIntention(user,billing,reference,origin);
     const attached=await serviceRpc('attach_paymob_test_order',{p_reference:reference,p_user_id:user.id,p_order_id:String(data.intention_order_id)});
     if (!attached) throw Error('Test order could not be saved');
-    return res.status(200).json({reference,publicKey:process.env.PAYMOB_PUBLIC_KEY,clientSecret:data.client_secret,testMode:true,amount:418,currency:'EGP'});
+    const url=unifiedCheckoutUrl(process.env.PAYMOB_PUBLIC_KEY,data.client_secret);
+    return res.status(200).json({reference,url,testMode:true,amount:TEST_AMOUNT/100,currency:'EGP'});
   } catch(e) {
     return res.status(503).json({error:e.message.startsWith('Paid-access database')?'Run docs/paymob_test.sql in Supabase SQL Editor before testing.':'Test checkout unavailable. Check Paymob test configuration.'});
   }
