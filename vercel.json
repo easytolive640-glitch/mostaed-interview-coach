@@ -134,6 +134,7 @@
     }
   ],
   "redirects": [
+    { "source": "/checkout.html", "destination": "/#pricing", "permanent": false },
     {
       "source": "/freepractice.html",
       "destination": "/freepractice",

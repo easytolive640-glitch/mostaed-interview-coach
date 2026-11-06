@@ -29,7 +29,7 @@ export const topics=[
       "de": "Tarife und Preise"
     },
     "answer": {
-      "en": "Free practice is available. A one-time payment in EGP covers 30 days. Starter includes 5 test starts and Pro includes 10. Check /checkout.html for current prices and Paymob availability.",
+      "en": "Free practice is available. A one-time payment in EGP covers 30 days. Starter includes 5 test starts and Pro includes 10. Choose a plan in the pricing section for the current EGP price and Paymob availability.",
       "ar": "التدريب المجاني متاح. دفعة واحدة بالجنيه المصري تغطي ٣٠ يومًا. تتضمن Starter خمس محاولات وPro عشر محاولات. راجع صفحة الدفع لمعرفة الأسعار وتوفر Paymob.",
       "fr": "L’entraînement gratuit est disponible. Un paiement en EGP couvre 30 jours. Starter inclut 5 tests, Pro en inclut 10. Consultez la page de paiement pour les tarifs.",
       "es": "La práctica gratuita está disponible. Un pago en EGP cubre 30 días. Starter incluye 5 intentos y Pro incluye 10. Consulta la página de pago para los precios.",

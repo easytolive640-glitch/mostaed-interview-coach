@@ -7,7 +7,7 @@ export default async function handler(req,res) {
     const safe=typeof path==='string' && (['/account.html?payment=return','/paid-practice.html?topup=return','/checkout-test.html?provider=paymob'].includes(path) ||
       /^\/coaching\.html\?booking=[a-f0-9-]{36}$/i.test(path));
     res.setHeader('Referrer-Policy','no-referrer');
-    res.setHeader('Location',safe?path:'/checkout.html');
+    res.setHeader('Location',safe?path:'/#pricing');
     return res.status(303).end();
   }
   if(req.method!=='POST')return res.status(405).end();

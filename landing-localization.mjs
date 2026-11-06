@@ -8,7 +8,10 @@ function applyPrices(){
   if (!egpPlans) return;
   const formatter = new Intl.NumberFormat(languages[select.value].code,{style:"currency",currency:"EGP",currencyDisplay:"code"});
   for (const [plan,key] of [["starter","starterPaymobPrice"],["pro","proPaymobPrice"]]) {
-    document.querySelector('[data-copy="'+key+'"]').textContent = formatter.format(egpPlans[plan]/100);
+    const price=formatter.format(egpPlans[plan]/100);
+    document.querySelector('[data-copy="'+key+'"]').textContent=price;
+    const button=document.querySelector('a[data-copy="checkAccess"][href*="plan='+plan+'"]');
+    if(button)button.textContent=landingCopy.checkAccess[Object.keys(languages).indexOf(select.value)]+' · '+price;
   }
 }
 function apply(){const language=select.value;const index=Object.keys(languages).indexOf(language);document.documentElement.lang=languages[language].code;document.documentElement.dir=language==='arabic'?'rtl':'ltr';rememberLanguage(language);syncLanguageLinks(language);applyGuideCards(language);
