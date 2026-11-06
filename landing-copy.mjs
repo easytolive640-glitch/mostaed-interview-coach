@@ -213,13 +213,7 @@ Object.assign(landingCopy, {
   "Elige práctica gratuita, AI Starter o AI Pro.",
   "Wählen Sie kostenlose Übungen, AI Starter oder AI Pro."
 ],
-  "checkAccess": [
-    "View subscription & access",
-    "عرض الاشتراك والوصول",
-    "Voir l’abonnement et l’accès",
-    "Ver suscripción y acceso",
-    "Abo und Zugang ansehen"
-  ],
+  "checkAccess": ["Choose plan", "اختر الباقة", "Choisir la formule", "Elegir plan", "Tarif wählen"],
   "tour": [
     "App tour",
     "جولة التطبيق",

@@ -6,7 +6,9 @@ import {translate} from './locales.mjs';
 initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs?v=account-chooser-1';
 const $ = id => document.getElementById(id);
-let selectedPlan=new URLSearchParams(location.search).get('plan')==='starter'?'starter':'pro';
+const route=new URLSearchParams(location.search);
+let selectedPlan=route.get('plan')==='starter'?'starter':'pro';
+let openPlanCheckout=route.get('checkout')==='1'&&['starter','pro'].includes(route.get('plan'));
 let quote, quoteFailed=false;
 void paymentQuote().then(value=>{quote=value;if(config)render();}).catch(()=>{quoteFailed=true;if(config)render();});
 let config, session, recoveryToken, creatingAccount = false;
@@ -25,6 +27,11 @@ function render() { $('google').hidden = Boolean(session) || Boolean(recoveryTok
   checkout.textContent=hasPrice ? label+' · '+egp(amount) : label;
   checkout.disabled=!available||!hasPrice;
   $('planAvailability').textContent=translate(!available?'planUnavailable':hasPrice?'planReady':quoteFailed?'checkoutPriceUnavailable':'checkoutPriceLoading',language);
+  if(openPlanCheckout&&session&&!recoveryToken&&(hasPrice||quoteFailed)){
+    openPlanCheckout=false;
+    checkout.scrollIntoView({block:'center'});
+    if(!checkout.disabled)checkout.click();
+  }
 }
 async function checkLoginAlert() {
   if(!session?.access_token)return;
@@ -81,11 +88,12 @@ $('logout').onclick = async () => { if(session) await fetch(`${config.url}/auth/
 $('subscribe').onclick = async () => {
  $('subscribe').disabled=true;
  try{
-  const quotedAmount=quote?.plans?.[selectedPlan];
+  const plan=selectedPlan;
+  const quotedAmount=quote?.plans?.[plan];
   const billing=await confirmPaymobBilling(quotedAmount);if(!billing)return;
-  track('begin_checkout',{plan:selectedPlan});
-  const d=await api('/api/checkout',{plan:selectedPlan,billing,quotedAmount});
-  sessionStorage.setItem('mostaed_paymob_reference',d.reference);track('checkout_redirected',{plan:selectedPlan});location.assign(d.url);
+  track('begin_checkout',{plan});
+  const d=await api('/api/checkout',{plan,billing,quotedAmount});
+  sessionStorage.setItem('mostaed_paymob_reference',d.reference);track('checkout_redirected',{plan});location.assign(d.url);
  }catch(e){track('checkout_failed',{stage:'checkout'});notice(e.message);}
  finally{render();}
 };
@@ -97,7 +105,7 @@ $('google').onclick = async () => {
   $('google').disabled = true;
   try {
     const { verifier, challenge } = await createPkce();
-    sessionStorage.setItem('mostaed_google_pkce', JSON.stringify({ verifier, created: Date.now() }));
+    sessionStorage.setItem('mostaed_google_pkce', JSON.stringify({ verifier, created: Date.now(), checkoutPlan:openPlanCheckout?selectedPlan:null }));
     location.assign(googleAuthorizeUrl(config.url, location.origin + '/account.html', challenge));
   } catch (e) { notice(e.message); $('google').disabled = false; }
 };
@@ -120,6 +128,11 @@ async function googleCallback() {
   });
   const data = await r.json();
   if (!r.ok) throw Error('Google sign-in could not be completed. Please try again.');
+  if(['starter','pro'].includes(pending.checkoutPlan)){
+    selectedPlan=pending.checkoutPlan;
+    $('billingPlan').value=selectedPlan;
+    openPlanCheckout=true;
+  }
   session = customerSession(data);
   sessionStorage.setItem('mostaed_account', JSON.stringify(session));
   return true;
