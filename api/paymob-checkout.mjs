@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { authenticatedUser, serviceRpc } from '../lib/server/paid-access.mjs';
-import { paymobTestConfigured, createTestIntention, unifiedCheckoutUrl, TEST_AMOUNT } from '../lib/server/paymob-test.mjs';
+import { paymobTestConfigured, createTestIntention, unifiedCheckoutUrl, TEST_AMOUNT, PaymobTestError } from '../lib/server/paymob-test.mjs';
 export default async function handler(req,res) {
   res.setHeader('Cache-Control','no-store');
   if (req.method !== 'POST') return res.status(405).json({error:'Method not allowed'});
@@ -26,6 +26,21 @@ export default async function handler(req,res) {
     const url=unifiedCheckoutUrl(process.env.PAYMOB_PUBLIC_KEY,data.client_secret);
     return res.status(200).json({reference,url,testMode:true,amount:TEST_AMOUNT/100,currency:'EGP'});
   } catch(e) {
-    return res.status(503).json({error:e.message.startsWith('Paid-access database')?'Run docs/paymob_test.sql in Supabase SQL Editor before testing.':'Test checkout unavailable. Check Paymob test configuration.'});
+    if(e instanceof PaymobTestError){
+      console.warn('Paymob test intention rejected',{code:e.code,providerStatus:e.status});
+      const messages={
+        PAYMOB_TEST_AUTH:'Paymob rejected the sandbox credentials.',
+        PAYMOB_TEST_INTEGRATION:'Paymob could not find the configured test card integration.',
+        PAYMOB_TEST_REQUEST:'Paymob rejected the test checkout request.',
+        PAYMOB_TEST_MODE:'Paymob did not return the expected EGP test checkout.',
+        PAYMOB_TEST_PROVIDER:'Paymob could not start the test checkout.',
+      };
+      return res.status(503).json({error:messages[e.code]+' ('+e.code+')'});
+    }
+    if(e.message.startsWith('Paid-access database')){
+      return res.status(503).json({error:'Test checkout could not access the test payment ledger.'});
+    }
+    console.warn('Paymob test checkout failed',{kind:e.name});
+    return res.status(503).json({error:'Test checkout unavailable. Check Paymob connectivity and try again.'});
   }
 }
