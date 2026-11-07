@@ -1,0 +1,7 @@
+{
+  "name": "mostaed-interview-coach",
+  "private": true,
+  "dependencies": {
+    "pdfjs-dist": "5.7.284"
+  }
+}

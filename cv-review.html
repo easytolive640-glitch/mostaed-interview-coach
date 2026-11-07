@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>CV Review &amp; Job Matches | Mostaed</title>
+  <link rel="stylesheet" href="/presentation-ui.css">
+</head>
+<body class="app-page account-page">
+  <main>
+    <nav class="app-nav" aria-label="Main navigation">
+      <a class="app-brand" href="/">Mostaed | مستعد</a>
+      <a href="/account.html">Account / الحساب</a>
+    </nav>
+    <p class="ui-eyebrow">MOSTAED AI</p>
+    <h1>CV Review &amp; Job Matches</h1>
+    <p>Upload your CV to check whether your experience, dates and skills tell a consistent story. See how your documented experience aligns with openings on the employer boards we check.</p>
+    <p lang="ar" dir="rtl">ارفع سيرتك الذاتية لمراجعة اتساق الخبرات والتواريخ والمهارات ومطابقتها مع الوظائف المتاحة على مواقع التوظيف التي نفحصها.</p>
+    <form id="reviewForm">
+      <label>CV file / السيرة الذاتية <input id="cvFile" type="file" accept=".pdf,.txt" required></label>
+      <small>Text-based PDF (up to 15 pages) or TXT, maximum 2 MB.</small>
+      <label>Preferred job location (optional) / موقع العمل (اختياري)
+        <input id="jobLocation" maxlength="80" placeholder="Egypt, Cairo or Remote">
+      </label>
+      <label>Report language / لغة التقرير
+        <select id="reportLanguage">
+          <option value="english">English</option><option value="arabic">العربية</option>
+          <option value="french">Français</option><option value="spanish">Español</option>
+          <option value="german">Deutsch</option>
+        </select>
+      </label>
+      <label><span><input type="checkbox" id="consent" required style="width:auto"> I consent to sending my CV text to Mostaed’s AI provider for this review.</span></label>
+      <small>Requires active AI access and uses one available attempt per submitted review. The CV and report are not saved to Mostaed history.</small>
+      <p><button id="reviewButton" type="submit">Review CV and find jobs / راجع السيرة وابحث عن وظائف</button></p>
+    </form>
+    <p id="reviewStatus" role="status"></p>
+    <section id="reviewResult" hidden tabindex="-1" aria-label="CV review results"></section>
+  </main>
+  <script type="module" src="/cv-review.mjs"></script>
+</body>
+</html>
