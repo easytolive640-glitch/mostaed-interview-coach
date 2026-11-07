@@ -10,6 +10,10 @@
   },
   "rewrites": [
     {
+      "source": "/api/cv-review",
+      "destination": "/api/account-config?cvReview=1"
+    },
+    {
       "source": "/api/career-feed",
       "destination": "/api/account-config?careerFeed=1"
     },

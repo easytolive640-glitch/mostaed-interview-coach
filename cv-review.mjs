@@ -79,12 +79,19 @@ form.addEventListener('submit', async event => {
     for (let offset = 0; offset < bytes.length; offset += 8192) {
       binary += String.fromCharCode(...bytes.subarray(offset, offset + 8192));
     }
-    const response = await fetch('/api/account-config?cvReview=1', {
+    const response = await fetch('/api/cv-review', {
       method: 'POST', headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + token},
       body: JSON.stringify({file: btoa(binary), format, language: selectedLanguage, location: get('jobLocation').value, consent: get('consent').checked}),
       signal: AbortSignal.timeout(65000),
     });
-    const report = await response.json();
+    const report = await response.json().catch(() => null);
+    if (!report) {
+      const statusCode = response.status;
+      const message = selectedLanguage === 'arabic'
+        ? 'تعذّر تحميل نتيجة المراجعة. حدّث الصفحة وحاول مجدداً.'
+        : 'The review result could not be loaded. Refresh the page and try again.';
+      throw Error(message + ' (HTTP ' + statusCode + ')');
+    }
     if (!response.ok) throw Error(report.error || 'CV review is temporarily unavailable.');
     status.textContent = '';
     render(report, selectedLanguage);
