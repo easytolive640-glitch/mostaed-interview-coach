@@ -7,6 +7,7 @@ initLocalization();
 import { createPkce, googleAuthorizeUrl, customerSession } from './google-auth.mjs?v=account-chooser-1';
 const $ = id => document.getElementById(id);
 const route=new URLSearchParams(location.search);
+let returnToTestCheckout=route.get('checkoutTest')==='1';
 let selectedPlan=route.get('plan')==='starter'?'starter':'pro';
 let openPlanCheckout=route.get('checkout')==='1'&&['starter','pro'].includes(route.get('plan'));
 let quote, quoteFailed=false;
@@ -18,6 +19,10 @@ document.getElementById('uiLanguage').addEventListener('change',()=>{if(noticeSo
 function render() { $('google').hidden = Boolean(session) || Boolean(recoveryToken); $('googleNotice').hidden = Boolean(session) || Boolean(recoveryToken); $('login').hidden = Boolean(session) || Boolean(recoveryToken); $('member').hidden = !session || Boolean(recoveryToken); $('reset').hidden = !recoveryToken;
   $('identity').textContent = [session?.user?.full_name, session?.user?.username ? '@'+session.user.username : '', session?.user?.email].filter(Boolean).join(' · ');
   const language=currentLanguage();
+  if(returnToTestCheckout && session && !recoveryToken){
+    location.replace('/checkout-test.html?lang='+encodeURIComponent(language));
+    return;
+  }
   const amount=quote?.plans?.[selectedPlan];
   const hasPrice=Number.isSafeInteger(amount)&&amount>0;
   const available=Boolean(config?.plans?.[selectedPlan]?.available);
@@ -105,7 +110,7 @@ $('google').onclick = async () => {
   $('google').disabled = true;
   try {
     const { verifier, challenge } = await createPkce();
-    sessionStorage.setItem('mostaed_google_pkce', JSON.stringify({ verifier, created: Date.now(), checkoutPlan:openPlanCheckout?selectedPlan:null }));
+    sessionStorage.setItem('mostaed_google_pkce', JSON.stringify({ verifier, created: Date.now(), checkoutPlan:openPlanCheckout?selectedPlan:null, returnToTestCheckout }));
     location.assign(googleAuthorizeUrl(config.url, location.origin + '/account.html', challenge));
   } catch (e) { notice(e.message); $('google').disabled = false; }
 };
@@ -133,6 +138,7 @@ async function googleCallback() {
     $('billingPlan').value=selectedPlan;
     openPlanCheckout=true;
   }
+  returnToTestCheckout=pending.returnToTestCheckout===true;
   session = customerSession(data);
   sessionStorage.setItem('mostaed_account', JSON.stringify(session));
   return true;

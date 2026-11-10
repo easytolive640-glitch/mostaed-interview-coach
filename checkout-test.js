@@ -36,9 +36,11 @@ try {
   session=JSON.parse(sessionStorage.getItem('mostaed_account') || 'null');
   if(!session?.access_token || session.expires_at*1000<Date.now()) session=null;
   $('signIn').hidden=Boolean(session);
-  const r=await fetch('/api/payment-test-config');const config=await r.json();if(!r.ok) throw Error('Test settings unavailable');
+  const r=await fetch('/api/payment-test-config',{cache:'no-store',signal:AbortSignal.timeout(10000)});const config=await r.json();if(!r.ok) throw Error('Test settings unavailable');
   say('paymobConfig',config.paymobReady?'Test keys detected. Database setup is also required.':'Paymob test credentials are not ready.');
-  $('cardStart').disabled=!session || !config.paymobReady;
+  const canStart=Boolean(session && config.paymobReady);
+  $('billing').hidden=!canStart;
+  $('cardStart').disabled=!canStart;
   $('cardStatus').hidden=!sessionStorage.getItem('mostaed_paymob_test_reference');
   // Redirect query parameters are never trusted for paid status.
   const params=new URLSearchParams(location.search);const provider=params.get('provider');
