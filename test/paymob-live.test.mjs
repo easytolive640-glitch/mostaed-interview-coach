@@ -29,7 +29,7 @@ test('checkout uses quoted EGP and does not send the customer to Paymob until th
   await checkout(req,response);assert.equal(response.code,409);assert.equal(calls.length,2);
   req.body.quotedAmount=19950;
   await checkout(req,response);assert.equal(response.code,200);
-  assert.equal(new URL(response.body.url).origin,'https://accept.paymob.com');
+  assert.equal(new URL(response.body.url).origin,'https://eg.checkout.paymob.com');
   assert.match(calls.at(-1),/attach_paymob_order$/);
  }finally{global.fetch=orig;}
 });

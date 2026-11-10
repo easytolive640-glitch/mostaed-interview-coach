@@ -60,7 +60,7 @@ test('test order reservation and storage precede exposing checkout token; price 
  };
  const r=res();await checkout(req({amount:1,billing:{first_name:'Test',last_name:'Buyer',phone_number:'+201010101010',street:'Test street',building:'1',city:'Cairo',state:'Cairo',country:'EG',email:'attacker@example.com'}}),r);
  assert.equal(r.code,200);assert.equal(r.body.amount,418);assert.equal(r.body.testMode,true);assert.equal(calls.length,4);
- const url=new URL(r.body.url);assert.equal(url.origin+url.pathname,'https://accept.paymob.com/unifiedcheckout/');
+ const url=new URL(r.body.url);assert.equal(url.origin+url.pathname,'https://eg.checkout.paymob.com/');
  assert.match(url.searchParams.get('publicKey'),/pk_test_/);assert.match(url.searchParams.get('clientSecret'),/csk_test_/);
  assert.match(calls[1],/reserve_paymob_test_checkout$/);assert.match(calls[3],/attach_paymob_test_order$/);
  assert.equal(JSON.stringify(r.body).includes('egy_sk_'),false);
