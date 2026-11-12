@@ -13,12 +13,11 @@ import { exchangeQuote, liveReady } from '../lib/server/paymob-live.mjs';
 import supportHandler from '../lib/server/support.mjs';
 async function exchangeRate(req, res) {
   if (req.method !== 'GET') return res.status(405).end();
+  res.setHeader('Cache-Control', 'no-store');
   try {
     const quote = await exchangeQuote();
-    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
     return res.status(200).json(quote);
   } catch {
-    res.setHeader('Cache-Control', 'no-store');
     return res.status(503).json({error: 'Exchange rate unavailable'});
   }
 }
