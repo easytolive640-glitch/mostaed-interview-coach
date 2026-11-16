@@ -50,6 +50,22 @@ async function api(path, body) {
   const response = await fetch(path, { method:'POST', headers:{'Content-Type':'application/json', Authorization:`Bearer ${session?.access_token || ''}`}, body:JSON.stringify(body) });
   const data = await response.json(); if (!response.ok) throw Error((data.error || 'Request unavailable') + (data.reference ? ' · Reference: '+data.reference : '')); return data;
 }
+async function showPracticeAccess() {
+  const signedInSession = session;
+  const signedInMessage = 'Signed in. Open Practice to check your access. / تم تسجيل الدخول. افتح التدريب للتحقق من إمكانية الوصول.';
+  notice(signedInMessage);
+  try {
+    const access = await api('/api/subscription', {});
+    if (!access.active || !access.testAccess || session !== signedInSession) return;
+    const assessment = await api('/api/account-config?assessment=1', {action:'status'});
+    if (session !== signedInSession || noticeSource !== signedInMessage) return;
+    notice(assessment.terminated
+      ? 'Assessment terminated. Contact support. / تم إنهاء التقييم. تواصل مع الدعم.'
+      : 'Your AI Practice trial is active. Open Practice to start. / تجربتك للتدريب الذكي نشطة. افتح التدريب للبدء.');
+  } catch {
+    // Practice displays the current access error when opened.
+  }
+}
 function signupMode(enabled) {
   creatingAccount=enabled; $('signupFields').hidden=!enabled; $('signupFields').disabled=!enabled;
   $('confirmLabel').hidden=!enabled; $('signupConfirm').disabled=!enabled;
@@ -73,7 +89,7 @@ async function authenticate(signup) {
   if (!response.ok) throw Error(data.msg || data.error_description || data.error || 'Sign-in failed');
   if(signup)track('sign_up',{method:'password'});
   if (!data.access_token) { signupMode(false); return notice('Check your email to confirm your account, then sign in. / أكد بريدك الإلكتروني ثم سجل الدخول'); }
-  track('login',{method:'password'});session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); void checkLoginAlert(); render(); notice('Signed in. Paid AI requires a verified subscription.');
+  track('login',{method:'password'});session = customerSession(data); sessionStorage.setItem('mostaed_account', JSON.stringify(session)); void checkLoginAlert(); render(); void showPracticeAccess();
 }
 $('login').onsubmit = async e => {
   e.preventDefault();
@@ -163,9 +179,12 @@ try {
   }
   const googleSignedIn = await googleCallback();if(googleSignedIn)track('login',{method:'google'});
   render();
-  if(session&&!recoveryToken)void checkLoginAlert();
-  if (!recoveryToken) notice(googleSignedIn ? 'Signed in with Google. Paid AI requires a verified subscription.'
-    : config.billingEnabled ? 'Sign in before subscribing.' : 'Free practice is available. Paid subscriptions are not open yet.');
+  if (session && !recoveryToken) {
+    void checkLoginAlert();
+    void showPracticeAccess();
+  } else if (!recoveryToken) {
+    notice(config.billingEnabled ? 'Sign in before subscribing.' : 'Free practice is available. Paid subscriptions are not open yet.');
+  }
   // The return flag triggers a server check; it is never proof of payment.
   if(session && !recoveryToken && new URLSearchParams(location.search).get('payment')==='return') {
     await $('verify').onclick();
