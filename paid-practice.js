@@ -11,7 +11,7 @@ import { paidQuestions } from './practice-questions.mjs';
 import { renderEvaluation } from './evaluation-report.mjs?v=pdf-export-1';
 const $=id=>document.getElementById(id);
 let attemptId, focusGuard, assessmentFinished=false, terminationReported=false, assessmentExpired=false, submitting=false, frozenSubmission=null, pendingSubmission=null, clockInterval;
-const terminationKey=()=>`mostaed_terminated_${session?.email||session?.user?.id||'account'}${session?.email?.trim().toLowerCase()==='kat.nin81@gmail.com'?'_reset_20261116_105000':''}`;
+const terminationKey=()=>`mostaed_terminated_${session?.email||session?.user?.id||'account'}${session?.email?.trim().toLowerCase()==='kat.nin81@gmail.com'?'_reset_20261116_113724':''}`;
 function reportTermination(){
   if(assessmentFinished||assessmentExpired||terminationReported||!session)return;
   terminationReported=true;
